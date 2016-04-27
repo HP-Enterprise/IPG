@@ -5,7 +5,6 @@
 *.iws
 *.log
 build/
-node_modules/
 /src/*/resources/static/lib/
 /*.properties
 /src/*/resources/application-*.properties

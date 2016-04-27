@@ -1,0 +1,13 @@
+.gradle/
+.idea/
+*.iml
+*.ipr
+*.iws
+*.log
+build/
+node_modules/
+/src/*/resources/static/lib/
+/*.properties
+/src/*/resources/application-*.properties
+/src/*/resources/application-*.yml
+/src/*/resources/*_zh_CN.properties

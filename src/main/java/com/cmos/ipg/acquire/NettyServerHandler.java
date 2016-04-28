@@ -12,6 +12,8 @@ import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.Date;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ScheduledExecutorService;
 
@@ -47,6 +49,7 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter { // (1)
         Data d=new Data();
         d.setClient( ch.remoteAddress().toString());
         d.setBytes(receiveDataHexString);
+        d.setCreateDate(new Date());
         dataMapper.save(d);
          }
 
@@ -57,6 +60,7 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter { // (1)
         ClientLog c=new ClientLog();
         c.setClient(ch.remoteAddress().toString());
         c.setAction("建立连接");
+        c.setCreateDate(new Date());
         clientLogMapper.save(c);
     }
     public void channelUnregistered(ChannelHandlerContext ctx){
@@ -66,6 +70,7 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter { // (1)
         ClientLog c=new ClientLog();
         c.setClient(ch.remoteAddress().toString());
         c.setAction("断开连接");
+        c.setCreateDate(new Date());
         clientLogMapper.save(c);
 
        }

@@ -1,6 +1,7 @@
 package com.cmos.ipg.entity;
 
 import java.io.Serializable;
+import java.util.Date;
 
 /**
  * Created by jackl on 2016/4/28.
@@ -9,6 +10,7 @@ public class Data implements Serializable {
     private  int id;
     private String client;
     private String bytes;
+    private Date  createDate;
 
     public int getId() {
         return id;
@@ -32,5 +34,13 @@ public class Data implements Serializable {
 
     public void setBytes(String bytes) {
         this.bytes = bytes;
+    }
+
+    public Date getCreateDate() {
+        return createDate;
+    }
+
+    public void setCreateDate(Date createDate) {
+        this.createDate = createDate;
     }
 }

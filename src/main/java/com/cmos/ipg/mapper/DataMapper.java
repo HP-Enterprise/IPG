@@ -15,8 +15,8 @@ public interface DataMapper {
     @Select("SELECT * FROM t_data WHERE from = #{from}")
     User findByFrom(@Param("from") String from);
 
-    @Insert("INSERT INTO t_data(client, bytes)" +
-            "VALUES(#{data.client}, #{data.bytes})")
+    @Insert("INSERT INTO t_data(client, bytes,create_date)" +
+            "VALUES(#{data.client}, #{data.bytes}, #{data.createDate})")
     void save(@Param("data")Data data);
 
 

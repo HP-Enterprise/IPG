@@ -10,9 +10,9 @@ CREATE TABLE t_client_log (
   client varchar(50) DEFAULT NULL COMMENT 'from',
   action varchar(500) DEFAULT NULL COMMENT 'action',
   create_by varchar(50) DEFAULT NULL,
-  create_date date DEFAULT NULL,
+  create_date datetime DEFAULT NULL,
   last_modified_by varchar(50) DEFAULT NULL,
-  last_modified_date date DEFAULT NULL,
+  last_modified_date datetime DEFAULT NULL,
   PRIMARY KEY (id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 

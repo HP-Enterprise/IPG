@@ -1,6 +1,11 @@
 package com.cmos.ipg.acquire;
 
 
+import com.cmos.ipg.entity.ClientLog;
+import com.cmos.ipg.entity.Data;
+import com.cmos.ipg.mapper.ClientLogMapper;
+import com.cmos.ipg.mapper.DataMapper;
+import com.cmos.ipg.utils.DataTool;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;
@@ -18,9 +23,13 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter { // (1)
     private ConcurrentHashMap<String,Channel> channels;
     private Logger _logger;
     private ScheduledExecutorService scheduledService;
-    private int maxDistance;
-
-    public NettyServerHandler(ConcurrentHashMap<String, Channel> cs, ScheduledExecutorService scheduledService){
+    private DataMapper dataMapper;
+    private DataTool dataTool;
+    private ClientLogMapper clientLogMapper;
+    public NettyServerHandler(ConcurrentHashMap<String, Channel> cs, ScheduledExecutorService scheduledService,DataMapper dataMapper,ClientLogMapper clientLogMapper,DataTool dataTool){
+        this.dataMapper=dataMapper;
+        this.clientLogMapper=clientLogMapper;
+        this.dataTool=dataTool;
         this.channels=cs;
         this.scheduledService=scheduledService;
         this._logger = LoggerFactory.getLogger(NettyServerHandler.class);
@@ -31,22 +40,33 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter { // (1)
         _logger.info("read something");
         Channel ch=ctx.channel();
         ByteBuf m = (ByteBuf) msg;
-        String chKey;
-        String respStr;
-        ByteBuf buf;
+        byte[] receiveData=dataTool.getBytesFromByteBuf(m);
+        String receiveDataHexString=dataTool.bytes2hex(receiveData);
         //将缓冲区的数据读出到byte[]
-        ch.writeAndFlush(msg);//心跳流程直接回消息
+        ch.writeAndFlush(dataTool.getByteBuf(receiveDataHexString));
+        Data d=new Data();
+        d.setClient( ch.remoteAddress().toString());
+        d.setBytes(receiveDataHexString);
+        dataMapper.save(d);
          }
 
     @Override
     public void channelRegistered(ChannelHandlerContext ctx){
         Channel ch=ctx.channel();
         _logger.info("Register" + ch.remoteAddress());
+        ClientLog c=new ClientLog();
+        c.setClient(ch.remoteAddress().toString());
+        c.setAction("建立连接");
+        clientLogMapper.save(c);
     }
     public void channelUnregistered(ChannelHandlerContext ctx){
         Channel ch=ctx.channel();
         _logger.info("UnRegister" + ch.remoteAddress());
         //连接断开 从map移除连接
+        ClientLog c=new ClientLog();
+        c.setClient(ch.remoteAddress().toString());
+        c.setAction("断开连接");
+        clientLogMapper.save(c);
 
        }
     @Override

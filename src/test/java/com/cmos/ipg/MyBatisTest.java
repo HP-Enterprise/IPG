@@ -1,5 +1,8 @@
 package com.cmos.ipg;
 
+import com.cmos.ipg.entity.Data;
+import com.cmos.ipg.entity.User;
+import com.cmos.ipg.mapper.DataMapper;
 import com.cmos.ipg.mapper.UserMapper;
 import com.cmos.ipg.utils.DataTool;
 import org.junit.After;
@@ -18,6 +21,9 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 public class MyBatisTest {
     @Autowired
     UserMapper userMapper;
+    @Autowired
+    DataMapper dataMapper;
+
     @Before
     public void setUp() {
     }
@@ -28,7 +34,20 @@ public class MyBatisTest {
 
     @Test
     public void test_getUser(){
+        User u=new User();
+        u.setUsername("aaa");
+        u.setPassword("666666");
+        userMapper.addUser(u);
         System.out.println(userMapper.findByName("jack"));
+    }
+
+    @Test
+    public void test_getData(){
+        Data d=new Data();
+        d.setClient("127.0.0.1");
+        d.setBytes("23 23");
+        dataMapper.save(d);
+
     }
 
 }

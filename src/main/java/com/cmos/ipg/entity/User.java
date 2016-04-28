@@ -37,6 +37,8 @@ public class User implements Serializable {
         this.password = password == null ? null : password.trim();
     }
 
+
+
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();

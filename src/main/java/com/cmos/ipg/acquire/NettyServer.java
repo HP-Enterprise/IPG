@@ -5,6 +5,9 @@ package com.cmos.ipg.acquire;
  */
 
 
+import com.cmos.ipg.mapper.ClientLogMapper;
+import com.cmos.ipg.mapper.DataMapper;
+import com.cmos.ipg.utils.DataTool;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.*;
 import io.netty.channel.nio.NioEventLoopGroup;
@@ -26,9 +29,13 @@ public class NettyServer {
     private ConcurrentHashMap<String,Channel> channels;
     private Logger _logger;
     private  ScheduledExecutorService scheduledService;
-
-
-    public NettyServer(ConcurrentHashMap<String, Channel> cs, int port, ScheduledExecutorService scheduledService) {
+    private DataMapper dataMapper;
+    private DataTool dataTool;
+    private ClientLogMapper clientLogMapper;
+    public NettyServer(ConcurrentHashMap<String, Channel> cs, int port, ScheduledExecutorService scheduledService,DataMapper dataMapper,ClientLogMapper clientLogMapper,DataTool dataTool) {
+        this.dataMapper=dataMapper;
+        this.clientLogMapper=clientLogMapper;
+        this.dataTool=dataTool;
         this.channels=cs;
         this.port = port;
         this.scheduledService=scheduledService;
@@ -46,7 +53,7 @@ public class NettyServer {
                             @Override
                             public void initChannel(SocketChannel ch) throws Exception {
                                 //ch.pipeline().addLast(new LengthFieldBasedFrameDecoder(1024, 2, 2, 2, 0));
-                                ch.pipeline().addLast(new NettyServerHandler(channels,  scheduledService));
+                                ch.pipeline().addLast(new NettyServerHandler(channels,  scheduledService,dataMapper,clientLogMapper,dataTool));
                              }
                         })
                         .option(ChannelOption.SO_BACKLOG, 1024)          // (5)

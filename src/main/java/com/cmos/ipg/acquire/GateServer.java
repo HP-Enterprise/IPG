@@ -18,12 +18,12 @@ public class GateServer {
     @Value("${com.comos.acquire.port}")
     private int _acquirePort=8000;
     private Logger _logger;
-    //Éú³ÉÊı¾İ
+    //ç”Ÿæˆæ•°æ®
     ScheduledExecutorService nettyServerScheduledService = Executors.newScheduledThreadPool(10);
     ScheduledExecutorService  dataHandlerScheduledService = Executors.newScheduledThreadPool(10);
     public static ConcurrentHashMap<String,Channel> channels=new ConcurrentHashMap<String,io.netty.channel.Channel>();
     public   void start(){
-        new NettyServer(channels, _acquirePort, nettyServerScheduledService).run();    //nettyÊÕÊı¾İ³ÌĞò£¬ÊÕµ½ÏûÏ¢ºó¿ÉÄÜµ¼ÖÂ×èÈûµÄÒµÎñÈ«²¿½»ÓÉÏß³Ì³Ø´¦Àí
+        new NettyServer(channels, _acquirePort, nettyServerScheduledService).run();    //nettyæ”¶æ•°æ®ç¨‹åºï¼Œæ”¶åˆ°æ¶ˆæ¯åå¯èƒ½å¯¼è‡´é˜»å¡çš„ä¸šåŠ¡å…¨éƒ¨äº¤ç”±çº¿ç¨‹æ± å¤„ç†
      }
 
 }

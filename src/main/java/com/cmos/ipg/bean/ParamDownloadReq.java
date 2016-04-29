@@ -3,25 +3,27 @@ package com.cmos.ipg.bean;
 import com.cmos.ipg.utils.DataTool;
 import io.netty.buffer.ByteBuf;
 
-
 import static io.netty.buffer.Unpooled.buffer;
+
 /**
  * Created by jackl on 2016/4/29.
  */
-public class HeartBeatReq extends UpBean{
-    private Byte heartBeat;
+public class ParamDownloadReq extends UpBean{
+    private Byte paramDownload;
 
-     public HeartBeatReq(){
-        this.setMessageType((byte)3);
+    public ParamDownloadReq(){
+        this.setMessageType((byte)4);
         this.setmId((byte)1);
     }
-    
-    public Byte getHeartBeat() {
-        return heartBeat;
+
+    public Byte getParamDownload() {
+        return paramDownload;
     }
-    public void setHeartBeat(Byte heartBeat) {
-        this.heartBeat = heartBeat;
+
+    public void setParamDownload(Byte paramDownload) {
+        this.paramDownload = paramDownload;
     }
+
     public void decoded(byte[] data){
         ByteBuf bb = buffer(BUFFER_SIZE);
         bb.writeBytes(data);
@@ -32,10 +34,9 @@ public class HeartBeatReq extends UpBean{
         this.setSendingTime(bb.readInt());
         this.setEventId(bb.readInt());
         this.setAgentNum(bb.readByte());
-        this.setHeartBeat(bb.readByte());
+        this.setParamDownload(bb.readByte());
         this.setCheckSum(bb.readByte());
-     }
-
+    }
 
     public byte[] encoded(){
         ByteBuf bb = buffer(BUFFER_SIZE);
@@ -47,7 +48,7 @@ public class HeartBeatReq extends UpBean{
         bb.writeInt(this.getSendingTime());//
         bb.writeInt(this.getEventId());//
         bb.writeByte(this.getAgentNum());//
-        bb.writeByte(this.getHeartBeat());//
+        bb.writeByte(this.getParamDownload());//
         //回写length段
         int index=bb.writerIndex();
         bb.resetWriterIndex();
@@ -62,19 +63,18 @@ public class HeartBeatReq extends UpBean{
         bb.writeByte(this.getCheckSum());//
         return dataTool.getBytesFromByteBuf(bb);
     }
-
     public String toString(){
         StringBuilder sb=new StringBuilder();
         sb.append("------------"+this.getClass().toString()+"------------").append("\n");
-        sb.append("  StartCode:").append(this.getStartCode()).append("\n");
-        sb.append("MessageSize:").append(this.getMessageSize()).append("\n");
-        sb.append("MessageType:").append(this.getMessageType()).append("\n");
-        sb.append("        Mid:").append(this.getmId()).append("\n");
-        sb.append("SendingTime:").append(this.getSendingTime()).append("\n");
-        sb.append("    EventId:").append(this.getEventId()).append("\n");
-        sb.append("   AgentNum:").append(this.getAgentNum()).append("\n");
-        sb.append("  HeartBeat:").append(this.getHeartBeat()).append("\n");
-        sb.append("   CheckSum:").append(this.getCheckSum()).append("\n");
+        sb.append("   StartCode:").append(this.getStartCode()).append("\n");
+        sb.append(" MessageSize:").append(this.getMessageSize()).append("\n");
+        sb.append(" MessageType:").append(this.getMessageType()).append("\n");
+        sb.append("         Mid:").append(this.getmId()).append("\n");
+        sb.append(" SendingTime:").append(this.getSendingTime()).append("\n");
+        sb.append("     EventId:").append(this.getEventId()).append("\n");
+        sb.append("    AgentNum:").append(this.getAgentNum()).append("\n");
+        sb.append("ParamDownload:").append(this.getParamDownload()).append("\n");
+        sb.append("    CheckSum:").append(this.getCheckSum()).append("\n");
         sb.append("------------"+this.getClass().toString()+"------------").append("\n");
         return sb.toString();
     }

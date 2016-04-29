@@ -1,6 +1,5 @@
 package com.cmos.ipg.bean;
 
-import com.cmos.ipg.utils.DataTool;
 import io.netty.buffer.ByteBuf;
 
 import static io.netty.buffer.Unpooled.buffer;
@@ -8,19 +7,38 @@ import static io.netty.buffer.Unpooled.buffer;
 /**
  * Created by jackl on 2016/4/29.
  */
-public class HeartBeatResp extends DownBean{
+public class ParamDownloadResp extends DownBean{
     private Byte status;
+    private int collectContab;
+    private Byte collectProtocol;
 
-    public HeartBeatResp(){
-        this.setMessageType((byte)3);
+    public ParamDownloadResp() {
+        this.setMessageType((byte)4);
         this.setmId((byte) 2);
     }
+
     public Byte getStatus() {
         return status;
     }
 
     public void setStatus(Byte status) {
         this.status = status;
+    }
+
+    public int getCollectContab() {
+        return collectContab;
+    }
+
+    public void setCollectContab(int collectContab) {
+        this.collectContab = collectContab;
+    }
+
+    public Byte getCollectProtocol() {
+        return collectProtocol;
+    }
+
+    public void setCollectProtocol(Byte collectProtocol) {
+        this.collectProtocol = collectProtocol;
     }
 
     public void decoded(byte[] data){
@@ -34,9 +52,10 @@ public class HeartBeatResp extends DownBean{
         this.setEventId(bb.readInt());
         this.setAgentNum(bb.readByte());
         this.setStatus(bb.readByte());
+        this.setCollectContab(bb.readInt());
+        this.setCollectProtocol(bb.readByte());
         this.setCheckSum(bb.readByte());
     }
-
 
     public byte[] encoded(){
         ByteBuf bb = buffer(BUFFER_SIZE);
@@ -49,6 +68,8 @@ public class HeartBeatResp extends DownBean{
         bb.writeInt(this.getEventId());
         bb.writeByte(this.getAgentNum());//
         bb.writeByte(this.getStatus());//
+        bb.writeInt(this.getCollectContab());//
+        bb.writeByte(this.getCollectProtocol());//
         //回写length段
         int index=bb.writerIndex();
         bb.resetWriterIndex();
@@ -67,15 +88,17 @@ public class HeartBeatResp extends DownBean{
     public String toString(){
         StringBuilder sb=new StringBuilder();
         sb.append("------------"+this.getClass().toString()+"------------").append("\n");
-        sb.append("  StartCode:").append(this.getStartCode()).append("\n");
-        sb.append("MessageSize:").append(this.getMessageSize()).append("\n");
-        sb.append("MessageType:").append(this.getMessageType()).append("\n");
-        sb.append("        Mid:").append(this.getmId()).append("\n");
-        sb.append("SendingTime:").append(this.getSendingTime()).append("\n");
-        sb.append("    EventId:").append(this.getEventId()).append("\n");
-        sb.append("   AgentNum:").append(this.getAgentNum()).append("\n");
-        sb.append("     Status:").append(this.getStatus()).append("\n");
-        sb.append("   CheckSum:").append(this.getCheckSum()).append("\n");
+        sb.append("      StartCode:").append(this.getStartCode()).append("\n");
+        sb.append("    MessageSize:").append(this.getMessageSize()).append("\n");
+        sb.append("    MessageType:").append(this.getMessageType()).append("\n");
+        sb.append("            Mid:").append(this.getmId()).append("\n");
+        sb.append("    SendingTime:").append(this.getSendingTime()).append("\n");
+        sb.append("        EventId:").append(this.getEventId()).append("\n");
+        sb.append("       AgentNum:").append(this.getAgentNum()).append("\n");
+        sb.append("         Status:").append(this.getStatus()).append("\n");
+        sb.append("  CollectContab:").append(this.getCollectContab()).append("\n");
+        sb.append("CollectProtocol:").append(this.getCollectProtocol()).append("\n");
+        sb.append("       CheckSum:").append(this.getCheckSum()).append("\n");
         sb.append("------------"+this.getClass().toString()+"------------").append("\n");
         return sb.toString();
     }

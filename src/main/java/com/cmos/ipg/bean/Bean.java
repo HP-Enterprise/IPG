@@ -1,5 +1,7 @@
 package com.cmos.ipg.bean;
 
+import com.cmos.ipg.utils.DataTool;
+
 /**
  * Created by jackl on 2016/4/29.
  */
@@ -12,6 +14,9 @@ public abstract class Bean {
     private Integer eventId;
     private Byte agentNum;
     private Byte checkSum;
+
+    public static final int BUFFER_SIZE = 1024;
+    public DataTool dataTool = new DataTool();
 
     public Short getStartCode() {
         return startCode;

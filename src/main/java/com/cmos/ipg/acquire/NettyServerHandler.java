@@ -69,13 +69,16 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter { // (1)
                     System.out.println("0x02");
                     break;
                 case 0x03://C
-                   _logger.info("heartbeat");
+                   _logger.info("Heartbeat request");
                     respStr=socketService.getHeartbeatResp(receiveDataHexString);
                     buf=dataTool.getByteBuf(respStr);
                     ch.writeAndFlush(buf);//心跳流程直接回消息
                     break;
                 case 0x04://D
-                    System.out.println("0x04");
+                    _logger.info("ParamDownload request");
+                    respStr=socketService.getParamDownloadResp(receiveDataHexString);
+                    buf=dataTool.getByteBuf(respStr);
+                    ch.writeAndFlush(buf);//
                     break;
                 default:
                     _logger.info(">>unknown request ,log to log" + receiveDataHexString);

@@ -5,9 +5,11 @@ package com.cmos.ipg.bean;
  */
 public abstract class Bean {
     private Short startCode=9252;
-    private Short length;
+    private Short messageSize;
     private Byte messageType;
+    private Byte mId;
     private Integer sendingTime;
+    private Integer eventId;
     private Byte agentNum;
     private Byte checkSum;
 
@@ -19,12 +21,12 @@ public abstract class Bean {
         this.startCode = startCode;
     }
 
-    public Short getLength() {
-        return length;
+    public Short getMessageSize() {
+        return messageSize;
     }
 
-    public void setLength(Short length) {
-        this.length = length;
+    public void setMessageSize(Short messageSize) {
+        this.messageSize = messageSize;
     }
 
     public Byte getMessageType() {
@@ -35,12 +37,28 @@ public abstract class Bean {
         this.messageType = messageType;
     }
 
+    public Byte getmId() {
+        return mId;
+    }
+
+    public void setmId(Byte mId) {
+        this.mId = mId;
+    }
+
     public Integer getSendingTime() {
         return sendingTime;
     }
 
     public void setSendingTime(Integer sendingTime) {
         this.sendingTime = sendingTime;
+    }
+
+    public Integer getEventId() {
+        return eventId;
+    }
+
+    public void setEventId(Integer eventId) {
+        this.eventId = eventId;
     }
 
     public Byte getAgentNum() {

@@ -55,8 +55,8 @@ public class DataTool {
         //返回数据包操作类型对应的byte
         byte data=0;
         if(bytes!=null){
-            if(bytes.length>5) {
-                data=bytes[5];
+            if(bytes.length>4) {
+                data=bytes[4];
             }
         }
         return data;
@@ -84,6 +84,18 @@ public class DataTool {
             sb.append(sTemp.toUpperCase());
         }
         return getSpaceHex(sb.toString());
+    }
+
+    public int getCurrentSeconds(){
+        //返回当前时间的秒数
+        int currentSeconds=Integer.valueOf(String.valueOf(new Date().getTime()/1000));
+        return currentSeconds;
+    }
+
+    public Date seconds2Date(long seconds){
+        //时间的秒数转换成Date
+        Date d=new Date(seconds*1000L);
+        return d;
     }
 
     public String getLengthString(String str,int length){

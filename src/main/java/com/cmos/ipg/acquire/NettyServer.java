@@ -7,6 +7,7 @@ package com.cmos.ipg.acquire;
 
 import com.cmos.ipg.mapper.ClientLogMapper;
 import com.cmos.ipg.mapper.DataMapper;
+import com.cmos.ipg.service.SocketService;
 import com.cmos.ipg.utils.DataTool;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.*;
@@ -31,10 +32,12 @@ public class NettyServer {
     private  ScheduledExecutorService scheduledService;
     private DataMapper dataMapper;
     private DataTool dataTool;
+    private SocketService socketService;
     private ClientLogMapper clientLogMapper;
-    public NettyServer(ConcurrentHashMap<String, Channel> cs, int port, ScheduledExecutorService scheduledService,DataMapper dataMapper,ClientLogMapper clientLogMapper,DataTool dataTool) {
+    public NettyServer(ConcurrentHashMap<String, Channel> cs, int port, ScheduledExecutorService scheduledService,DataMapper dataMapper,ClientLogMapper clientLogMapper,SocketService socketService,DataTool dataTool) {
         this.dataMapper=dataMapper;
         this.clientLogMapper=clientLogMapper;
+        this.socketService=socketService;
         this.dataTool=dataTool;
         this.channels=cs;
         this.port = port;
@@ -53,7 +56,7 @@ public class NettyServer {
                             @Override
                             public void initChannel(SocketChannel ch) throws Exception {
                                 //ch.pipeline().addLast(new LengthFieldBasedFrameDecoder(1024, 2, 2, 2, 0));
-                                ch.pipeline().addLast(new NettyServerHandler(channels,  scheduledService,dataMapper,clientLogMapper,dataTool));
+                                ch.pipeline().addLast(new NettyServerHandler(channels,  scheduledService,dataMapper,clientLogMapper,socketService,dataTool));
                              }
                         })
                         .option(ChannelOption.SO_BACKLOG, 1024)          // (5)

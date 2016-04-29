@@ -5,6 +5,7 @@ import com.cmos.ipg.entity.ClientLog;
 import com.cmos.ipg.entity.Data;
 import com.cmos.ipg.mapper.ClientLogMapper;
 import com.cmos.ipg.mapper.DataMapper;
+import com.cmos.ipg.service.SocketService;
 import com.cmos.ipg.utils.DataTool;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.Channel;
@@ -27,10 +28,12 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter { // (1)
     private ScheduledExecutorService scheduledService;
     private DataMapper dataMapper;
     private DataTool dataTool;
+    private SocketService socketService;
     private ClientLogMapper clientLogMapper;
-    public NettyServerHandler(ConcurrentHashMap<String, Channel> cs, ScheduledExecutorService scheduledService,DataMapper dataMapper,ClientLogMapper clientLogMapper,DataTool dataTool){
+    public NettyServerHandler(ConcurrentHashMap<String, Channel> cs, ScheduledExecutorService scheduledService,DataMapper dataMapper,ClientLogMapper clientLogMapper,SocketService socketService,DataTool dataTool){
         this.dataMapper=dataMapper;
         this.clientLogMapper=clientLogMapper;
+        this.socketService=socketService;
         this.dataTool=dataTool;
         this.channels=cs;
         this.scheduledService=scheduledService;
@@ -43,8 +46,9 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter { // (1)
         ByteBuf m = (ByteBuf) msg;
         byte[] receiveData=dataTool.getBytesFromByteBuf(m);
         String receiveDataHexString=dataTool.bytes2hex(receiveData);
+        String respStr;
+        ByteBuf buf;
         //将缓冲区的数据读出到byte[]
-        ch.writeAndFlush(dataTool.getByteBuf(receiveDataHexString));
         _logger.info("Receive date from " + ch.remoteAddress() + ">>>:" + receiveDataHexString);
         if(!dataTool.checkByteArray(receiveData)) {
             _logger.info(">>>>>bytes data is invalid,we will not handle them");
@@ -58,7 +62,10 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter { // (1)
                     System.out.println("0x02");
                     break;
                 case 0x03://C
-                    System.out.println("0x03");
+                   _logger.info("heartbeat");
+                    respStr=socketService.getHeartbeatResp(receiveDataHexString);
+                    buf=dataTool.getByteBuf(respStr);
+                    ch.writeAndFlush(buf);//心跳流程直接回消息
                     break;
                 case 0x04://D
                     System.out.println("0x04");

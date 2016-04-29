@@ -55,7 +55,7 @@ public class NettyServer {
                         .childHandler(new ChannelInitializer<SocketChannel>() { // (4)
                             @Override
                             public void initChannel(SocketChannel ch) throws Exception {
-                                //ch.pipeline().addLast(new LengthFieldBasedFrameDecoder(1024, 2, 2, 2, 0));
+                                ch.pipeline().addLast(new LengthFieldBasedFrameDecoder(1024, 2, 2, -4, 0));
                                 ch.pipeline().addLast(new NettyServerHandler(channels,  scheduledService,dataMapper,clientLogMapper,socketService,dataTool));
                              }
                         })

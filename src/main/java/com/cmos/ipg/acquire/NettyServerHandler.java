@@ -7,6 +7,7 @@ import com.cmos.ipg.mapper.ClientLogMapper;
 import com.cmos.ipg.mapper.DataMapper;
 import com.cmos.ipg.service.SocketService;
 import com.cmos.ipg.utils.DataTool;
+import com.sun.scenario.effect.impl.sw.sse.SSEBlend_SRC_OUTPeer;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;
@@ -14,6 +15,8 @@ import io.netty.channel.ChannelInboundHandlerAdapter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.net.InetSocketAddress;
+import java.net.SocketAddress;
 import java.util.Date;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ScheduledExecutorService;
@@ -50,6 +53,10 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter { // (1)
         ByteBuf buf;
         //将缓冲区的数据读出到byte[]
         _logger.info("Receive date from " + ch.remoteAddress() + ">>>:" + receiveDataHexString);
+        InetSocketAddress socketAddress=(InetSocketAddress)ch.remoteAddress();
+        System.out.println(socketAddress.getAddress().getHostAddress()+":"+socketAddress.getPort());
+
+
         if(!dataTool.checkByteArray(receiveData)) {
             _logger.info(">>>>>bytes data is invalid,we will not handle them");
         }else{

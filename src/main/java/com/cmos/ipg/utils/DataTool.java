@@ -55,8 +55,8 @@ public class DataTool {
         //返回数据包操作类型对应的byte
         byte data=0;
         if(bytes!=null){
-            if(bytes.length>9) {
-                data=bytes[9];
+            if(bytes.length>5) {
+                data=bytes[5];
             }
         }
         return data;
@@ -238,7 +238,7 @@ public class DataTool {
         boolean result=false;
         if(data!=null){
             if(data.length>2) {
-                if (data[0] == 0x23 && data[1] == 0x23 && checkSum(data)) {
+                if (data[0] == 0x24 && data[1] == 0x24 && checkSum(data)) {
                     result = true;
                 }
             }

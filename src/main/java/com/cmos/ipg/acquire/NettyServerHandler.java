@@ -39,13 +39,40 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter { // (1)
 
     @Override
     public synchronized void channelRead(ChannelHandlerContext ctx, Object msg) { // (2)
-        _logger.info("read something");
         Channel ch=ctx.channel();
         ByteBuf m = (ByteBuf) msg;
         byte[] receiveData=dataTool.getBytesFromByteBuf(m);
         String receiveDataHexString=dataTool.bytes2hex(receiveData);
         //将缓冲区的数据读出到byte[]
         ch.writeAndFlush(dataTool.getByteBuf(receiveDataHexString));
+        _logger.info("Receive date from " + ch.remoteAddress() + ">>>:" + receiveDataHexString);
+        if(!dataTool.checkByteArray(receiveData)) {
+            _logger.info(">>>>>bytes data is invalid,we will not handle them");
+        }else{
+            byte dataType=dataTool.getApplicationType(receiveData);
+            switch(dataType){
+                case 0x01://A
+                    System.out.println("0x01");
+                    break;
+                case 0x02://B
+                    System.out.println("0x02");
+                    break;
+                case 0x03://C
+                    System.out.println("0x03");
+                    break;
+                case 0x04://D
+                    System.out.println("0x04");
+                    break;
+                default:
+                    _logger.info(">>unknown request ,log to log" + receiveDataHexString);
+                     break;
+
+            }
+
+        }
+
+
+
         Data d=new Data();
         d.setClient( ch.remoteAddress().toString());
         d.setBytes(receiveDataHexString);
@@ -54,7 +81,7 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter { // (1)
          }
 
     @Override
-    public void channelRegistered(ChannelHandlerContext ctx){
+    public void channelRegistered(ChannelHandlerContext ctx) {
         Channel ch=ctx.channel();
         _logger.info("Register" + ch.remoteAddress());
         ClientLog c=new ClientLog();

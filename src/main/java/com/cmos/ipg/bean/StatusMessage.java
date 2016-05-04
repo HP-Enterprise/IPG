@@ -9,6 +9,9 @@ import static io.netty.buffer.Unpooled.buffer;
  */
 public class StatusMessage extends UpBean{
 
+    private static int deviceNameSize=100;
+    private static int deviceLocateSize=200;
+
     private Byte packageNum;
     private String[] deviceName;//
     private String[] deviceLocate;//
@@ -23,6 +26,70 @@ public class StatusMessage extends UpBean{
         this.setmId((byte) 1);
     }
 
+    public Byte getPackageNum() {
+        return packageNum;
+    }
+
+    public void setPackageNum(Byte packageNum) {
+        this.packageNum = packageNum;
+    }
+
+    public String[] getDeviceName() {
+        return deviceName;
+    }
+
+    public void setDeviceName(String[] deviceName) {
+        this.deviceName = deviceName;
+    }
+
+    public String[] getDeviceLocate() {
+        return deviceLocate;
+    }
+
+    public void setDeviceLocate(String[] deviceLocate) {
+        this.deviceLocate = deviceLocate;
+    }
+
+    public Integer[] getStatus1() {
+        return status1;
+    }
+
+    public void setStatus1(Integer[] status1) {
+        this.status1 = status1;
+    }
+
+    public Integer[] getStatus2() {
+        return status2;
+    }
+
+    public void setStatus2(Integer[] status2) {
+        this.status2 = status2;
+    }
+
+    public Integer[] getStatus3() {
+        return status3;
+    }
+
+    public void setStatus3(Integer[] status3) {
+        this.status3 = status3;
+    }
+
+    public Integer[] getStatus4() {
+        return status4;
+    }
+
+    public void setStatus4(Integer[] status4) {
+        this.status4 = status4;
+    }
+
+    public Integer[] getStatus5() {
+        return status5;
+    }
+
+    public void setStatus5(Integer[] status5) {
+        this.status5 = status5;
+    }
+
     @Override
     public void decoded(byte[] data){
         ByteBuf bb = buffer(BUFFER_SIZE);
@@ -34,10 +101,30 @@ public class StatusMessage extends UpBean{
         this.setSendingTime(bb.readInt());
         this.setEventId(bb.readInt());
         this.setAgentNum(bb.readByte());
+        this.setPackageNum(bb.readByte());
+        int _packageNum=this.getPackageNum();
 
+        deviceName = new String[_packageNum];
+        deviceLocate = new String[_packageNum];
+        status1 = new Integer[_packageNum];
+        status2 = new Integer[_packageNum];
+        status3 = new Integer[_packageNum];
+        status4 = new Integer[_packageNum];
+        status5 = new Integer[_packageNum];
 
-
-
+        for (int i = 0; i <_packageNum ; i++) {
+            byte[] deviceNameBytes = new byte[deviceNameSize];
+            bb.readBytes(deviceNameBytes);
+            deviceName[i] = new String(deviceNameBytes);
+            byte[] deviceLocateBytes = new byte[deviceLocateSize];
+            bb.readBytes(deviceLocateBytes);
+            deviceLocate[i] = new String(deviceLocateBytes);
+            status1[i] =  bb.readInt();
+            status2[i] =  bb.readInt();
+            status3[i] =  bb.readInt();
+            status4[i] =  bb.readInt();
+            status5[i] =  bb.readInt();
+        }
         this.setCheckSum(bb.readByte());
     }
 
@@ -52,7 +139,16 @@ public class StatusMessage extends UpBean{
         bb.writeInt(this.getSendingTime());//
         bb.writeInt(this.getEventId());
         bb.writeByte(this.getAgentNum());//
-
+        bb.writeByte(this.getPackageNum());
+        for (int i = 0; i <this.getPackageNum() ; i++) {
+            bb.writeBytes(dataTool.getLengthBytesString(deviceName[i], deviceNameSize).getBytes());
+            bb.writeBytes(dataTool.getLengthBytesString(deviceLocate[i], deviceLocateSize).getBytes());
+            bb.writeInt(status1[i]);
+            bb.writeInt(status2[i]);
+            bb.writeInt(status3[i]);
+            bb.writeInt(status4[i]);
+            bb.writeInt(status5[i]);
+        }
         //回写length段
         int index=bb.writerIndex();
         bb.resetWriterIndex();

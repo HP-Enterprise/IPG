@@ -119,14 +119,13 @@ public class DataTool {
         if(str==null){
             return str;
         }
-    try{
-    if(str.getBytes("UTF-8").length>=length){
+
+    if(str.getBytes().length>=length){
         return str;
     }
-    while (str.getBytes("UTF-8").length<length){
+    while (str.getBytes().length<length){
         str=str+" ";
     }
-    }catch (UnsupportedEncodingException e){e.printStackTrace();}
 
         return str;
     }

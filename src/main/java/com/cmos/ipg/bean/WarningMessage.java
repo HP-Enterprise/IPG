@@ -67,22 +67,20 @@ public class WarningMessage extends UpBean{
         this.setSendingTime(bb.readInt());
         this.setEventId(bb.readInt());
         this.setAgentNum(bb.readByte());
-        try{
+
         byte[] alarmDeviceNameBytes = new byte[alarmDeviceNameSize];
         bb.readBytes(alarmDeviceNameBytes);
-        this.setAlarmDeviceName(new String(alarmDeviceNameBytes, "UTF-8"));
+        this.setAlarmDeviceName(new String(alarmDeviceNameBytes));
 
         byte[] alarmTitleBytes = new byte[alarmTitleSize];
         bb.readBytes(alarmTitleBytes);
-        this.setAlarmTitle(new String(alarmTitleBytes, "UTF-8"));
+        this.setAlarmTitle(new String(alarmTitleBytes));
 
         byte[] alarmContentBytes = new byte[alarmContentSize];
         bb.readBytes(alarmContentBytes);
-        this.setAlarmContent(new String(alarmContentBytes, "UTF-8"));
+        this.setAlarmContent(new String(alarmContentBytes));
 
-    }catch (UnsupportedEncodingException e){
-        e.printStackTrace();
-    }
+
         this.setAlarmLevel(bb.readByte());
         this.setCheckSum(bb.readByte());
     }
@@ -98,13 +96,10 @@ public class WarningMessage extends UpBean{
         bb.writeInt(this.getSendingTime());//
         bb.writeInt(this.getEventId());
         bb.writeByte(this.getAgentNum());//
-        try{
-            bb.writeBytes(this.getAlarmDeviceName().getBytes("UTF-8"));
-            bb.writeBytes(this.getAlarmTitle().getBytes("UTF-8"));
-            bb.writeBytes(this.getAlarmContent().getBytes("UTF-8"));
-        }catch (UnsupportedEncodingException e){
-            e.printStackTrace();
-        }
+
+        bb.writeBytes(dataTool.getLengthBytesString(this.getAlarmDeviceName(), alarmDeviceNameSize).getBytes());
+        bb.writeBytes(dataTool.getLengthBytesString(this.getAlarmTitle(), alarmTitleSize).getBytes());
+        bb.writeBytes(dataTool.getLengthBytesString(this.getAlarmContent(), alarmContentSize).getBytes());
 
         bb.writeByte(alarmLevel);
         //回写length段

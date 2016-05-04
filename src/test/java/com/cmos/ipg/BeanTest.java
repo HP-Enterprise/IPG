@@ -97,14 +97,53 @@ public class BeanTest {
         warningMessage.setEventId(1443151834);
         warningMessage.setAgentNum((byte) 3);
 
-        warningMessage.setAlarmDeviceName(dataTool.getLengthBytesString("中国ABC", 100));
-        warningMessage.setAlarmTitle(dataTool.getLengthBytesString("TITLE", 200));
-        warningMessage.setAlarmContent(dataTool.getLengthBytesString("CCC",500));
+        warningMessage.setAlarmDeviceName("中国ABC");
+        warningMessage.setAlarmTitle("TITLE");
+        warningMessage.setAlarmContent("CCC");
 
-        warningMessage.setAlarmLevel((byte)1);
+        warningMessage.setAlarmLevel((byte) 1);
         byte[] bytes=warningMessage.encoded();
         System.out.println(dataTool.bytes2hex(bytes));
         WarningMessage h=new WarningMessage();
+        h.decoded(bytes);
+        System.out.println(h.toString());
+        assert (h.getAgentNum().equals((byte)3));
+    }
+
+    @Test
+    public void test_StatusMeaasge(){
+        StatusMessage statusMessage=new StatusMessage();
+        statusMessage.setSendingTime(1443151834);
+        statusMessage.setEventId(1443151834);
+        statusMessage.setAgentNum((byte) 3);
+        statusMessage.setPackageNum((byte)1);
+        String[] deviceName = new String[statusMessage.getPackageNum()];
+        String[] deviceLocate = new String[statusMessage.getPackageNum()];
+        Integer[] status1 = new Integer[statusMessage.getPackageNum()];
+        Integer[] status2 = new Integer[statusMessage.getPackageNum()];
+        Integer[] status3 = new Integer[statusMessage.getPackageNum()];
+        Integer[] status4 = new Integer[statusMessage.getPackageNum()];
+        Integer[] status5 = new Integer[statusMessage.getPackageNum()];
+        for (int i = 0; i <statusMessage.getPackageNum() ; i++) {
+            deviceName[i]="设备名称A"+i;
+            deviceLocate[i]="设备位置B"+i;
+            status1[i]=i*1;
+            status2[i]=i*2;
+            status3[i]=i*3;
+            status4[i]=i*4;
+            status5[i]=i*5;
+        }
+        statusMessage.setDeviceName(deviceName);
+        statusMessage.setDeviceLocate(deviceLocate);
+        statusMessage.setStatus1(status1);
+        statusMessage.setStatus2(status2);
+        statusMessage.setStatus3(status3);
+        statusMessage.setStatus4(status4);
+        statusMessage.setStatus5(status5);
+
+        byte[] bytes=statusMessage.encoded();
+        System.out.println(dataTool.bytes2hex(bytes));
+        StatusMessage h=new StatusMessage();
         h.decoded(bytes);
         System.out.println(h.toString());
         assert (h.getAgentNum().equals((byte)3));

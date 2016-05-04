@@ -1,9 +1,6 @@
 package com.cmos.ipg.service;
 
-import com.cmos.ipg.bean.HeartBeatReq;
-import com.cmos.ipg.bean.HeartBeatResp;
-import com.cmos.ipg.bean.ParamDownloadReq;
-import com.cmos.ipg.bean.ParamDownloadResp;
+import com.cmos.ipg.bean.*;
 import com.cmos.ipg.utils.DataTool;
 import io.netty.buffer.ByteBuf;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +18,7 @@ public class SocketService {
 
 
     /**
-     *
+     * 处理客户端心跳
      * @param reqString 心跳请求hex
      * @return 心跳响应hex
      */
@@ -42,7 +39,7 @@ public class SocketService {
     }
 
     /**
-     *
+     * 处理参数下载请求
      * @param reqString 参数下载请求hex
      * @return 参数下载响应hex
      */
@@ -64,5 +61,47 @@ public class SocketService {
         byte[] respBytes=resp.encoded();
         String respStr=dataTool.bytes2hex(respBytes);
         return respStr;
+    }
+
+    /**
+     * 处理状态信息上报
+     * @param reqString 状态信息hex
+     * @return 处理结果
+     */
+    public int handlStatusMessage(String reqString){
+        //
+        try{
+            ByteBuf bb=dataTool.getByteBuf(reqString);
+            byte[] reqBytes=dataTool.getBytesFromByteBuf(bb);
+            StatusMessage req=new StatusMessage();
+            req.decoded(reqBytes);
+            System.out.println("save to mysql>>>:"+req.toString());
+            // todo save to db and push to mq
+            return 0;
+        }catch (Exception e){
+            e.printStackTrace();
+            return 1;//非正常返回
+        }
+    }
+
+    /**
+     * 处理告警信息上报
+     * @param reqString 告警信息hex
+     * @return 处理结果
+     */
+    public int handleWarningMessage(String reqString){
+        //
+        try{
+            ByteBuf bb=dataTool.getByteBuf(reqString);
+            byte[] reqBytes=dataTool.getBytesFromByteBuf(bb);
+            WarningMessage req=new WarningMessage();
+            req.decoded(reqBytes);
+            System.out.println("save to mysql>>>:" + req.toString());
+            // todo save to db and push to mq
+            return 0;
+        }catch (Exception e){
+            e.printStackTrace();
+            return 1;//非正常返回
+        }
     }
 }

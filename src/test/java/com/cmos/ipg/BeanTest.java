@@ -1,9 +1,6 @@
 package com.cmos.ipg;
 
-import com.cmos.ipg.bean.HeartBeatReq;
-import com.cmos.ipg.bean.HeartBeatResp;
-import com.cmos.ipg.bean.ParamDownloadReq;
-import com.cmos.ipg.bean.ParamDownloadResp;
+import com.cmos.ipg.bean.*;
 import com.cmos.ipg.utils.DataTool;
 import org.junit.After;
 import org.junit.Before;
@@ -91,5 +88,25 @@ public class BeanTest {
         System.out.println(h.toString());
         assert (h.getStatus().equals((byte)1));
 
+    }
+
+    @Test
+    public void test_WarningMeaasge(){
+        WarningMessage warningMessage=new WarningMessage();
+        warningMessage.setSendingTime(1443151834);
+        warningMessage.setEventId(1443151834);
+        warningMessage.setAgentNum((byte) 3);
+
+        warningMessage.setAlarmDeviceName(dataTool.getLengthBytesString("中国ABC", 100));
+        warningMessage.setAlarmTitle(dataTool.getLengthBytesString("TITLE", 200));
+        warningMessage.setAlarmContent(dataTool.getLengthBytesString("CCC",500));
+
+        warningMessage.setAlarmLevel((byte)1);
+        byte[] bytes=warningMessage.encoded();
+        System.out.println(dataTool.bytes2hex(bytes));
+        WarningMessage h=new WarningMessage();
+        h.decoded(bytes);
+        System.out.println(h.toString());
+        assert (h.getAgentNum().equals((byte)3));
     }
 }

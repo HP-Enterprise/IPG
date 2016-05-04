@@ -4,6 +4,8 @@ import io.netty.buffer.ByteBuf;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
+
+import java.io.UnsupportedEncodingException;
 import java.nio.ByteBuffer;
 import java.util.*;
 
@@ -109,6 +111,23 @@ public class DataTool {
         while (str.length()<length){
             str=str+" ";
         }
+        return str;
+    }
+
+    public String getLengthBytesString(String str,int length){
+        //将给定字符串右补空格为定长字符串
+        if(str==null){
+            return str;
+        }
+    try{
+    if(str.getBytes("UTF-8").length>=length){
+        return str;
+    }
+    while (str.getBytes("UTF-8").length<length){
+        str=str+" ";
+    }
+    }catch (UnsupportedEncodingException e){e.printStackTrace();}
+
         return str;
     }
 

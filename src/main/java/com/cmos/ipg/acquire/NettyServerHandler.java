@@ -66,7 +66,8 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter { // (1)
                     System.out.println("0x01");
                     break;
                 case 0x02://B
-                    System.out.println("0x02");
+                    _logger.info("WarningMessage request");
+                    int result=socketService.handleWarningMessage(receiveDataHexString);
                     break;
                 case 0x03://C
                    _logger.info("Heartbeat request");

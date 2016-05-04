@@ -1,6 +1,5 @@
 package com.cmos.ipg.bean;
 
-import com.cmos.ipg.utils.DataTool;
 import io.netty.buffer.ByteBuf;
 
 import static io.netty.buffer.Unpooled.buffer;
@@ -24,6 +23,7 @@ public class ParamDownloadReq extends UpBean{
         this.paramDownload = paramDownload;
     }
 
+    @Override
     public void decoded(byte[] data){
         ByteBuf bb = buffer(BUFFER_SIZE);
         bb.writeBytes(data);
@@ -38,6 +38,7 @@ public class ParamDownloadReq extends UpBean{
         this.setCheckSum(bb.readByte());
     }
 
+    @Override
     public byte[] encoded(){
         ByteBuf bb = buffer(BUFFER_SIZE);
         bb.writeShort(this.getStartCode());
@@ -63,6 +64,7 @@ public class ParamDownloadReq extends UpBean{
         bb.writeByte(this.getCheckSum());//
         return dataTool.getBytesFromByteBuf(bb);
     }
+    @Override
     public String toString(){
         StringBuilder sb=new StringBuilder();
         sb.append("------------"+this.getClass().toString()+"------------").append("\n");

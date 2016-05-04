@@ -23,6 +23,7 @@ public class HeartBeatResp extends DownBean{
         this.status = status;
     }
 
+    @Override
     public void decoded(byte[] data){
         ByteBuf bb = buffer(BUFFER_SIZE);
         bb.writeBytes(data);
@@ -37,7 +38,7 @@ public class HeartBeatResp extends DownBean{
         this.setCheckSum(bb.readByte());
     }
 
-
+    @Override
     public byte[] encoded(){
         ByteBuf bb = buffer(BUFFER_SIZE);
         bb.writeShort(this.getStartCode());
@@ -64,6 +65,7 @@ public class HeartBeatResp extends DownBean{
         return dataTool.getBytesFromByteBuf(bb);
     }
 
+    @Override
     public String toString(){
         StringBuilder sb=new StringBuilder();
         sb.append("------------"+this.getClass().toString()+"------------").append("\n");

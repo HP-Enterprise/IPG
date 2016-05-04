@@ -81,4 +81,11 @@ public abstract class Bean {
     public void setCheckSum(Byte checkSum) {
         this.checkSum = checkSum;
     }
+
+
+    public void decoded(byte[] data){}
+
+    public byte[] encoded(){
+        return null;
+    }
 }

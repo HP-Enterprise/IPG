@@ -6,6 +6,12 @@ com.comos.acquire:
    #data server listen on this port
     port: 8000
 
+#RocketMQ server info
+com.comos.mq:
+    producerName: ProducerGroupName
+    nameServerAddress: 127.0.0.1:9876
+    instanceName: Producer
+
 # Logging level (TRACE, DEBUG, INFO, WARN, ERROR, FATAL, OFF)
 logging:
     level:

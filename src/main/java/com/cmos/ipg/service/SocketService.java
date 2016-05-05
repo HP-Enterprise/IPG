@@ -15,7 +15,8 @@ import java.nio.ByteBuffer;
 public class SocketService {
     @Autowired
     DataTool dataTool;
-
+    @Autowired
+    MQService mqService;
 
     /**
      * 处理客户端心跳
@@ -98,6 +99,7 @@ public class SocketService {
             req.decoded(reqBytes);
             System.out.println("save to mysql>>>:" + req.toString());
             // todo save to db and push to mq
+            mqService.pushToUser(1,req.getAlarmLevel()+":"+req.getAlarmDeviceName().trim()+","+req.getAlarmTitle().trim()+","+req.getAlarmContent().trim());
             return 0;
         }catch (Exception e){
             e.printStackTrace();

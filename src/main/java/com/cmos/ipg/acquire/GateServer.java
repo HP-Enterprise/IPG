@@ -2,6 +2,7 @@ package com.cmos.ipg.acquire;
 
 import com.cmos.ipg.mapper.ClientLogMapper;
 import com.cmos.ipg.mapper.DataMapper;
+import com.cmos.ipg.service.MQService;
 import com.cmos.ipg.service.SocketService;
 import com.cmos.ipg.utils.DataTool;
 import io.netty.channel.Channel;
@@ -31,6 +32,8 @@ public class GateServer {
     DataTool dataTool;
     @Autowired
     SocketService socketService;
+    @Autowired
+    MQService mqService;
 
     //生成数据
     ScheduledExecutorService nettyServerScheduledService = Executors.newScheduledThreadPool(10);

@@ -2,6 +2,7 @@ package com.cmos.ipg;
 
 import com.cmos.ipg.mq.Consumer;
 import com.cmos.ipg.mq.Producer;
+import com.cmos.ipg.service.MQService;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -21,6 +22,9 @@ public class MQTest {
     @Autowired
     Producer producer;
 
+    @Autowired
+    MQService mqService;
+
     @Before
     public void setUp() {
     }
@@ -30,8 +34,9 @@ public class MQTest {
     }
 
     @Test
-    public void test_getUser(){
-       // producer.main();
+    public void test_sendMsg(){
+        mqService.pushToUser(1,"WARNING>>>>");
+
     }
 
 

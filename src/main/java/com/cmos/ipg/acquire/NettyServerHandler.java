@@ -5,6 +5,7 @@ import com.cmos.ipg.entity.ClientLog;
 import com.cmos.ipg.entity.Data;
 import com.cmos.ipg.mapper.ClientLogMapper;
 import com.cmos.ipg.mapper.DataMapper;
+import com.cmos.ipg.service.MQService;
 import com.cmos.ipg.service.SocketService;
 import com.cmos.ipg.utils.DataTool;
 import com.sun.scenario.effect.impl.sw.sse.SSEBlend_SRC_OUTPeer;

@@ -24,6 +24,6 @@ public interface AlarmHistoryMapper {
     AlarmHistory findById(@Param("id") int id);
 
     @Insert("INSERT INTO ip_alarm_his(device_id, alarm_device_name,alarm_title,alarm_content,alarm_level,alarm_date)" +
-            "VALUES(#{alarm.deviceId}, #{alarm.alarmDeviceName}, #{alarm.alarmTitle}, #{alarm.alarmContent}, #{alarm.alarmLevel}, #{alarm.alarmDate})")
-    void save(@Param("alarm") AlarmHistory alarmHistory);
+            "VALUES(#{alarmHistory.deviceId}, #{alarmHistory.alarmDeviceName}, #{alarmHistory.alarmTitle}, #{alarmHistory.alarmContent}, #{alarmHistory.alarmLevel}, #{alarmHistory.alarmDate})")
+    void save(@Param("alarmHistory") AlarmHistory alarmHistory);
 }

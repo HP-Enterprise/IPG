@@ -95,6 +95,6 @@ device_para_value varchar(100) not null COMMENT '设备参数值',
 alarm_title varchar(200) COMMENT '告警标题',
 alarm_content varchar(500) COMMENT '告警正文',
 alarm_level int COMMENT '告警级别 1 严重 2 重要 3 一般  4通知',
-alarm_time  datetime COMMENT '告警时间',
+alarm_date  datetime COMMENT '告警时间',
 PRIMARY KEY (id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='告警配置表';

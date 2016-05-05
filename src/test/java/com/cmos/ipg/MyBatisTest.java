@@ -35,6 +35,8 @@ public class MyBatisTest {
     AlarmMapper alarmMapper;
     @Autowired
     AlarmHistoryMapper alarmHistoryMapper;
+    @Autowired
+    AlarmConfMapper alarmConfMapper;
 
 
     @Before
@@ -43,6 +45,24 @@ public class MyBatisTest {
 
     @After
     public void tearDown() {
+    }
+
+    @Transactional
+    @Rollback
+    @Test
+    public void test_alarmConf(){
+        AlarmConf alarmConf=new AlarmConf();
+        alarmConf.setDeviceId(1);
+        alarmConf.setDeviceName("A1");
+        alarmConf.setDeviceParaName("p1");
+        alarmConf.setDeviceParaValue("v1");
+        alarmConf.setAlarmTitle("tlh1");
+        alarmConf.setAlarmContent("2000");
+        alarmConf.setAlarmLevel(1);
+        alarmConf.setAlarmDate(new Date());
+        alarmConfMapper.save(alarmConf);
+        AlarmConf f=alarmConfMapper.findById(1);
+        assert (f.getDeviceName().equals("A1"));
     }
 
     @Transactional

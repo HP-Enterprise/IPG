@@ -1,9 +1,9 @@
 package com.cmos.ipg;
 
 import com.cmos.ipg.entity.Data;
-import com.cmos.ipg.entity.User;
+import com.cmos.ipg.entity.Device;
 import com.cmos.ipg.mapper.DataMapper;
-import com.cmos.ipg.mapper.UserMapper;
+import com.cmos.ipg.mapper.DeviceMapper;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -21,7 +21,7 @@ import org.springframework.transaction.annotation.Transactional;
 @SpringApplicationConfiguration(classes = Application.class)
 public class MyBatisTest {
     @Autowired
-    UserMapper userMapper;
+    DeviceMapper deviceMapper;
     @Autowired
     DataMapper dataMapper;
 
@@ -33,15 +33,18 @@ public class MyBatisTest {
     public void tearDown() {
     }
 
-    @Transactional
-    @Rollback
+
+
     @Test
-    public void test_getUser(){
-        User u=new User();
-        u.setUsername("aaa");
-        u.setPassword("666666");
-        userMapper.addUser(u);
-        System.out.println(userMapper.findByName("jack"));
+    public void test_device(){
+        Device device=new Device();
+        device.setDeviceSn("abcdef123456");
+        device.setDeviceType(1);
+        device.setDeviceLocate("A1");
+        device.setDeviceName("设备A");
+        deviceMapper.save(device);
+        Device f=deviceMapper.findById(1);
+        assert (f.getDeviceLocate().equals("A1"));
     }
 
     @Transactional

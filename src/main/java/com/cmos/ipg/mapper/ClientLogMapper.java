@@ -1,7 +1,5 @@
 package com.cmos.ipg.mapper;
 import com.cmos.ipg.entity.ClientLog;
-import com.cmos.ipg.entity.Data;
-import com.cmos.ipg.entity.User;
 import org.apache.ibatis.annotations.*;
 import org.apache.ibatis.type.JdbcType;
 

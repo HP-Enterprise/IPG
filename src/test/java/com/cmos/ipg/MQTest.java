@@ -1,9 +1,5 @@
 package com.cmos.ipg;
 
-import com.cmos.ipg.entity.Data;
-import com.cmos.ipg.entity.User;
-import com.cmos.ipg.mapper.DataMapper;
-import com.cmos.ipg.mapper.UserMapper;
 import com.cmos.ipg.mq.Consumer;
 import com.cmos.ipg.mq.Producer;
 import org.junit.After;

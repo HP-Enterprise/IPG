@@ -2,8 +2,12 @@ package com.cmos.ipg;
 
 import com.cmos.ipg.entity.Data;
 import com.cmos.ipg.entity.Device;
+import com.cmos.ipg.entity.DeviceStatus;
+import com.cmos.ipg.entity.DeviceStatusHistory;
 import com.cmos.ipg.mapper.DataMapper;
 import com.cmos.ipg.mapper.DeviceMapper;
+import com.cmos.ipg.mapper.DeviceStatusHistoryMapper;
+import com.cmos.ipg.mapper.DeviceStatusMapper;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -13,6 +17,8 @@ import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Date;
 
 /**
  * Created by jackl on 2016/4/28.
@@ -24,6 +30,11 @@ public class MyBatisTest {
     DeviceMapper deviceMapper;
     @Autowired
     DataMapper dataMapper;
+    @Autowired
+    DeviceStatusMapper deviceStatusMapper;
+    @Autowired
+    DeviceStatusHistoryMapper deviceStatusHistoryMapper;
+
 
     @Before
     public void setUp() {
@@ -34,7 +45,37 @@ public class MyBatisTest {
     }
 
 
+    
+    @Transactional
+    @Rollback
+    @Test
+    public void test_deviceStatusHis(){
+        DeviceStatusHistory deviceStatusHistory=new DeviceStatusHistory();
+        deviceStatusHistory.setDeviceId(1);
+        deviceStatusHistory.setDeviceParaName("vol");
+        deviceStatusHistory.setDeviceParaValue("100");
+        deviceStatusHistory.setCollectDate(new Date());
+        deviceStatusHistoryMapper.save(deviceStatusHistory);
+        DeviceStatusHistory f=deviceStatusHistoryMapper.findById(1);
+        System.out.println(f.getCollectDate().toString());
+        assert (f.getDeviceId()==1);
+    }
 
+    @Transactional
+    @Rollback
+    @Test
+    public void test_deviceStatus(){
+        DeviceStatus deviceStatus=new DeviceStatus();
+        deviceStatus.setDeviceId(1);
+        deviceStatus.setDeviceParaName("vol");
+        deviceStatus.setDeviceParaValue("100");
+        deviceStatusMapper.save(deviceStatus);
+        DeviceStatus f=deviceStatusMapper.findById(1);
+        assert (f.getDeviceId()==1);
+    }
+
+    @Transactional
+    @Rollback
     @Test
     public void test_device(){
         Device device=new Device();

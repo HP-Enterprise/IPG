@@ -44,10 +44,10 @@ PRIMARY KEY (id)
 DROP TABLE IF EXISTS ip_device_status_his;
 create table ip_device_status_his(
 id int(11) NOT NULL AUTO_INCREMENT COMMENT '主键id',
-collect_date datetime not null COMMENT '采集时间',
 device_id int(11) not null COMMENT '设备id',
 device_para_name varchar(100) not null COMMENT '设备参数名称',
 device_para_value varchar(100) not null COMMENT '设备参数值',
+collect_date datetime not null COMMENT '采集时间',
 PRIMARY KEY (id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='设备状态历史表';
 

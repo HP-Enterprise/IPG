@@ -1,11 +1,12 @@
 package com.cmos.ipg.entity;
 
+import java.io.Serializable;
 import java.util.Date;
 
 /**
  * Created by jackl on 2016/5/5.
  */
-public class Device {
+public class Device implements Serializable {
     private  int id;
     private String deviceName;
     private String deviceSn;

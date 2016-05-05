@@ -12,6 +12,7 @@ import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
 
+
 import java.util.Date;
 
 /**
@@ -30,6 +31,11 @@ public class MyBatisTest {
     DeviceStatusHistoryMapper deviceStatusHistoryMapper;
     @Autowired
     AgentMapper agentMapper;
+    @Autowired
+    AlarmMapper alarmMapper;
+    @Autowired
+    AlarmHistoryMapper alarmHistoryMapper;
+
 
     @Before
     public void setUp() {
@@ -39,6 +45,37 @@ public class MyBatisTest {
     public void tearDown() {
     }
 
+    @Transactional
+    @Rollback
+    @Test
+    public void test_alarmHis(){
+        AlarmHistory alarmHistory=new AlarmHistory();
+        alarmHistory.setDeviceId(1);
+        alarmHistory.setAlarmDeviceName("A1");
+        alarmHistory.setAlarmTitle("tlh1");
+        alarmHistory.setAlarmContent("2000");
+        alarmHistory.setAlarmLevel(1);
+        alarmHistory.setAlarmDate(new Date());
+        alarmHistoryMapper.save(alarmHistory);
+        AlarmHistory f=alarmHistoryMapper.findById(1);
+        assert (f.getAlarmContent().equals("2000"));
+    }
+
+    @Transactional
+    @Rollback
+    @Test
+    public void test_alarm(){
+        Alarm alarm=new Alarm();
+        alarm.setDeviceId(1);
+        alarm.setAlarmDeviceName("A1");
+        alarm.setAlarmTitle("tl1");
+        alarm.setAlarmContent("1000");
+        alarm.setAlarmLevel(1);
+        alarm.setAlarmDate(new Date());
+        alarmMapper.save(alarm);
+        Alarm f=alarmMapper.findById(1);
+        assert (f.getAlarmContent().equals("1000"));
+    }
 
     @Transactional
     @Rollback

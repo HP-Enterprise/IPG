@@ -64,28 +64,31 @@ PRIMARY KEY (id)
 DROP TABLE IF EXISTS ip_alarm;
 create table ip_alarm(
 id int(11) NOT NULL AUTO_INCREMENT COMMENT '主键id',
-alarm_devicename	varchar(100) COMMENT '告警设备名称',
+device_id int(11) not null COMMENT '设备id',
+alarm_device_name	varchar(100) COMMENT '告警设备名称',
 alarm_title varchar(200) COMMENT '告警标题',
 alarm_content varchar(500) COMMENT '告警正文',
 alarm_level int COMMENT '告警级别 1 严重 2 重要 3 一般  4通知',
-alarm_time datetime NOT NULL COMMENT '告警时间',
+alarm_date datetime NOT NULL COMMENT '告警时间',
 PRIMARY KEY (id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='告警表';
 
 DROP TABLE IF EXISTS ip_alarm_his;
 create table ip_alarm_his(
 id int(11) NOT NULL AUTO_INCREMENT COMMENT '主键id',
+device_id int(11) not null COMMENT '设备id',
 alarm_device_name	varchar(100) COMMENT '告警设备名称',
 alarm_title varchar(200) COMMENT '告警标题',
 alarm_content varchar(500) COMMENT '告警正文',
 alarm_level int COMMENT '告警级别 1 严重 2 重要 3 一般  4通知',
-alarm_time  datetime NOT NULL COMMENT '告警时间',
+alarm_date  datetime NOT NULL COMMENT '告警时间',
 PRIMARY KEY (id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='告警历史表';
 
 DROP TABLE IF EXISTS ip_alarm_conf;
 create table ip_alarm_conf(
 id int(11) NOT NULL AUTO_INCREMENT COMMENT '主键id',
+device_id int(11) not null COMMENT '设备id',
 device_name varchar(100) COMMENT '告警设备名称',
 device_para_name varchar(100) not null COMMENT '设备参数名称',
 device_para_value varchar(100) not null COMMENT '设备参数值',

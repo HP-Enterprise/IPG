@@ -1,13 +1,7 @@
 package com.cmos.ipg;
 
-import com.cmos.ipg.entity.Data;
-import com.cmos.ipg.entity.Device;
-import com.cmos.ipg.entity.DeviceStatus;
-import com.cmos.ipg.entity.DeviceStatusHistory;
-import com.cmos.ipg.mapper.DataMapper;
-import com.cmos.ipg.mapper.DeviceMapper;
-import com.cmos.ipg.mapper.DeviceStatusHistoryMapper;
-import com.cmos.ipg.mapper.DeviceStatusMapper;
+import com.cmos.ipg.entity.*;
+import com.cmos.ipg.mapper.*;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -34,7 +28,8 @@ public class MyBatisTest {
     DeviceStatusMapper deviceStatusMapper;
     @Autowired
     DeviceStatusHistoryMapper deviceStatusHistoryMapper;
-
+    @Autowired
+    AgentMapper agentMapper;
 
     @Before
     public void setUp() {
@@ -45,7 +40,20 @@ public class MyBatisTest {
     }
 
 
-    
+    @Transactional
+    @Rollback
+    @Test
+    public void test_agent(){
+        Agent agent=new Agent();
+        agent.setAgentName("AG1");
+        agent.setIp("192.168.2.22");
+        agent.setPort("9000");
+        agent.setContable("1000");
+        agentMapper.save(agent);
+        Agent f=agentMapper.findById(1);
+        assert (f.getContable().equals("1000"));
+    }
+
     @Transactional
     @Rollback
     @Test

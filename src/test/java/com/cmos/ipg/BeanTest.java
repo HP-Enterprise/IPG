@@ -111,7 +111,7 @@ public class BeanTest {
     }
 
     @Test
-    public void test_StatusMeaasge(){
+    public void test_StatusMessage(){
         StatusMessage statusMessage=new StatusMessage();
         statusMessage.setSendingTime(1443151834);
         statusMessage.setEventId(1443151834);

@@ -1,3 +1,4 @@
+server.port: 8080 # Server HTTP port.
 # Acquire port
 com.comos.acquire:
     #disable  dataServer and dataHandler .if set this value true,neither dataServer nor dataHandler will work

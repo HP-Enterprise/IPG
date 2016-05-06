@@ -114,22 +114,22 @@ public class DataTool {
         return str;
     }
 
-    public String getLengthBytesString(String str,int length){
+    public String getLengthBytesString(String str,int length) {
         //将给定字符串右补空格为定长字符串
-        if(str==null){
+        if (str == null) {
             return str;
         }
+        try {
+            if (str.getBytes("UTF-8").length >= length) {
+                return str;
+            }
+            while (str.getBytes("UTF-8").length < length) {
+                str = str + " ";
+            }
+        }catch (UnsupportedEncodingException e){e.printStackTrace();}
+            return str;
 
-    if(str.getBytes().length>=length){
-        return str;
     }
-    while (str.getBytes().length<length){
-        str=str+" ";
-    }
-
-        return str;
-    }
-
 
     public  char[] getBitsFrom2Byte(byte[]  bytes){
         String a=new String(getBitsFromByte(bytes[0]))+new String(getBitsFromByte(bytes[1]));

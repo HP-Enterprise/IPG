@@ -2,6 +2,8 @@ package com.cmos.ipg.bean;
 
 import io.netty.buffer.ByteBuf;
 
+import java.io.UnsupportedEncodingException;
+
 import static io.netty.buffer.Unpooled.buffer;
 
 /**
@@ -92,6 +94,7 @@ public class StatusMessage extends UpBean{
 
     @Override
     public void decoded(byte[] data){
+        try{
         ByteBuf bb = buffer(BUFFER_SIZE);
         bb.writeBytes(data);
         this.setStartCode(bb.readShort());
@@ -115,10 +118,10 @@ public class StatusMessage extends UpBean{
         for (int i = 0; i <_packageNum ; i++) {
             byte[] deviceNameBytes = new byte[deviceNameSize];
             bb.readBytes(deviceNameBytes);
-            deviceName[i] = new String(deviceNameBytes);
+            deviceName[i] = new String(deviceNameBytes,"UTF-8");
             byte[] deviceLocateBytes = new byte[deviceLocateSize];
             bb.readBytes(deviceLocateBytes);
-            deviceLocate[i] = new String(deviceLocateBytes);
+            deviceLocate[i] = new String(deviceLocateBytes,"UTF-8");
             status1[i] =  bb.readInt();
             status2[i] =  bb.readInt();
             status3[i] =  bb.readInt();
@@ -126,11 +129,13 @@ public class StatusMessage extends UpBean{
             status5[i] =  bb.readInt();
         }
         this.setCheckSum(bb.readByte());
+        }catch (UnsupportedEncodingException e){e.printStackTrace();}
     }
 
     @Override
     public byte[] encoded(){
         ByteBuf bb = buffer(BUFFER_SIZE);
+        try{
         bb.writeShort(this.getStartCode());
         bb.markWriterIndex();
         bb.writeShort(0);//预先写入length=0占位
@@ -141,8 +146,8 @@ public class StatusMessage extends UpBean{
         bb.writeByte(this.getAgentNum());//
         bb.writeByte(this.getPackageNum());
         for (int i = 0; i <this.getPackageNum() ; i++) {
-            bb.writeBytes(dataTool.getLengthBytesString(deviceName[i], deviceNameSize).getBytes());
-            bb.writeBytes(dataTool.getLengthBytesString(deviceLocate[i], deviceLocateSize).getBytes());
+            bb.writeBytes(dataTool.getLengthBytesString(deviceName[i], deviceNameSize).getBytes("UTF-8"));
+            bb.writeBytes(dataTool.getLengthBytesString(deviceLocate[i], deviceLocateSize).getBytes("UTF-8"));
             bb.writeInt(status1[i]);
             bb.writeInt(status2[i]);
             bb.writeInt(status3[i]);
@@ -161,6 +166,7 @@ public class StatusMessage extends UpBean{
         byte[] tmp=dataTool.getBytesFromByteBuf(_copy);
         this.setCheckSum(dataTool.getCheckSum(tmp));
         bb.writeByte(this.getCheckSum());//
+        }catch (UnsupportedEncodingException e){e.printStackTrace();}
         return dataTool.getBytesFromByteBuf(bb);
     }
 

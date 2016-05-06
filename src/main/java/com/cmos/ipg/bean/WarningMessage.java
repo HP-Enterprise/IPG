@@ -58,6 +58,7 @@ public class WarningMessage extends UpBean{
 
     @Override
     public void decoded(byte[] data){
+        try{
         ByteBuf bb = buffer(BUFFER_SIZE);
         bb.writeBytes(data);
         this.setStartCode(bb.readShort());
@@ -70,50 +71,51 @@ public class WarningMessage extends UpBean{
 
         byte[] alarmDeviceNameBytes = new byte[alarmDeviceNameSize];
         bb.readBytes(alarmDeviceNameBytes);
-        this.setAlarmDeviceName(new String(alarmDeviceNameBytes));
+        this.setAlarmDeviceName(new String(alarmDeviceNameBytes,"UTF-8"));
 
         byte[] alarmTitleBytes = new byte[alarmTitleSize];
         bb.readBytes(alarmTitleBytes);
-        this.setAlarmTitle(new String(alarmTitleBytes));
+        this.setAlarmTitle(new String(alarmTitleBytes,"UTF-8"));
 
         byte[] alarmContentBytes = new byte[alarmContentSize];
         bb.readBytes(alarmContentBytes);
-        this.setAlarmContent(new String(alarmContentBytes));
-
-
+        this.setAlarmContent(new String(alarmContentBytes,"UTF-8"));
         this.setAlarmLevel(bb.readByte());
         this.setCheckSum(bb.readByte());
+        }catch (UnsupportedEncodingException e){e.printStackTrace();}
     }
 
     @Override
     public byte[] encoded(){
         ByteBuf bb = buffer(BUFFER_SIZE);
-        bb.writeShort(this.getStartCode());
-        bb.markWriterIndex();
-        bb.writeShort(0);//预先写入length=0占位
-        bb.writeByte(this.getMessageType());//
-        bb.writeByte(this.getmId());
-        bb.writeInt(this.getSendingTime());//
-        bb.writeInt(this.getEventId());
-        bb.writeByte(this.getAgentNum());//
+        try{
+            bb.writeShort(this.getStartCode());
+            bb.markWriterIndex();
+            bb.writeShort(0);//预先写入length=0占位
+            bb.writeByte(this.getMessageType());//
+            bb.writeByte(this.getmId());
+            bb.writeInt(this.getSendingTime());//
+            bb.writeInt(this.getEventId());
+            bb.writeByte(this.getAgentNum());//
 
-        bb.writeBytes(dataTool.getLengthBytesString(this.getAlarmDeviceName(), alarmDeviceNameSize).getBytes());
-        bb.writeBytes(dataTool.getLengthBytesString(this.getAlarmTitle(), alarmTitleSize).getBytes());
-        bb.writeBytes(dataTool.getLengthBytesString(this.getAlarmContent(), alarmContentSize).getBytes());
+            bb.writeBytes(dataTool.getLengthBytesString(this.getAlarmDeviceName(), alarmDeviceNameSize).getBytes("UTF-8"));
+            bb.writeBytes(dataTool.getLengthBytesString(this.getAlarmTitle(), alarmTitleSize).getBytes("UTF-8"));
+            bb.writeBytes(dataTool.getLengthBytesString(this.getAlarmContent(), alarmContentSize).getBytes("UTF-8"));
 
-        bb.writeByte(alarmLevel);
-        //回写length段
-        int index=bb.writerIndex();
-        bb.resetWriterIndex();
-        int length=index+1;//+checksum 通过顺序写index可以计算得到length
-        this.setMessageSize((short) length);
-        bb.writeShort(this.getMessageSize());
-        bb.writerIndex(index);
-        //写完后指针复位
-        ByteBuf _copy=bb.copy();
-        byte[] tmp=dataTool.getBytesFromByteBuf(_copy);
-        this.setCheckSum(dataTool.getCheckSum(tmp));
-        bb.writeByte(this.getCheckSum());//
+            bb.writeByte(alarmLevel);
+            //回写length段
+            int index=bb.writerIndex();
+            bb.resetWriterIndex();
+            int length=index+1;//+checksum 通过顺序写index可以计算得到length
+            this.setMessageSize((short) length);
+            bb.writeShort(this.getMessageSize());
+            bb.writerIndex(index);
+            //写完后指针复位
+            ByteBuf _copy=bb.copy();
+            byte[] tmp=dataTool.getBytesFromByteBuf(_copy);
+            this.setCheckSum(dataTool.getCheckSum(tmp));
+            bb.writeByte(this.getCheckSum());//
+        }catch (UnsupportedEncodingException e){e.printStackTrace();}
         return dataTool.getBytesFromByteBuf(bb);
     }
 

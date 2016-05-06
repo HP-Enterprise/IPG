@@ -79,7 +79,7 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter { // (1)
                     break;
                 case 0x04://D
                     _logger.info("ParamDownload request");
-                    respStr=socketService.getParamDownloadResp(receiveDataHexString);
+                    respStr=socketService.getParamDownloadResp(ch,receiveDataHexString);
                     buf=dataTool.getByteBuf(respStr);
                     ch.writeAndFlush(buf);//
                     break;

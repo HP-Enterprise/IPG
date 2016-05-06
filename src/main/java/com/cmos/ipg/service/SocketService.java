@@ -11,6 +11,7 @@ import com.cmos.ipg.mapper.DeviceStatusHistoryMapper;
 import com.cmos.ipg.mapper.DeviceStatusMapper;
 import com.cmos.ipg.utils.DataTool;
 import io.netty.buffer.ByteBuf;
+import io.netty.channel.Channel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -58,10 +59,12 @@ public class SocketService {
 
     /**
      * 处理参数下载请求
+     * @param ch Channel
      * @param reqString 参数下载请求hex
      * @return 参数下载响应hex
      */
-    public String getParamDownloadResp(String reqString){
+    public String getParamDownloadResp( Channel ch,String reqString){
+        System.out.println(ch.remoteAddress());
         //根据参数下载请求的16进制字符串，生成响应的16进制字符串
         ByteBuf bb=dataTool.getByteBuf(reqString);
         byte[] reqBytes=dataTool.getBytesFromByteBuf(bb);
@@ -93,7 +96,7 @@ public class SocketService {
             byte[] reqBytes=dataTool.getBytesFromByteBuf(bb);
             StatusMessage req=new StatusMessage();
             req.decoded(reqBytes);
-            System.out.println("save to mysql>>>:"+req.toString());
+            System.out.println("save to mysql>>>:");
             // todo save to db and push to mq
             //save deviceStatusHistory
             int num=req.getPackageNum();
@@ -140,7 +143,7 @@ public class SocketService {
             byte[] reqBytes=dataTool.getBytesFromByteBuf(bb);
             WarningMessage req=new WarningMessage();
             req.decoded(reqBytes);
-            System.out.println("save to mysql>>>:" + req.toString());
+            System.out.println("save to mysql>>>:");
             // todo save to db and push to mq
             //AlarmHistory
             AlarmHistory alarmHistory=new AlarmHistory();

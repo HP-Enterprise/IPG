@@ -1,5 +1,5 @@
-DROP TABLE IF EXISTS t_data;
-CREATE TABLE t_data (
+DROP TABLE IF EXISTS ip_data;
+CREATE TABLE ip_data (
   id int(11) NOT NULL AUTO_INCREMENT,
   client varchar(50) DEFAULT NULL COMMENT 'from',
   bytes varchar(5000) DEFAULT NULL COMMENT 'bytes',
@@ -10,8 +10,8 @@ CREATE TABLE t_data (
   PRIMARY KEY (id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-DROP TABLE IF EXISTS t_client_log;
-CREATE TABLE t_client_log (
+DROP TABLE IF EXISTS ip_client_log;
+CREATE TABLE ip_client_log (
   id int(11) NOT NULL AUTO_INCREMENT,
   client varchar(50) DEFAULT NULL COMMENT 'from',
   action varchar(500) DEFAULT NULL COMMENT 'action',
@@ -60,6 +60,7 @@ agent_name varchar(100) not null COMMENT '代理名称',
 ip varchar(20) not null COMMENT '代理ip',
 port varchar(10) not null COMMENT '代理端口',
 contable varchar(50) not null COMMENT '代理采集周期 * * * * *',
+conProtocol int not null COMMENT '代理采集协议',
 PRIMARY KEY (id)
 )ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='agent代理表';
 

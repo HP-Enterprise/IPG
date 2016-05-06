@@ -8,7 +8,8 @@ public class Agent {
     private String agentName;
     private String ip;
     private String port;
-    private String contable;
+    private int contable;
+    private int conProtocol;
 
     public int getId() {
         return id;
@@ -42,11 +43,19 @@ public class Agent {
         this.port = port;
     }
 
-    public String getContable() {
+    public int getContable() {
         return contable;
     }
 
-    public void setContable(String contable) {
+    public void setContable(int contable) {
         this.contable = contable;
+    }
+
+    public int getConProtocol() {
+        return conProtocol;
+    }
+
+    public void setConProtocol(int conProtocol) {
+        this.conProtocol = conProtocol;
     }
 }

@@ -3,10 +3,7 @@ CREATE TABLE ip_data (
   id int(11) NOT NULL AUTO_INCREMENT,
   client varchar(50) DEFAULT NULL COMMENT 'from',
   bytes varchar(5000) DEFAULT NULL COMMENT 'bytes',
-  create_by varchar(50) DEFAULT NULL,
-  create_date datetime DEFAULT NULL,
-  last_modified_by varchar(50) DEFAULT NULL,
-  last_modified_date datetime DEFAULT NULL,
+  action_date datetime DEFAULT NULL,
   PRIMARY KEY (id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -15,10 +12,7 @@ CREATE TABLE ip_client_log (
   id int(11) NOT NULL AUTO_INCREMENT,
   client varchar(50) DEFAULT NULL COMMENT 'from',
   action varchar(500) DEFAULT NULL COMMENT 'action',
-  create_by varchar(50) DEFAULT NULL,
-  create_date datetime DEFAULT NULL,
-  last_modified_by varchar(50) DEFAULT NULL,
-  last_modified_date datetime DEFAULT NULL,
+  action_date datetime DEFAULT NULL,
   PRIMARY KEY (id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -59,10 +53,11 @@ id int(11) NOT NULL AUTO_INCREMENT COMMENT '主键id',
 agent_name varchar(100) not null COMMENT '代理名称',
 ip varchar(20) not null COMMENT '代理ip',
 port varchar(10) not null COMMENT '代理端口',
-contable varchar(50) not null COMMENT '代理采集周期 * * * * *',
-conProtocol int not null COMMENT '代理采集协议',
+contable int(10) not null COMMENT '代理采集周期 * * * * *',
+con_protocol int not null COMMENT '代理采集协议',
 PRIMARY KEY (id)
 )ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='agent代理表';
+INSERT INTO ip_agent VALUES ('1', 'A000', '127.0.0.1', '8899', '1000', '8');
 
 DROP TABLE IF EXISTS ip_alarm;
 create table ip_alarm(

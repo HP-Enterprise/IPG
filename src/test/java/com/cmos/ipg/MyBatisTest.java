@@ -105,10 +105,11 @@ public class MyBatisTest {
         agent.setAgentName("AG1");
         agent.setIp("192.168.2.22");
         agent.setPort("9000");
-        agent.setContable("1000");
+        agent.setContable(1000);
+        agent.setConProtocol(10);
         agentMapper.save(agent);
-        Agent f=agentMapper.findByAgentName("AG1");
-        assert (f.getContable().equals("1000"));
+        Agent f=agentMapper.findByAgentIp("192.168.2.22");
+        assert (f.getContable()==1000);
     }
 
     @Transactional

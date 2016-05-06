@@ -55,9 +55,7 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter { // (1)
         //将缓冲区的数据读出到byte[]
         _logger.info("Receive date from " + ch.remoteAddress() + ">>>:" + receiveDataHexString);
         InetSocketAddress socketAddress=(InetSocketAddress)ch.remoteAddress();
-        System.out.println(socketAddress.getAddress().getHostAddress()+":"+socketAddress.getPort());
-
-
+       // System.out.println(socketAddress.getAddress().getHostAddress()+":"+socketAddress.getPort());
         if(!dataTool.checkByteArray(receiveData)) {
             _logger.info(">>>>>bytes data is invalid,we will not handle them");
         }else{
@@ -91,12 +89,10 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter { // (1)
 
         }
 
-
-
         Data d=new Data();
         d.setClient( ch.remoteAddress().toString());
         d.setBytes(receiveDataHexString);
-        d.setCreateDate(new Date());
+        d.setActionDate(new Date());
         dataMapper.save(d);
          }
 
@@ -104,10 +100,15 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter { // (1)
     public void channelRegistered(ChannelHandlerContext ctx) {
         Channel ch=ctx.channel();
         _logger.info("Register" + ch.remoteAddress());
+        boolean verifyResult=socketService.verifyAgent(ch);
+        if(!verifyResult){
+            _logger.info("Agent from " + ch.remoteAddress()+" is not in server white list!close connection!");
+            ch.close();
+        }
         ClientLog c=new ClientLog();
         c.setClient(ch.remoteAddress().toString());
-        c.setAction("建立连接");
-        c.setCreateDate(new Date());
+        c.setAction("建立连接:"+verifyResult);
+        c.setActionDate(new Date());
         clientLogMapper.save(c);
     }
     public void channelUnregistered(ChannelHandlerContext ctx){
@@ -117,7 +118,7 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter { // (1)
         ClientLog c=new ClientLog();
         c.setClient(ch.remoteAddress().toString());
         c.setAction("断开连接");
-        c.setCreateDate(new Date());
+        c.setActionDate(new Date());
         clientLogMapper.save(c);
 
        }

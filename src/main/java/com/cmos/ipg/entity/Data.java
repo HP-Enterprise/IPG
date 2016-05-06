@@ -10,7 +10,7 @@ public class Data implements Serializable {
     private  int id;
     private String client;
     private String bytes;
-    private Date  createDate;
+    private Date  actionDate;
 
     public int getId() {
         return id;
@@ -36,11 +36,11 @@ public class Data implements Serializable {
         this.bytes = bytes;
     }
 
-    public Date getCreateDate() {
-        return createDate;
+    public Date getActionDate() {
+        return actionDate;
     }
 
-    public void setCreateDate(Date createDate) {
-        this.createDate = createDate;
+    public void setActionDate(Date actionDate) {
+        this.actionDate = actionDate;
     }
 }

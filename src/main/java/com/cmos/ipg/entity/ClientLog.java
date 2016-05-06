@@ -10,7 +10,7 @@ public class ClientLog {
     private  int id;
     private String client;
     private String action;
-    private Date createDate;
+    private Date actionDate;
 
     public int getId() {
         return id;
@@ -37,11 +37,11 @@ public class ClientLog {
         this.action = action;
     }
 
-    public Date getCreateDate() {
-        return createDate;
+    public Date getActionDate() {
+        return actionDate;
     }
 
-    public void setCreateDate(Date createDate) {
-        this.createDate = createDate;
+    public void setActionDate(Date actionDate) {
+        this.actionDate = actionDate;
     }
 }

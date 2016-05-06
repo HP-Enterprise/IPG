@@ -11,12 +11,13 @@ import org.apache.ibatis.type.JdbcType;
 @Mapper
 public interface AgentMapper {
 
-    @Select("SELECT * FROM ip_agent WHERE agent_name = #{agentName} limit 1")
+    @Select("SELECT * FROM ip_agent WHERE ip = #{ip} limit 1")
     @Results(value = {
-            @Result(property = "agentName", column = "agent_name", javaType = String.class, jdbcType = JdbcType.VARCHAR) })
-    Agent findByAgentName(@Param("agentName") String  agentName);
+            @Result(property = "agentName", column = "agent_name", javaType = String.class, jdbcType = JdbcType.VARCHAR) ,
+            @Result(property = "conProtocol", column = "con_protocol", javaType = Integer.class, jdbcType = JdbcType.INTEGER) })
+    Agent findByAgentIp(@Param("ip") String  ip);
 
-    @Insert("INSERT INTO ip_agent(agent_name, ip,port,contable)" +
-            "VALUES(#{agent.agentName}, #{agent.ip}, #{agent.port}, #{agent.contable})")
+    @Insert("INSERT INTO ip_agent(agent_name, ip,port,contable,con_protocol)" +
+            "VALUES(#{agent.agentName}, #{agent.ip}, #{agent.port}, #{agent.contable}, #{agent.conProtocol})")
     void save(@Param("agent") Agent agent);
 }

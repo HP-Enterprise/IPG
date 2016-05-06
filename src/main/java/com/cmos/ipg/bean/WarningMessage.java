@@ -71,15 +71,15 @@ public class WarningMessage extends UpBean{
 
         byte[] alarmDeviceNameBytes = new byte[alarmDeviceNameSize];
         bb.readBytes(alarmDeviceNameBytes);
-        this.setAlarmDeviceName(new String(alarmDeviceNameBytes,"UTF-8"));
+        this.setAlarmDeviceName(new String(alarmDeviceNameBytes,"UTF-8").trim());
 
         byte[] alarmTitleBytes = new byte[alarmTitleSize];
         bb.readBytes(alarmTitleBytes);
-        this.setAlarmTitle(new String(alarmTitleBytes,"UTF-8"));
+        this.setAlarmTitle(new String(alarmTitleBytes,"UTF-8").trim());
 
         byte[] alarmContentBytes = new byte[alarmContentSize];
         bb.readBytes(alarmContentBytes);
-        this.setAlarmContent(new String(alarmContentBytes,"UTF-8"));
+        this.setAlarmContent(new String(alarmContentBytes,"UTF-8").trim());
         this.setAlarmLevel(bb.readByte());
         this.setCheckSum(bb.readByte());
         }catch (UnsupportedEncodingException e){e.printStackTrace();}

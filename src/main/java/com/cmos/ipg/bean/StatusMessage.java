@@ -118,10 +118,10 @@ public class StatusMessage extends UpBean{
         for (int i = 0; i <_packageNum ; i++) {
             byte[] deviceNameBytes = new byte[deviceNameSize];
             bb.readBytes(deviceNameBytes);
-            deviceName[i] = new String(deviceNameBytes,"UTF-8");
+            deviceName[i] = new String(deviceNameBytes,"UTF-8").trim();
             byte[] deviceLocateBytes = new byte[deviceLocateSize];
             bb.readBytes(deviceLocateBytes);
-            deviceLocate[i] = new String(deviceLocateBytes,"UTF-8");
+            deviceLocate[i] = new String(deviceLocateBytes,"UTF-8").trim();
             status1[i] =  bb.readInt();
             status2[i] =  bb.readInt();
             status3[i] =  bb.readInt();

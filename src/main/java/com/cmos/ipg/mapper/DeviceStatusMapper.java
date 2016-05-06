@@ -11,12 +11,12 @@ import org.apache.ibatis.type.JdbcType;
 @Mapper
 public interface DeviceStatusMapper {
 
-    @Select("SELECT * FROM ip_device_status WHERE id = #{id}")
+    @Select("SELECT * FROM ip_device_status WHERE device_id = #{deviceId} LIMIT 1")
     @Results(value = {
             @Result(property = "deviceId", column = "device_id", javaType = Integer.class, jdbcType = JdbcType.INTEGER),
             @Result(property = "deviceParaName", column = "device_para_name", javaType = String.class, jdbcType = JdbcType.VARCHAR),
             @Result(property = "deviceParaValue", column = "device_para_value", javaType = String.class, jdbcType = JdbcType.VARCHAR) })
-    DeviceStatus findById(@Param("id") int id);
+    DeviceStatus findByDeviceId(@Param("deviceId") int deviceId);
 
     @Insert("INSERT INTO ip_device_status(device_id, device_para_name,device_para_value)" +
             "VALUES(#{deviceStatus.deviceId}, #{deviceStatus.deviceParaName}, #{deviceStatus.deviceParaValue})")

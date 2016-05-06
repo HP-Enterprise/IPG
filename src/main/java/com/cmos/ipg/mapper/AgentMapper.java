@@ -11,10 +11,10 @@ import org.apache.ibatis.type.JdbcType;
 @Mapper
 public interface AgentMapper {
 
-    @Select("SELECT * FROM ip_agent WHERE id = #{id}")
+    @Select("SELECT * FROM ip_agent WHERE agent_name = #{agentName} limit 1")
     @Results(value = {
             @Result(property = "agentName", column = "agent_name", javaType = String.class, jdbcType = JdbcType.VARCHAR) })
-    Agent findById(@Param("id") int id);
+    Agent findByAgentName(@Param("agentName") String  agentName);
 
     @Insert("INSERT INTO ip_agent(agent_name, ip,port,contable)" +
             "VALUES(#{agent.agentName}, #{agent.ip}, #{agent.port}, #{agent.contable})")

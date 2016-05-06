@@ -1,12 +1,20 @@
 package com.cmos.ipg.service;
 
 import com.cmos.ipg.bean.*;
+import com.cmos.ipg.entity.Alarm;
+import com.cmos.ipg.entity.AlarmHistory;
+import com.cmos.ipg.entity.DeviceStatusHistory;
+import com.cmos.ipg.mapper.AlarmHistoryMapper;
+import com.cmos.ipg.mapper.AlarmMapper;
+import com.cmos.ipg.mapper.DeviceStatusHistoryMapper;
+import com.cmos.ipg.mapper.DeviceStatusMapper;
 import com.cmos.ipg.utils.DataTool;
 import io.netty.buffer.ByteBuf;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.nio.ByteBuffer;
+import java.util.Date;
 
 /**
  * Created by jackl on 2016/4/29.
@@ -17,6 +25,14 @@ public class SocketService {
     DataTool dataTool;
     @Autowired
     MQService mqService;
+    @Autowired
+    DeviceStatusMapper deviceStatusMapper;
+    @Autowired
+    DeviceStatusHistoryMapper deviceStatusHistoryMapper;
+    @Autowired
+    AlarmMapper alarmMapper;
+    @Autowired
+    AlarmHistoryMapper alarmHistoryMapper;
 
     /**
      * 处理客户端心跳
@@ -69,7 +85,7 @@ public class SocketService {
      * @param reqString 状态信息hex
      * @return 处理结果
      */
-    public int handlStatusMessage(String reqString){
+    public int handleStatusMessage(String reqString){
         //
         try{
             ByteBuf bb=dataTool.getByteBuf(reqString);
@@ -78,6 +94,9 @@ public class SocketService {
             req.decoded(reqBytes);
             System.out.println("save to mysql>>>:"+req.toString());
             // todo save to db and push to mq
+            //save deviceStatusHistory
+
+
             return 0;
         }catch (Exception e){
             e.printStackTrace();
@@ -99,7 +118,29 @@ public class SocketService {
             req.decoded(reqBytes);
             System.out.println("save to mysql>>>:" + req.toString());
             // todo save to db and push to mq
-            mqService.pushToUser(1,req.getAlarmLevel()+":"+req.getAlarmDeviceName().trim()+","+req.getAlarmTitle().trim()+","+req.getAlarmContent().trim());
+            //AlarmHistory
+            AlarmHistory alarmHistory=new AlarmHistory();
+            alarmHistory.setDeviceId(-1);
+            alarmHistory.setAlarmDeviceName(req.getAlarmDeviceName());
+            alarmHistory.setAlarmTitle(req.getAlarmTitle());
+            alarmHistory.setAlarmContent(req.getAlarmContent());
+            alarmHistory.setAlarmLevel(req.getAlarmLevel());
+            alarmHistory.setAlarmDate(dataTool.seconds2Date(req.getSendingTime()));
+            alarmHistoryMapper.save(alarmHistory);
+
+            //Alarm
+            alarmMapper.deleteByName(req.getAlarmDeviceName());//delete current alarm info
+            Alarm alarm=new Alarm();
+            alarm.setDeviceId(-1);
+            alarm.setAlarmDeviceName(req.getAlarmDeviceName());
+            alarm.setAlarmTitle(req.getAlarmTitle());
+            alarm.setAlarmContent(req.getAlarmContent());
+            alarm.setAlarmLevel(req.getAlarmLevel());
+            alarm.setAlarmDate(dataTool.seconds2Date(req.getSendingTime()));
+            alarmMapper.save(alarm);
+            //push message
+            String pushMsg=req.getAlarmLevel()+":"+req.getAlarmDeviceName()+","+req.getAlarmTitle()+","+req.getAlarmContent();
+            mqService.pushToUser(1,pushMsg);
             return 0;
         }catch (Exception e){
             e.printStackTrace();

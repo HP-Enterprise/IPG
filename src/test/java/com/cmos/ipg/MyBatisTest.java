@@ -61,7 +61,7 @@ public class MyBatisTest {
         alarmConf.setAlarmLevel(1);
         alarmConf.setAlarmDate(new Date());
         alarmConfMapper.save(alarmConf);
-        AlarmConf f=alarmConfMapper.findById(1);
+        AlarmConf f=alarmConfMapper.findByDeviceId(1);
         assert (f.getDeviceName().equals("A1"));
     }
 
@@ -77,7 +77,7 @@ public class MyBatisTest {
         alarmHistory.setAlarmLevel(1);
         alarmHistory.setAlarmDate(new Date());
         alarmHistoryMapper.save(alarmHistory);
-        AlarmHistory f=alarmHistoryMapper.findById(1);
+        AlarmHistory f=alarmHistoryMapper.findByDeviceId(1);
         assert (f.getAlarmContent().equals("2000"));
     }
 
@@ -93,7 +93,7 @@ public class MyBatisTest {
         alarm.setAlarmLevel(1);
         alarm.setAlarmDate(new Date());
         alarmMapper.save(alarm);
-        Alarm f=alarmMapper.findById(1);
+        Alarm f=alarmMapper.findByDeviceId(1);
         assert (f.getAlarmContent().equals("1000"));
     }
 
@@ -107,7 +107,7 @@ public class MyBatisTest {
         agent.setPort("9000");
         agent.setContable("1000");
         agentMapper.save(agent);
-        Agent f=agentMapper.findById(1);
+        Agent f=agentMapper.findByAgentName("AG1");
         assert (f.getContable().equals("1000"));
     }
 
@@ -121,7 +121,7 @@ public class MyBatisTest {
         deviceStatusHistory.setDeviceParaValue("100");
         deviceStatusHistory.setCollectDate(new Date());
         deviceStatusHistoryMapper.save(deviceStatusHistory);
-        DeviceStatusHistory f=deviceStatusHistoryMapper.findById(1);
+        DeviceStatusHistory f=deviceStatusHistoryMapper.findByDeviceId(1);
         System.out.println(f.getCollectDate().toString());
         assert (f.getDeviceId()==1);
     }
@@ -135,7 +135,7 @@ public class MyBatisTest {
         deviceStatus.setDeviceParaName("vol");
         deviceStatus.setDeviceParaValue("100");
         deviceStatusMapper.save(deviceStatus);
-        DeviceStatus f=deviceStatusMapper.findById(1);
+        DeviceStatus f=deviceStatusMapper.findByDeviceId(1);
         assert (f.getDeviceId()==1);
     }
 
@@ -149,7 +149,7 @@ public class MyBatisTest {
         device.setDeviceLocate("A1");
         device.setDeviceName("设备A");
         deviceMapper.save(device);
-        Device f=deviceMapper.findById(1);
+        Device f=deviceMapper.findBySn("abcdef123456");
         assert (f.getDeviceLocate().equals("A1"));
     }
 

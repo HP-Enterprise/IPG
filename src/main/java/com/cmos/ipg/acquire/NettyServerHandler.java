@@ -65,7 +65,7 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter { // (1)
             switch(dataType){
                 case 0x01://A
                     _logger.info("StatusMessage request");
-                    int result_s=socketService.handlStatusMessage(receiveDataHexString);
+                    int result_s=socketService.handleStatusMessage(receiveDataHexString);
                     break;
                 case 0x02://B
                     _logger.info("WarningMessage request");

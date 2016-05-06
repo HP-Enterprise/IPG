@@ -16,12 +16,13 @@ public interface DeviceStatusHistoryMapper {
     @Select("SELECT * FROM ip_device_status_his WHERE device_id = #{deviceId} limit 1")
     @Results(value = {
             @Result(property = "deviceId", column = "device_id", javaType = Integer.class, jdbcType = JdbcType.INTEGER),
+            @Result(property = "deviceName", column = "device_name", javaType = String.class, jdbcType = JdbcType.VARCHAR),
             @Result(property = "deviceParaName", column = "device_para_name", javaType = String.class, jdbcType = JdbcType.VARCHAR),
             @Result(property = "deviceParaValue", column = "device_para_value", javaType = String.class, jdbcType = JdbcType.VARCHAR),
             @Result(property = "collectDate", column = "collect_date", javaType = Date.class, jdbcType = JdbcType.TIMESTAMP) })
     DeviceStatusHistory findByDeviceId(@Param("deviceId") int deviceId);
 
-    @Insert("INSERT INTO ip_device_status_his(device_id, device_para_name,device_para_value,collect_date)" +
-            "VALUES(#{deviceStatusHistory.deviceId}, #{deviceStatusHistory.deviceParaName}, #{deviceStatusHistory.deviceParaValue}, #{deviceStatusHistory.collectDate})")
+    @Insert("INSERT INTO ip_device_status_his(device_id, device_name,device_para_name,device_para_value,collect_date)" +
+            "VALUES(#{deviceStatusHistory.deviceId}, #{deviceStatusHistory.deviceName}, #{deviceStatusHistory.deviceParaName}, #{deviceStatusHistory.deviceParaValue}, #{deviceStatusHistory.collectDate})")
     void save(@Param("deviceStatusHistory") DeviceStatusHistory deviceStatusHistory);
 }

@@ -8,6 +8,7 @@ import java.util.Date;
 public class DeviceStatusHistory {
     private  int id;
     private  int deviceId;
+    private String deviceName;
     private String deviceParaName;
     private String deviceParaValue;
     private Date collectDate;
@@ -26,6 +27,14 @@ public class DeviceStatusHistory {
 
     public void setDeviceId(int deviceId) {
         this.deviceId = deviceId;
+    }
+
+    public String getDeviceName() {
+        return deviceName;
+    }
+
+    public void setDeviceName(String deviceName) {
+        this.deviceName = deviceName;
     }
 
     public String getDeviceParaName() {

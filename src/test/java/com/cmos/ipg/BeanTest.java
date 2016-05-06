@@ -116,9 +116,10 @@ public class BeanTest {
         statusMessage.setSendingTime(1443151834);
         statusMessage.setEventId(1443151834);
         statusMessage.setAgentNum((byte) 3);
-        statusMessage.setPackageNum((byte)1);
+        statusMessage.setPackageNum((byte)3);
         String[] deviceName = new String[statusMessage.getPackageNum()];
         String[] deviceLocate = new String[statusMessage.getPackageNum()];
+        String[] devicePara = new String[statusMessage.getPackageNum()];
         Integer[] status1 = new Integer[statusMessage.getPackageNum()];
         Integer[] status2 = new Integer[statusMessage.getPackageNum()];
         Integer[] status3 = new Integer[statusMessage.getPackageNum()];
@@ -127,6 +128,7 @@ public class BeanTest {
         for (int i = 0; i <statusMessage.getPackageNum() ; i++) {
             deviceName[i]="设备名称A"+i;
             deviceLocate[i]="设备位置B"+i;
+            devicePara[i]="参数C"+i;
             status1[i]=i*1;
             status2[i]=i*2;
             status3[i]=i*3;
@@ -135,6 +137,7 @@ public class BeanTest {
         }
         statusMessage.setDeviceName(deviceName);
         statusMessage.setDeviceLocate(deviceLocate);
+        statusMessage.setDevicePara(devicePara);
         statusMessage.setStatus1(status1);
         statusMessage.setStatus2(status2);
         statusMessage.setStatus3(status3);

@@ -13,10 +13,12 @@ public class StatusMessage extends UpBean{
 
     private static int deviceNameSize=100;
     private static int deviceLocateSize=200;
+    private static int deviceParaSize=100;
 
     private Byte packageNum;
     private String[] deviceName;//
     private String[] deviceLocate;//
+    private String[] devicePara;
     private Integer[] status1;//
     private Integer[] status2;//
     private Integer[] status3;//
@@ -50,6 +52,14 @@ public class StatusMessage extends UpBean{
 
     public void setDeviceLocate(String[] deviceLocate) {
         this.deviceLocate = deviceLocate;
+    }
+
+    public String[] getDevicePara() {
+        return devicePara;
+    }
+
+    public void setDevicePara(String[] devicePara) {
+        this.devicePara = devicePara;
     }
 
     public Integer[] getStatus1() {
@@ -109,6 +119,7 @@ public class StatusMessage extends UpBean{
 
         deviceName = new String[_packageNum];
         deviceLocate = new String[_packageNum];
+        devicePara=new String[_packageNum];
         status1 = new Integer[_packageNum];
         status2 = new Integer[_packageNum];
         status3 = new Integer[_packageNum];
@@ -122,6 +133,9 @@ public class StatusMessage extends UpBean{
             byte[] deviceLocateBytes = new byte[deviceLocateSize];
             bb.readBytes(deviceLocateBytes);
             deviceLocate[i] = new String(deviceLocateBytes,"UTF-8").trim();
+            byte[] deviceParaBytes = new byte[deviceParaSize];
+            bb.readBytes(deviceParaBytes);
+            devicePara[i] = new String(deviceParaBytes,"UTF-8").trim();
             status1[i] =  bb.readInt();
             status2[i] =  bb.readInt();
             status3[i] =  bb.readInt();
@@ -148,6 +162,7 @@ public class StatusMessage extends UpBean{
         for (int i = 0; i <this.getPackageNum() ; i++) {
             bb.writeBytes(dataTool.getLengthBytesString(deviceName[i], deviceNameSize).getBytes("UTF-8"));
             bb.writeBytes(dataTool.getLengthBytesString(deviceLocate[i], deviceLocateSize).getBytes("UTF-8"));
+            bb.writeBytes(dataTool.getLengthBytesString(devicePara[i], deviceParaSize).getBytes("UTF-8"));
             bb.writeInt(status1[i]);
             bb.writeInt(status2[i]);
             bb.writeInt(status3[i]);

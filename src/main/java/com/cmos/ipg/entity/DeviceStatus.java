@@ -6,6 +6,7 @@ package com.cmos.ipg.entity;
 public class DeviceStatus {
     private  int id;
     private  int deviceId;
+    private String deviceName;
     private String deviceParaName;
     private String deviceParaValue;
 
@@ -23,6 +24,14 @@ public class DeviceStatus {
 
     public void setDeviceId(int deviceId) {
         this.deviceId = deviceId;
+    }
+
+    public String getDeviceName() {
+        return deviceName;
+    }
+
+    public void setDeviceName(String deviceName) {
+        this.deviceName = deviceName;
     }
 
     public String getDeviceParaName() {

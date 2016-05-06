@@ -3,6 +3,7 @@ package com.cmos.ipg.service;
 import com.cmos.ipg.bean.*;
 import com.cmos.ipg.entity.Alarm;
 import com.cmos.ipg.entity.AlarmHistory;
+import com.cmos.ipg.entity.DeviceStatus;
 import com.cmos.ipg.entity.DeviceStatusHistory;
 import com.cmos.ipg.mapper.AlarmHistoryMapper;
 import com.cmos.ipg.mapper.AlarmMapper;
@@ -95,6 +96,29 @@ public class SocketService {
             System.out.println("save to mysql>>>:"+req.toString());
             // todo save to db and push to mq
             //save deviceStatusHistory
+            int num=req.getPackageNum();
+            for (int i = 0; i < num; i++) {
+                //save deviceStatusHistory
+                DeviceStatusHistory deviceStatusHistory=new DeviceStatusHistory();
+                deviceStatusHistory.setDeviceId(-1);
+                deviceStatusHistory.setDeviceName(req.getDeviceName()[i]);
+                deviceStatusHistory.setDeviceParaName(req.getDevicePara()[i]);
+                deviceStatusHistory.setDeviceParaValue(String.valueOf(req.getStatus1()[i]));
+                deviceStatusHistory.setCollectDate(dataTool.seconds2Date(req.getSendingTime()));
+                deviceStatusHistoryMapper.save(deviceStatusHistory);
+
+                //delete
+                deviceStatusMapper.deleteByNameAndPara(req.getDeviceName()[i],req.getDevicePara()[i]);
+                //save deviceStatusHistory
+                DeviceStatus deviceStatus=new DeviceStatus();
+                deviceStatus.setDeviceId(-1);
+                deviceStatus.setDeviceName(req.getDeviceName()[i]);
+                deviceStatus.setDeviceParaName(req.getDevicePara()[i]);
+                deviceStatus.setDeviceParaValue(String.valueOf(req.getStatus1()[i]));
+                deviceStatusMapper.save(deviceStatus);
+            }
+
+            //
 
 
             return 0;

@@ -117,6 +117,7 @@ public class MyBatisTest {
     public void test_deviceStatusHis(){
         DeviceStatusHistory deviceStatusHistory=new DeviceStatusHistory();
         deviceStatusHistory.setDeviceId(1);
+        deviceStatusHistory.setDeviceName("name");
         deviceStatusHistory.setDeviceParaName("vol");
         deviceStatusHistory.setDeviceParaValue("100");
         deviceStatusHistory.setCollectDate(new Date());
@@ -132,6 +133,7 @@ public class MyBatisTest {
     public void test_deviceStatus(){
         DeviceStatus deviceStatus=new DeviceStatus();
         deviceStatus.setDeviceId(1);
+        deviceStatus.setDeviceName("name");
         deviceStatus.setDeviceParaName("vol");
         deviceStatus.setDeviceParaValue("100");
         deviceStatusMapper.save(deviceStatus);

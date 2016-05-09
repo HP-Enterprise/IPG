@@ -21,7 +21,7 @@ import java.util.concurrent.ScheduledExecutorService;
  */
 @Component
 public class GateServer {
-    @Value("${com.comos.acquire.port}")
+    @Value("${com.cmos.acquire.port}")
     private int _acquirePort=8000;
     private Logger _logger;
     @Autowired

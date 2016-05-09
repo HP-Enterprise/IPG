@@ -19,8 +19,10 @@ public class Application implements CommandLineRunner {
     private Logger _logger;
     @Autowired
     private GateServer gateServer;
-    @Value("${com.comos.acquire.disabled}")
+    @Value("${com.cmos.acquire.disabled}")
     private boolean _disabled;
+    @Value("${com.cmos.acquire.port}")
+    private int _port;
 
     public static void main(String[] args) {
         SpringApplication.run(Application.class, args);
@@ -30,11 +32,12 @@ public class Application implements CommandLineRunner {
     @Override
     public void run(String... args) throws Exception {
         this._logger = LoggerFactory.getLogger(Application.class);
-        this._logger.info("Application is running...");
+
         // 启动数据接受程序
         if(_disabled){
             return;
         }else{
+            this._logger.info("GateServer is running,listening at port "+_port);
             gateServer.start();
         }
 

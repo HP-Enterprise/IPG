@@ -15,13 +15,9 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class MQTTHome {
-//    private @Value("${com.hp.mqtt.producerGroupName}") String producerGroupName;
-//    private @Value("${com.hp.mqtt.nameServerAddress}") String nameServerAddress;
-//    private @Value("${com.hp.mqtt.instanceName}") String instanceName;
-
-    private  String producerGroupName="ProducerGroupName";
-    private  String nameServerAddress="127.0.0.1:9876";
-    private  String instanceName="Producer";
+   private @Value("${com.cmos.mq.ProducerGroupName}") String producerGroupName;
+   private @Value("${com.cmos.mq.nameServerAddress}") String nameServerAddress;
+   private @Value("${com.cmos.mq.instanceName}") String instanceName;
 
     DefaultMQProducer producer=null;
 

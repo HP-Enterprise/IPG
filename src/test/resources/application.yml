@@ -1,13 +1,13 @@
 # Acquire port
-com.comos.acquire:
+com.cmos.acquire:
     #disable  dataServer and dataHandler .if set this value true,neither dataServer nor dataHandler will work
     disabled: true
    #data server listen on this port
     port: 8000
 
 #RocketMQ server info
-com.comos.mq:
-    producerName: ProducerGroupName
+com.cmos.mq:
+    ProducerGroupName: ProducerGroupName
     nameServerAddress: 127.0.0.1:9876
     instanceName: Producer
 

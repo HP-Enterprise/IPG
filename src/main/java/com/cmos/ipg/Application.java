@@ -37,7 +37,7 @@ public class Application implements CommandLineRunner {
         if(_disabled){
             return;
         }else{
-            this._logger.info("GateServer is running,listening at port "+_port);
+            this._logger.info("GateWay Server is running,listening at port "+_port);
             gateServer.start();
         }
 

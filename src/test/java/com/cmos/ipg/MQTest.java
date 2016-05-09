@@ -5,6 +5,7 @@ import com.cmos.ipg.mq.Producer;
 import com.cmos.ipg.service.MQService;
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,6 +34,8 @@ public class MQTest {
     public void tearDown() {
     }
 
+
+    @Ignore
     @Test
     public void test_sendMsg(){
         mqService.pushToUser(1,"WARNING>>>>");

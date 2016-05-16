@@ -55,6 +55,7 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter { // (1)
         //将缓冲区的数据读出到byte[]
         _logger.info("Receive date from " + ch.remoteAddress() + ">>>:" + receiveDataHexString);
         InetSocketAddress socketAddress=(InetSocketAddress)ch.remoteAddress();
+        String ip=socketAddress.getAddress().getHostAddress();
        // System.out.println(socketAddress.getAddress().getHostAddress()+":"+socketAddress.getPort());
         if(!dataTool.checkByteArray(receiveData)) {
             _logger.info(">>>>>bytes data is invalid,we will not handle them");
@@ -63,11 +64,11 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter { // (1)
             switch(dataType){
                 case 0x01://A
                     _logger.info("StatusMessage request");
-                    int result_s=socketService.handleStatusMessage(receiveDataHexString);
+                    int result_s=socketService.handleStatusMessage(receiveDataHexString,ip);
                     break;
                 case 0x02://B
                     _logger.info("WarningMessage request");
-                    int result_w=socketService.handleWarningMessage(receiveDataHexString);
+                    int result_w=socketService.handleWarningMessage(receiveDataHexString,ip);
                     break;
                 case 0x03://C
                    _logger.info("Heartbeat request");

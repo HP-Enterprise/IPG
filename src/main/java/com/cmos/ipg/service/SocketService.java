@@ -6,6 +6,8 @@ import com.cmos.ipg.mapper.*;
 import com.cmos.ipg.utils.DataTool;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.Channel;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -32,7 +34,7 @@ public class SocketService {
     AlarmHistoryMapper alarmHistoryMapper;
     @Autowired
     AgentMapper agentMapper;
-
+    private Logger _logger= LoggerFactory.getLogger(SocketService.class);
 
 
     public boolean verifyAgent( Channel ch){
@@ -105,9 +107,10 @@ public class SocketService {
     /**
      * 处理状态信息上报
      * @param reqString 状态信息hex
+     * @param ip c端ip
      * @return 处理结果
      */
-    public int handleStatusMessage(String reqString){
+    public int handleStatusMessage(String reqString,String ip){
         //
         try{
             ByteBuf bb=dataTool.getByteBuf(reqString);
@@ -116,6 +119,11 @@ public class SocketService {
             req.decoded(reqBytes);
             System.out.println("save to mysql>>>:");
             // todo save to db and push to mq
+            Agent _agent=agentMapper.findByAgentIp(ip);
+            if(_agent==null){
+                _logger.info("save failed,from ip "+ip+" not in the db");
+                return 2;//from ip not in the list
+            }
             //save deviceStatusHistory
             int num=req.getPackageNum();
             for (int i = 0; i < num; i++) {
@@ -149,9 +157,10 @@ public class SocketService {
     /**
      * 处理告警信息上报
      * @param reqString 告警信息hex
+     * @param ip c端ip
      * @return 处理结果
      */
-    public int handleWarningMessage(String reqString){
+    public int handleWarningMessage(String reqString,String ip){
         //
         try{
             ByteBuf bb=dataTool.getByteBuf(reqString);
@@ -160,6 +169,11 @@ public class SocketService {
             req.decoded(reqBytes);
             System.out.println("save to mysql>>>:");
             // todo save to db and push to mq
+            Agent _agent=agentMapper.findByAgentIp(ip);
+            if(_agent==null){
+                _logger.info("save failed,from ip "+ip+" not in the db");
+                return 2;//from ip not in the list
+            }
             //AlarmHistory
             AlarmHistory alarmHistory=new AlarmHistory();
             alarmHistory.setDeviceId(-1);

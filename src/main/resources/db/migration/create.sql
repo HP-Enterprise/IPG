@@ -1,15 +1,16 @@
 DROP TABLE IF EXISTS ip_command;
 CREATE TABLE ip_command (
   id int(11) NOT NULL AUTO_INCREMENT,
+  event_id int(11) NOT NULL,
   command_type SMALLINT  NOT NULL COMMENT '指令类别,对应agent type',
   num int(10)  NOT NULL COMMENT '指令编号',
   action varchar(100)  NOT NULL COMMENT '操作',
   param varchar(200)  NOT NULL COMMENT '参数',
-  command_status SMALLINT  NOT NULL COMMENT '指令状态 0未发 1已发',
+  command_status SMALLINT  NOT NULL COMMENT '指令状态： -3 正在发送 -2 已发 -1 待发送 0 失败 1 成功 2 参数错误',
   action_date datetime DEFAULT NULL COMMENT '时间',
   PRIMARY KEY (id)
 )  ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='控制指令表';
-INSERT INTO ip_command VALUES ('1', '1', '1001', '123','{100,200,300}', '0', '2016-05-18 11:09:05');
+INSERT INTO ip_command VALUES ('1', '1443151834','1', '1001', '123','{100,200,300}', '-1', '2016-05-18 11:09:05');
 
 
 DROP TABLE IF EXISTS ip_data;

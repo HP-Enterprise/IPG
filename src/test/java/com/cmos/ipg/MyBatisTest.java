@@ -176,11 +176,12 @@ public class MyBatisTest {
     @Test
     public void test_command(){
         Command command=new Command();
+        command.setEventId(1443151834);
         command.setCommandType((short) 1);
         command.setNum(1001);
         command.setAction("turn off light");
         command.setParam("100001");
-        command.setCommandStatus((short) 0);
+        command.setCommandStatus((short) -1);
         command.setActionDate(new Date());
         commandMapper.save(command);
         Command c=commandMapper.findOne();

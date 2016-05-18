@@ -7,6 +7,7 @@ import java.util.Date;
  */
 public class Command {
     private  int id;
+    private int eventId;
     private  short commandType;
     private  int num;
     private String action;
@@ -20,6 +21,14 @@ public class Command {
 
     public void setId(int id) {
         this.id = id;
+    }
+
+    public int getEventId() {
+        return eventId;
+    }
+
+    public void setEventId(int eventId) {
+        this.eventId = eventId;
     }
 
     public short getCommandType() {

@@ -13,17 +13,26 @@ import java.util.Date;
 @Mapper
 public interface CommandMapper {
 
-    @Select("SELECT * FROM ip_command where command_status=0 order by  action_date desc limit 1")
+    @Select("SELECT * FROM ip_command where command_status=-1 order by  action_date desc limit 1")
     @Results(value = {
+            @Result(property = "eventId", column = "event_id", javaType = Integer.class, jdbcType = JdbcType.INTEGER) ,
             @Result(property = "commandType", column = "command_type", javaType = Short.class, jdbcType = JdbcType.SMALLINT) ,
             @Result(property = "commandStatus", column = "command_status", javaType = Short.class, jdbcType = JdbcType.SMALLINT) ,
             @Result(property = "actionDate", column = "action_date", javaType = Date.class, jdbcType = JdbcType.TIMESTAMP) })
     Command findOne();
 
-    @Insert("INSERT INTO ip_command(command_type,num,action, param,command_status,action_date)" +
-            "VALUES(#{command.commandType},#{command.num},#{command.action}, #{command.param}, #{command.commandStatus}, #{command.actionDate})")
+    @Insert("INSERT INTO ip_command(event_id,command_type,num,action, param,command_status,action_date)" +
+            "VALUES(#{command.eventId},#{command.commandType},#{command.num},#{command.action}, #{command.param}, #{command.commandStatus}, #{command.actionDate})")
     void save(@Param("command") Command command);
 
-    @Update("update ip_command  set command_type=#{command.commandType},num=#{command.num},action=#{command.action}, param=#{command.param},command_status=#{command.commandStatus},action_date=#{command.actionDate} where id=#{command.id}")
+    @Update("update ip_command  set event_id=#{command.eventId},command_type=#{command.commandType},num=#{command.num},action=#{command.action}, param=#{command.param},command_status=#{command.commandStatus},action_date=#{command.actionDate} where id=#{command.id}")
     void update(@Param("command") Command command);
+
+    @Select("SELECT * FROM ip_command where event_id=#{eventId} order by  action_date desc limit 1")
+    @Results(value = {
+            @Result(property = "eventId", column = "event_id", javaType = Integer.class, jdbcType = JdbcType.INTEGER) ,
+            @Result(property = "commandType", column = "command_type", javaType = Short.class, jdbcType = JdbcType.SMALLINT) ,
+            @Result(property = "commandStatus", column = "command_status", javaType = Short.class, jdbcType = JdbcType.SMALLINT) ,
+            @Result(property = "actionDate", column = "action_date", javaType = Date.class, jdbcType = JdbcType.TIMESTAMP) })
+    Command findOneByEventId(@Param("eventId") int eventId);
 }

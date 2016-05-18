@@ -58,7 +58,7 @@ public class NettySender extends Thread{
 
             CommandReq commandReq=new CommandReq();
             commandReq.setSendingTime(dataTool.getCurrentSeconds());
-            commandReq.setEventId(dataTool.getCurrentSeconds());
+            commandReq.setEventId(command.getEventId());
             commandReq.setAgentNum((byte) 0);
             commandReq.setOrderType(command.getAction());
             commandReq.setOrderPara(command.getParam());
@@ -67,10 +67,10 @@ public class NettySender extends Thread{
             _logger.info("send command to "+ch.remoteAddress()+":"+byteStr);
             ByteBuf buf=dataTool.getByteBuf(dataTool.bytes2hex(bytes));
             ch.writeAndFlush(buf);
-            command.setCommandStatus((short)1);
+            command.setCommandStatus((short)-2);//已发
             socketService.updateCommand(command);
          }else{
-            command.setCommandStatus((short)0);
+            command.setCommandStatus((short)-1);//待发状态
             socketService.updateCommand(command);
             _logger.info("Connection is Dead:"+ip);
          }

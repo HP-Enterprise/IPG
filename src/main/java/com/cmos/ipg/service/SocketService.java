@@ -222,9 +222,13 @@ public class SocketService {
             byte[] reqBytes=dataTool.getBytesFromByteBuf(bb);
             CommandResp commandResp=new CommandResp();
             commandResp.decoded(reqBytes);
-            _logger.info("CommandResp"+commandResp.getEventId()+"-"+commandResp.getStatus());
-
-            return 0;
+            _logger.info("CommandResp" + commandResp.getEventId() + "-" + commandResp.getStatus());
+            Command c=commandMapper.findOneByEventId(commandResp.getEventId());
+            if(c!=null){
+                c.setCommandStatus(commandResp.getStatus());
+                commandMapper.update(c);
+            }
+             return 0;
         }catch (Exception e){
             e.printStackTrace();
             return 1;//非正常返回
@@ -239,7 +243,7 @@ public class SocketService {
     public Command loadOneCommand(){
         Command c=commandMapper.findOne();
         if(c!=null){
-            c.setCommandStatus((short)-1);
+            c.setCommandStatus((short)-3);//正在处理
             commandMapper.update(c);
         }
         return c;

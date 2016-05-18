@@ -21,4 +21,11 @@ public interface AgentMapper {
     @Insert("INSERT INTO ip_agent(agent_name,agent_type,num, ip,port,contable,con_protocol,description)" +
             "VALUES(#{agent.agentName},#{agent.agentType},#{agent.num}, #{agent.ip}, #{agent.port}, #{agent.contable}, #{agent.conProtocol}, #{agent.description})")
     void save(@Param("agent") Agent agent);
+
+    @Select("SELECT * FROM ip_agent WHERE agent_type = #{agent_type} and num=#{num}  limit 1")
+    @Results(value = {
+            @Result(property = "agentName", column = "agent_name", javaType = String.class, jdbcType = JdbcType.VARCHAR) ,
+            @Result(property = "agentType", column = "agent_type", javaType = Short.class, jdbcType = JdbcType.SMALLINT) ,
+            @Result(property = "conProtocol", column = "con_protocol", javaType = Integer.class, jdbcType = JdbcType.INTEGER) })
+    Agent findByAgentTypeAndNum(@Param("agent_type") short  agent_type,@Param("num") int  num);
 }

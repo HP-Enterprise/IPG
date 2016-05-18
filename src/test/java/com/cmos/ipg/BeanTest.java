@@ -91,7 +91,7 @@ public class BeanTest {
     }
 
     @Test
-    public void test_WarningMeaasge(){
+    public void test_WarningMessage(){
         WarningMessage warningMessage=new WarningMessage();
         warningMessage.setSendingTime(1443151834);
         warningMessage.setEventId(1443151834);
@@ -147,6 +147,38 @@ public class BeanTest {
         byte[] bytes=statusMessage.encoded();
         System.out.println(dataTool.bytes2hex(bytes));
         StatusMessage h=new StatusMessage();
+        h.decoded(bytes);
+        System.out.println(h.toString());
+        assert (h.getAgentNum().equals((byte)3));
+    }
+
+    @Test
+    public void test_CommandReq(){
+        CommandReq commandReq=new CommandReq();
+        commandReq.setSendingTime(1443151834);
+        commandReq.setEventId(1443151834);
+        commandReq.setAgentNum((byte) 3);
+        commandReq.setOrderType("控制ABC");
+        commandReq.setOrderPara("abcdef");
+
+        byte[] bytes=commandReq.encoded();
+        System.out.println(dataTool.bytes2hex(bytes));
+        CommandReq h=new CommandReq();
+        h.decoded(bytes);
+        System.out.println(h.toString());
+        assert (h.getAgentNum().equals((byte)3));
+    }
+
+    @Test
+    public void test_CommandResp(){
+        CommandResp commandResp=new CommandResp();
+        commandResp.setSendingTime(1443151834);
+        commandResp.setEventId(1443151834);
+        commandResp.setAgentNum((byte) 3);
+        commandResp.setStatus((byte) 1);
+        byte[] bytes=commandResp.encoded();
+        System.out.println(dataTool.bytes2hex(bytes));
+        CommandResp h=new CommandResp();
         h.decoded(bytes);
         System.out.println(h.toString());
         assert (h.getAgentNum().equals((byte)3));

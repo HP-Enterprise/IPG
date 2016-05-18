@@ -23,4 +23,7 @@ public interface CommandMapper {
     @Insert("INSERT INTO ip_command(command_type,num,action, param,command_status,action_date)" +
             "VALUES(#{command.commandType},#{command.num},#{command.action}, #{command.param}, #{command.commandStatus}, #{command.actionDate})")
     void save(@Param("command") Command command);
+
+    @Update("update ip_command  set command_type=#{command.commandType},num=#{command.num},action=#{command.action}, param=#{command.param},command_status=#{command.commandStatus},action_date=#{command.actionDate} where id=#{command.id}")
+    void update(@Param("command") Command command);
 }

@@ -184,6 +184,8 @@ public class MyBatisTest {
         command.setActionDate(new Date());
         commandMapper.save(command);
         Command c=commandMapper.findOne();
+        c.setAction("turn on");
+        commandMapper.update(c);
         assert (c.getParam().equals("100001"));
     }
 

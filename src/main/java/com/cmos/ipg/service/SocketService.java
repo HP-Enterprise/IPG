@@ -10,7 +10,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.lang.management.CompilationMXBean;
 import java.net.InetSocketAddress;
 import java.nio.ByteBuffer;
 import java.util.Date;
@@ -34,6 +36,9 @@ public class SocketService {
     AlarmHistoryMapper alarmHistoryMapper;
     @Autowired
     AgentMapper agentMapper;
+    @Autowired
+    CommandMapper commandMapper;
+
     private Logger _logger= LoggerFactory.getLogger(SocketService.class);
 
 
@@ -205,4 +210,27 @@ public class SocketService {
     }
 
 
+    public Command updateCommand( Command c){
+       commandMapper.update(c);
+        return c;
+    }
+    public Command loadOneCommand(){
+        Command c=commandMapper.findOne();
+        if(c!=null){
+            c.setCommandStatus((short)-1);
+            commandMapper.update(c);
+        }
+        return c;
+    }
+
+    public String getIpFromCommand(Command command){
+
+        Agent agent=agentMapper.findByAgentTypeAndNum(command.getCommandType(),command.getNum());
+        if(agent!=null){
+            return agent.getIp();
+        }else {
+            return "";
+        }
+
+    }
 }

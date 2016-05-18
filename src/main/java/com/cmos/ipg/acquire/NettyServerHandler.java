@@ -108,7 +108,7 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter { // (1)
             _logger.info("Agent from " + ch.remoteAddress()+" is not in server white list!close connection!");
             ch.close();
         }else{
-            channels.put(ch.remoteAddress().toString(), ch);// save this connection
+            channels.put(ip, ch);// save this connection
         }
         ClientLog c=new ClientLog();
         c.setClient(ch.remoteAddress().toString());
@@ -118,9 +118,11 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter { // (1)
     }
     public void channelUnregistered(ChannelHandlerContext ctx){
         Channel ch=ctx.channel();
+        InetSocketAddress socketAddress=(InetSocketAddress)ch.remoteAddress();
+        String ip=socketAddress.getAddress().getHostAddress();
         _logger.info("UnRegister" + ch.remoteAddress());
         //连接断开 从map移除连接
-        channels.remove(ch.remoteAddress().toString());
+        channels.remove(ip);
 
         ClientLog c=new ClientLog();
         c.setClient(ch.remoteAddress().toString());

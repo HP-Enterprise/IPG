@@ -6,10 +6,13 @@ package com.cmos.ipg.entity;
 public class Agent {
     private  int id;
     private String agentName;
+    private short agentType;
+    private int num;
     private String ip;
     private String port;
     private int contable;
     private int conProtocol;
+    private String description;
 
     public int getId() {
         return id;
@@ -57,5 +60,29 @@ public class Agent {
 
     public void setConProtocol(int conProtocol) {
         this.conProtocol = conProtocol;
+    }
+
+    public short getAgentType() {
+        return agentType;
+    }
+
+    public void setAgentType(short agentType) {
+        this.agentType = agentType;
+    }
+
+    public int getNum() {
+        return num;
+    }
+
+    public void setNum(int num) {
+        this.num = num;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 }

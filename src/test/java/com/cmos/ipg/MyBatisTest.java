@@ -37,7 +37,8 @@ public class MyBatisTest {
     AlarmHistoryMapper alarmHistoryMapper;
     @Autowired
     AlarmConfMapper alarmConfMapper;
-
+    @Autowired
+    CommandMapper commandMapper;
 
     @Before
     public void setUp() {
@@ -103,10 +104,13 @@ public class MyBatisTest {
     public void test_agent(){
         Agent agent=new Agent();
         agent.setAgentName("AG1");
+        agent.setAgentType((short)1);
+        agent.setNum(1001);
         agent.setIp("192.168.2.22");
         agent.setPort("9000");
         agent.setContable(1000);
         agent.setConProtocol(10);
+        agent.setDescription("说明信息");
         agentMapper.save(agent);
         Agent f=agentMapper.findByAgentIp("192.168.2.22");
         assert (f.getContable()==1000);
@@ -166,5 +170,22 @@ public class MyBatisTest {
         dataMapper.save(d);
 
     }
+
+    @Transactional
+    @Rollback
+    @Test
+    public void test_command(){
+        Command command=new Command();
+        command.setCommandType((short) 1);
+        command.setNum(1001);
+        command.setAction("turn off light");
+        command.setParam("100001");
+        command.setCommandStatus((short) 0);
+        command.setActionDate(new Date());
+        commandMapper.save(command);
+        Command c=commandMapper.findOne();
+        assert (c.getParam().equals("100001"));
+    }
+
 
 }

@@ -55,6 +55,7 @@ public class NettySender extends Thread{
         String ip=socketService.getIpFromCommand(command);//从数据库得到目标ip
         Channel ch=channels.get(ip);
         if(ch!=null){
+
             CommandReq commandReq=new CommandReq();
             commandReq.setSendingTime(dataTool.getCurrentSeconds());
             commandReq.setEventId(dataTool.getCurrentSeconds());
@@ -62,6 +63,8 @@ public class NettySender extends Thread{
             commandReq.setOrderType(command.getAction());
             commandReq.setOrderPara(command.getParam());
             byte[] bytes=commandReq.encoded();
+            String byteStr=dataTool.bytes2hex(bytes);
+            _logger.info("send command to "+ch.remoteAddress()+":"+byteStr);
             ByteBuf buf=dataTool.getByteBuf(dataTool.bytes2hex(bytes));
             ch.writeAndFlush(buf);
             command.setCommandStatus((short)1);

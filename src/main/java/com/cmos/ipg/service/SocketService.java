@@ -209,6 +209,28 @@ public class SocketService {
         }
     }
 
+    /**
+     * 处理控制指令响应
+     * @param reqString 控制响应hex
+     * @param ip c端ip
+     * @return 处理结果
+     */
+    public int handleCommandResp(String reqString,String ip){
+        //
+        try{
+            ByteBuf bb=dataTool.getByteBuf(reqString);
+            byte[] reqBytes=dataTool.getBytesFromByteBuf(bb);
+            CommandResp commandResp=new CommandResp();
+            commandResp.decoded(reqBytes);
+            _logger.info("CommandResp"+commandResp.getEventId()+"-"+commandResp.getStatus());
+
+            return 0;
+        }catch (Exception e){
+            e.printStackTrace();
+            return 1;//非正常返回
+        }
+    }
+
 
     public Command updateCommand( Command c){
        commandMapper.update(c);

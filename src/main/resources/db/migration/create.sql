@@ -10,7 +10,7 @@ CREATE TABLE ip_command (
   action_date datetime DEFAULT NULL COMMENT '时间',
   PRIMARY KEY (id)
 )  ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='控制指令表';
-INSERT INTO ip_command VALUES ('1', '1443151834','1', '1001', '123','{100,200,300}', '-1', '2016-05-18 11:09:05');
+INSERT INTO ip_command VALUES ('1', '1443151834','1', '100', '123','{100,200,300}', '-1', '2016-05-18 11:09:05');
 
 
 DROP TABLE IF EXISTS ip_data;
@@ -75,7 +75,7 @@ con_protocol int not null COMMENT '代理采集协议',
 description varchar(200) not null COMMENT '说明',
 PRIMARY KEY (id)
 )ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='agent代理表';
-INSERT INTO ip_agent VALUES ('1', 'A000',1,1001, '127.0.0.1', '8899', '1000', '8','代理说明信息');
+INSERT INTO ip_agent VALUES ('1', 'A000',1,100, '127.0.0.1', '8899', '1000', '8','代理说明信息');
 
 DROP TABLE IF EXISTS ip_alarm;
 create table ip_alarm(

@@ -1,6 +1,7 @@
 package com.cmos.ipg.acquire;
 
 import com.cmos.ipg.bean.CommandReq;
+import com.cmos.ipg.entity.Agent;
 import com.cmos.ipg.entity.Command;
 import com.cmos.ipg.service.SocketService;
 import com.cmos.ipg.utils.DataTool;
@@ -52,14 +53,21 @@ public class NettySender extends Thread{
          return;
        }
         _logger.info("start send command");
-        String ip=socketService.getIpFromCommand(command);//从数据库得到目标ip
+        Agent targetAgent=socketService.getAgentFromCommand(command);//从数据库得到目标agent
+        String ip="";
+        if(targetAgent!=null){
+            ip=targetAgent.getIp();
+        }else{
+            _logger.info("send command failed,target null");
+            return;
+        }
         Channel ch=channels.get(ip);
         if(ch!=null){
 
             CommandReq commandReq=new CommandReq();
             commandReq.setSendingTime(dataTool.getCurrentSeconds());
             commandReq.setEventId(command.getEventId());
-            commandReq.setAgentNum((byte) 0);
+            commandReq.setAgentNum((byte) targetAgent.getNum());
             commandReq.setOrderType(command.getAction());
             commandReq.setOrderPara(command.getParam());
             byte[] bytes=commandReq.encoded();

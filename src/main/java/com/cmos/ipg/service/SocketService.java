@@ -249,14 +249,9 @@ public class SocketService {
         return c;
     }
 
-    public String getIpFromCommand(Command command){
+    public Agent getAgentFromCommand(Command command){
 
-        Agent agent=agentMapper.findByAgentTypeAndNum(command.getCommandType(),command.getNum());
-        if(agent!=null){
-            return agent.getIp();
-        }else {
-            return "";
-        }
+      return agentMapper.findByAgentTypeAndNum(command.getCommandType(),command.getNum());
 
     }
 }

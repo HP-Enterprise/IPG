@@ -1,6 +1,7 @@
 package com.cmos.ipg;
 
 import com.cmos.ipg.acquire.GateServer;
+import com.cmos.ipg.dubbo.DemoService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +17,7 @@ import org.springframework.context.annotation.ImportResource;
  */
 
 @SpringBootApplication
-@ImportResource("classpath:dubbo.xml")
+@ImportResource("classpath:dubbo_consumer.xml")
 public class Application implements CommandLineRunner {
     private Logger _logger;
     @Autowired
@@ -26,7 +27,10 @@ public class Application implements CommandLineRunner {
     @Value("${com.cmos.acquire.port}")
     private int _port;
 
+    @Autowired
+    DemoService demoService;
     public static void main(String[] args) {
+
         SpringApplication.run(Application.class, args);
 
     }
@@ -34,7 +38,7 @@ public class Application implements CommandLineRunner {
     @Override
     public void run(String... args) throws Exception {
         this._logger = LoggerFactory.getLogger(Application.class);
-
+        demoService.sayHello("abddhasjk");
         // 启动数据接受程序
         if(_disabled){
             return;

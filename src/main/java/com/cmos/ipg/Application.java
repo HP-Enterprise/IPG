@@ -17,7 +17,7 @@ import org.springframework.context.annotation.ImportResource;
  */
 
 @SpringBootApplication
-@ImportResource("classpath:dubbo_consumer.xml")
+@ImportResource({ "classpath:dubbo-all.xml"})
 public class Application implements CommandLineRunner {
     private Logger _logger;
     @Autowired
@@ -38,7 +38,12 @@ public class Application implements CommandLineRunner {
     @Override
     public void run(String... args) throws Exception {
         this._logger = LoggerFactory.getLogger(Application.class);
-        demoService.sayHello("abddhasjk");
+        try {
+            System.out.println(demoService.sayHello("ipg ipg"));
+        }catch (Exception e){
+            e.printStackTrace();
+            this._logger.error("Dubbo Consumer filed:"+e.getMessage());
+        }
         // 启动数据接受程序
         if(_disabled){
             return;

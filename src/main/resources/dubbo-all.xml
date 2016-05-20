@@ -22,8 +22,8 @@
     </dubbo:consumer>
     <dubbo:reference
             id="demoService"
-            interface="com.cmos.ipg.dubbo.DemoService"
-            url="dubbo://127.0.0.1:20880/com.znn.provider.DemoService"
+            interface="com.cmos.ipg.dubbo.ReceiveAlarmService"
+            url="dubbo://127.0.0.1:20880/com.znn.provider.ReceiveAlarmService"
             />
 
 </beans>

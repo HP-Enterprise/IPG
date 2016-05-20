@@ -1,6 +1,7 @@
 package com.cmos.ipg.service;
 
 import com.cmos.ipg.bean.*;
+import com.cmos.ipg.dubbo.ReceiveAlarmService;
 import com.cmos.ipg.entity.*;
 import com.cmos.ipg.mapper.*;
 import com.cmos.ipg.utils.DataTool;
@@ -38,6 +39,8 @@ public class SocketService {
     AgentMapper agentMapper;
     @Autowired
     CommandMapper commandMapper;
+    //@Autowired
+    ReceiveAlarmService receiveAlarmService;
 
     private Logger _logger= LoggerFactory.getLogger(SocketService.class);
 
@@ -202,6 +205,15 @@ public class SocketService {
             //push message
             String pushMsg=req.getAlarmLevel()+":"+req.getAlarmDeviceName()+","+req.getAlarmTitle()+","+req.getAlarmContent();
             mqService.pushToUser(1,pushMsg);
+            // send via Dubbo
+            //如果没有Dubbo服务,请先注释掉line 42 避免Spring启动错误
+            try {
+                System.out.println( receiveAlarmService.send(pushMsg));
+            }catch (Exception e){
+                e.printStackTrace();
+                this._logger.error("Dubbo Consumer filed:"+e.getMessage());
+            }
+            //dubbo end
             return 0;
         }catch (Exception e){
             e.printStackTrace();

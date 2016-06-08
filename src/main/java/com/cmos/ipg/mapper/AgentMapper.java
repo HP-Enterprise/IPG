@@ -18,9 +18,12 @@ public interface AgentMapper {
             @Result(property = "conProtocol", column = "con_protocol", javaType = Integer.class, jdbcType = JdbcType.INTEGER) })
     Agent findByAgentIp(@Param("ip") String  ip);
 
-    @Insert("INSERT INTO ip_agent(agent_name,agent_type,num, ip,port,contable,con_protocol,description)" +
-            "VALUES(#{agent.agentName},#{agent.agentType},#{agent.num}, #{agent.ip}, #{agent.port}, #{agent.contable}, #{agent.conProtocol}, #{agent.description})")
+    @Insert("INSERT INTO ip_agent(agent_name,agent_type,num, ip,port,contable,con_protocol,description,agent_online)" +
+            "VALUES(#{agent.agentName},#{agent.agentType},#{agent.num}, #{agent.ip}, #{agent.port}, #{agent.contable}, #{agent.conProtocol}, #{agent.description},#{agent.agentOnline})")
     void save(@Param("agent") Agent agent);
+
+    @Update("UPDATE ip_agent SET agent_online = #{agentOnline} WHERE ip = #{ip}")
+    void update(@Param("agentOnline") short agentOnline,@Param("ip") String ip);
 
     @Select("SELECT * FROM ip_agent WHERE agent_type = #{agent_type} and num=#{num}  limit 1")
     @Results(value = {

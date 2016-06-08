@@ -3,6 +3,7 @@ package com.cmos.ipg.acquire;
 
 import com.cmos.ipg.entity.ClientLog;
 import com.cmos.ipg.entity.Data;
+import com.cmos.ipg.mapper.AgentMapper;
 import com.cmos.ipg.mapper.ClientLogMapper;
 import com.cmos.ipg.mapper.DataMapper;
 import com.cmos.ipg.service.MQService;
@@ -31,6 +32,7 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter { // (1)
     private Logger _logger;
     private ScheduledExecutorService scheduledService;
     private DataMapper dataMapper;
+    private AgentMapper agentMapper;
     private DataTool dataTool;
     private SocketService socketService;
     private ClientLogMapper clientLogMapper;
@@ -114,6 +116,9 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter { // (1)
         }else{
             channels.put(ip, ch);// save this connection
         }
+        //修改agent的在线状态[上线]
+        agentMapper.update((short) 1,ip);
+        //记录客户端的连接信息
         ClientLog c=new ClientLog();
         c.setClient(ch.remoteAddress().toString());
         c.setAction("建立连接:"+verifyResult);
@@ -128,6 +133,9 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter { // (1)
         //连接断开 从map移除连接
         channels.remove(ip);
 
+        //修改agent的在线状态[下线]
+        agentMapper.update((short) 0,ip);
+        //记录客户端的连接信息
         ClientLog c=new ClientLog();
         c.setClient(ch.remoteAddress().toString());
         c.setAction("断开连接");

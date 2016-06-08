@@ -13,6 +13,7 @@ public class Agent {
     private int contable;
     private int conProtocol;
     private String description;
+    private short agentOnline;
 
     public int getId() {
         return id;
@@ -84,5 +85,13 @@ public class Agent {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public short getAgentOnline() {
+        return agentOnline;
+    }
+
+    public void setAgentOnline(short agentOnline) {
+        this.agentOnline = agentOnline;
     }
 }

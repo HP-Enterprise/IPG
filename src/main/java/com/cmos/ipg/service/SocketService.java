@@ -140,7 +140,7 @@ public class SocketService {
                 deviceStatusHistory.setDeviceId(-1);
                 deviceStatusHistory.setDeviceName(req.getDeviceName()[i]);
                 deviceStatusHistory.setDeviceParaName(req.getDevicePara()[i]);
-                deviceStatusHistory.setDeviceParaValue(String.valueOf(req.getStatus1()[i]));
+                deviceStatusHistory.setDeviceParaValue(req.getStatus1()[i]);
                 deviceStatusHistory.setCollectDate(dataTool.seconds2Date(req.getSendingTime()));
                 deviceStatusHistoryMapper.save(deviceStatusHistory);
 
@@ -151,7 +151,7 @@ public class SocketService {
                 deviceStatus.setDeviceId(-1);
                 deviceStatus.setDeviceName(req.getDeviceName()[i]);
                 deviceStatus.setDeviceParaName(req.getDevicePara()[i]);
-                deviceStatus.setDeviceParaValue(String.valueOf(req.getStatus1()[i]));
+                deviceStatus.setDeviceParaValue(req.getStatus1()[i]);
                 deviceStatusMapper.save(deviceStatus);
             }
             //

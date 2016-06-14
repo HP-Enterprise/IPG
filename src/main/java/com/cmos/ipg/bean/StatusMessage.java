@@ -11,9 +11,9 @@ import static io.netty.buffer.Unpooled.buffer;
  */
 public class StatusMessage extends UpBean{
 
-    private static int deviceNameSize=100;
-    private static int deviceLocateSize=200;
-    private static int deviceParaSize=100;
+    private static int deviceNameSize=10;
+    private static int deviceLocateSize=20;
+    private static int deviceParaSize=20;
     private static int statusSize=10;
 
     private Byte packageNum;
@@ -139,15 +139,15 @@ public class StatusMessage extends UpBean{
             devicePara[i] = new String(deviceParaBytes,"UTF-8").trim();
             byte[] statusBytes = new byte[statusSize];
             bb.readBytes(statusBytes);
-            status1[i] = new String(deviceParaBytes,"UTF-8").trim();
+            status1[i] = new String(statusBytes,"UTF-8").trim();
             bb.readBytes(statusBytes);
-            status2[i] =  new String(deviceParaBytes,"UTF-8").trim();
+            status2[i] =  new String(statusBytes,"UTF-8").trim();
             bb.readBytes(statusBytes);
-            status3[i] =  new String(deviceParaBytes,"UTF-8").trim();
+            status3[i] =  new String(statusBytes,"UTF-8").trim();
             bb.readBytes(statusBytes);
-            status4[i] =  new String(deviceParaBytes,"UTF-8").trim();
+            status4[i] =  new String(statusBytes,"UTF-8").trim();
             bb.readBytes(statusBytes);
-            status5[i] =  new String(deviceParaBytes,"UTF-8").trim();
+            status5[i] =  new String(statusBytes,"UTF-8").trim();
         }
         this.setCheckSum(bb.readByte());
         }catch (UnsupportedEncodingException e){e.printStackTrace();}

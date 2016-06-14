@@ -1,5 +1,6 @@
 package com.cmos.ipg.acquire;
 
+import com.cmos.ipg.mapper.AgentMapper;
 import com.cmos.ipg.mapper.ClientLogMapper;
 import com.cmos.ipg.mapper.DataMapper;
 import com.cmos.ipg.service.MQService;
@@ -29,6 +30,8 @@ public class GateServer {
     @Autowired
     ClientLogMapper clientLogMapper;
     @Autowired
+    AgentMapper agentMapper;
+    @Autowired
     DataTool dataTool;
     @Autowired
     SocketService socketService;
@@ -42,7 +45,7 @@ public class GateServer {
     public static ConcurrentHashMap<String,Channel> channels=new ConcurrentHashMap<String,io.netty.channel.Channel>();
     public   void start(){
         new NettySender(channels,socketService,dataTool).start();    //netty发数据线程
-        new NettyServer(channels, _acquirePort, nettyServerScheduledService,dataMapper,clientLogMapper,socketService,dataTool).run();    //netty收数据程序，收到消息后可能导致阻塞的业务全部交由线程池处理
+        new NettyServer(channels, _acquirePort, nettyServerScheduledService,dataMapper,clientLogMapper,agentMapper,socketService,dataTool).run();    //netty收数据程序，收到消息后可能导致阻塞的业务全部交由线程池处理
      }
 
 }

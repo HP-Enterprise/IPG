@@ -36,9 +36,10 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter { // (1)
     private DataTool dataTool;
     private SocketService socketService;
     private ClientLogMapper clientLogMapper;
-    public NettyServerHandler(ConcurrentHashMap<String, Channel> cs, ScheduledExecutorService scheduledService,DataMapper dataMapper,ClientLogMapper clientLogMapper,SocketService socketService,DataTool dataTool){
+    public NettyServerHandler(ConcurrentHashMap<String, Channel> cs, ScheduledExecutorService scheduledService,DataMapper dataMapper,ClientLogMapper clientLogMapper,AgentMapper agentMapper,SocketService socketService,DataTool dataTool){
         this.dataMapper=dataMapper;
         this.clientLogMapper=clientLogMapper;
+        this.agentMapper=agentMapper;
         this.socketService=socketService;
         this.dataTool=dataTool;
         this.channels=cs;

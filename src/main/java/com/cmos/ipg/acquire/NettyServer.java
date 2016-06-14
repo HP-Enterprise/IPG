@@ -5,6 +5,7 @@ package com.cmos.ipg.acquire;
  */
 
 
+import com.cmos.ipg.mapper.AgentMapper;
 import com.cmos.ipg.mapper.ClientLogMapper;
 import com.cmos.ipg.mapper.DataMapper;
 import com.cmos.ipg.service.MQService;
@@ -33,11 +34,13 @@ public class NettyServer {
     private  ScheduledExecutorService scheduledService;
     private DataMapper dataMapper;
     private DataTool dataTool;
+    private AgentMapper agentMapper;
     private SocketService socketService;
     private ClientLogMapper clientLogMapper;
-    public NettyServer(ConcurrentHashMap<String, Channel> cs, int port, ScheduledExecutorService scheduledService,DataMapper dataMapper,ClientLogMapper clientLogMapper,SocketService socketService,DataTool dataTool) {
+    public NettyServer(ConcurrentHashMap<String, Channel> cs, int port, ScheduledExecutorService scheduledService,DataMapper dataMapper,ClientLogMapper clientLogMapper,AgentMapper agentMapper,SocketService socketService,DataTool dataTool) {
         this.dataMapper=dataMapper;
         this.clientLogMapper=clientLogMapper;
+        this.agentMapper=agentMapper;
         this.socketService=socketService;
         this.dataTool=dataTool;
         this.channels=cs;
@@ -57,7 +60,7 @@ public class NettyServer {
                             @Override
                             public void initChannel(SocketChannel ch) throws Exception {
                                 ch.pipeline().addLast(new LengthFieldBasedFrameDecoder(1024*200, 2, 2, -4, 0));
-                                ch.pipeline().addLast(new NettyServerHandler(channels,  scheduledService,dataMapper,clientLogMapper,socketService,dataTool));
+                                ch.pipeline().addLast(new NettyServerHandler(channels,  scheduledService,dataMapper,clientLogMapper,agentMapper,socketService,dataTool));
                              }
                         })
                         .option(ChannelOption.SO_BACKLOG, 1024)          // (5)

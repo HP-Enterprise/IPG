@@ -14,16 +14,17 @@ public class StatusMessage extends UpBean{
     private static int deviceNameSize=100;
     private static int deviceLocateSize=200;
     private static int deviceParaSize=100;
+    private static int statusSize=10;
 
     private Byte packageNum;
     private String[] deviceName;//
     private String[] deviceLocate;//
     private String[] devicePara;
-    private Integer[] status1;//
-    private Integer[] status2;//
-    private Integer[] status3;//
-    private Integer[] status4;//
-    private Integer[] status5;//
+    private String[] status1;//
+    private String[] status2;//
+    private String[] status3;//
+    private String[] status4;//
+    private String[] status5;//
 
     public StatusMessage() {
         this.setMessageType((byte)1);
@@ -62,43 +63,43 @@ public class StatusMessage extends UpBean{
         this.devicePara = devicePara;
     }
 
-    public Integer[] getStatus1() {
+    public String[] getStatus1() {
         return status1;
     }
 
-    public void setStatus1(Integer[] status1) {
+    public void setStatus1(String[] status1) {
         this.status1 = status1;
     }
 
-    public Integer[] getStatus2() {
+    public String[] getStatus2() {
         return status2;
     }
 
-    public void setStatus2(Integer[] status2) {
+    public void setStatus2(String[] status2) {
         this.status2 = status2;
     }
 
-    public Integer[] getStatus3() {
+    public String[] getStatus3() {
         return status3;
     }
 
-    public void setStatus3(Integer[] status3) {
+    public void setStatus3(String[] status3) {
         this.status3 = status3;
     }
 
-    public Integer[] getStatus4() {
+    public String[] getStatus4() {
         return status4;
     }
 
-    public void setStatus4(Integer[] status4) {
+    public void setStatus4(String[] status4) {
         this.status4 = status4;
     }
 
-    public Integer[] getStatus5() {
+    public String[] getStatus5() {
         return status5;
     }
 
-    public void setStatus5(Integer[] status5) {
+    public void setStatus5(String[] status5) {
         this.status5 = status5;
     }
 
@@ -120,11 +121,11 @@ public class StatusMessage extends UpBean{
         deviceName = new String[_packageNum];
         deviceLocate = new String[_packageNum];
         devicePara=new String[_packageNum];
-        status1 = new Integer[_packageNum];
-        status2 = new Integer[_packageNum];
-        status3 = new Integer[_packageNum];
-        status4 = new Integer[_packageNum];
-        status5 = new Integer[_packageNum];
+        status1 = new String[_packageNum];
+        status2 = new String[_packageNum];
+        status3 = new String[_packageNum];
+        status4 = new String[_packageNum];
+        status5 = new String[_packageNum];
 
         for (int i = 0; i <_packageNum ; i++) {
             byte[] deviceNameBytes = new byte[deviceNameSize];
@@ -136,11 +137,17 @@ public class StatusMessage extends UpBean{
             byte[] deviceParaBytes = new byte[deviceParaSize];
             bb.readBytes(deviceParaBytes);
             devicePara[i] = new String(deviceParaBytes,"UTF-8").trim();
-            status1[i] =  bb.readInt();
-            status2[i] =  bb.readInt();
-            status3[i] =  bb.readInt();
-            status4[i] =  bb.readInt();
-            status5[i] =  bb.readInt();
+            byte[] statusBytes = new byte[statusSize];
+            bb.readBytes(statusBytes);
+            status1[i] = new String(deviceParaBytes,"UTF-8").trim();
+            bb.readBytes(statusBytes);
+            status2[i] =  new String(deviceParaBytes,"UTF-8").trim();
+            bb.readBytes(statusBytes);
+            status3[i] =  new String(deviceParaBytes,"UTF-8").trim();
+            bb.readBytes(statusBytes);
+            status4[i] =  new String(deviceParaBytes,"UTF-8").trim();
+            bb.readBytes(statusBytes);
+            status5[i] =  new String(deviceParaBytes,"UTF-8").trim();
         }
         this.setCheckSum(bb.readByte());
         }catch (UnsupportedEncodingException e){e.printStackTrace();}
@@ -163,11 +170,11 @@ public class StatusMessage extends UpBean{
             bb.writeBytes(dataTool.getLengthBytesString(deviceName[i], deviceNameSize).getBytes("UTF-8"));
             bb.writeBytes(dataTool.getLengthBytesString(deviceLocate[i], deviceLocateSize).getBytes("UTF-8"));
             bb.writeBytes(dataTool.getLengthBytesString(devicePara[i], deviceParaSize).getBytes("UTF-8"));
-            bb.writeInt(status1[i]);
-            bb.writeInt(status2[i]);
-            bb.writeInt(status3[i]);
-            bb.writeInt(status4[i]);
-            bb.writeInt(status5[i]);
+            bb.writeBytes(dataTool.getLengthBytesString(status1[i], statusSize).getBytes("UTF-8"));
+            bb.writeBytes(dataTool.getLengthBytesString(status2[i], statusSize).getBytes("UTF-8"));
+            bb.writeBytes(dataTool.getLengthBytesString(status3[i], statusSize).getBytes("UTF-8"));
+            bb.writeBytes(dataTool.getLengthBytesString(status4[i], statusSize).getBytes("UTF-8"));
+            bb.writeBytes(dataTool.getLengthBytesString(status5[i], statusSize).getBytes("UTF-8"));
         }
         //回写length段
         int index=bb.writerIndex();

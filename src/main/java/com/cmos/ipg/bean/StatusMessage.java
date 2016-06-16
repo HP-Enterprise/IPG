@@ -16,6 +16,7 @@ public class StatusMessage extends UpBean{
     private static int deviceParaSize=100;
     private static int statusSize=10;
 
+
     private Byte packageNum;
     private String[] deviceName;//
     private String[] deviceLocate;//

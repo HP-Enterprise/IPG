@@ -120,20 +120,20 @@ public class BeanTest {
         String[] deviceName = new String[statusMessage.getPackageNum()];
         String[] deviceLocate = new String[statusMessage.getPackageNum()];
         String[] devicePara = new String[statusMessage.getPackageNum()];
-        Integer[] status1 = new Integer[statusMessage.getPackageNum()];
-        Integer[] status2 = new Integer[statusMessage.getPackageNum()];
-        Integer[] status3 = new Integer[statusMessage.getPackageNum()];
-        Integer[] status4 = new Integer[statusMessage.getPackageNum()];
-        Integer[] status5 = new Integer[statusMessage.getPackageNum()];
+        String[] status1 = new String[statusMessage.getPackageNum()];
+        String[] status2 = new String[statusMessage.getPackageNum()];
+        String[] status3 = new String[statusMessage.getPackageNum()];
+        String[] status4 = new String[statusMessage.getPackageNum()];
+        String[] status5 = new String[statusMessage.getPackageNum()];
         for (int i = 0; i <statusMessage.getPackageNum() ; i++) {
             deviceName[i]="设备名称A"+i;
             deviceLocate[i]="设备位置B"+i;
             devicePara[i]="参数C"+i;
-            status1[i]=i*1;
-            status2[i]=i*2;
-            status3[i]=i*3;
-            status4[i]=i*4;
-            status5[i]=i*5;
+            status1[i]=String.valueOf(i*1);
+            status2[i]=String.valueOf(i*2);
+            status3[i]=String.valueOf(i*3);
+            status4[i]=String.valueOf(i*4);
+            status5[i]=String.valueOf(i*5);
         }
         statusMessage.setDeviceName(deviceName);
         statusMessage.setDeviceLocate(deviceLocate);

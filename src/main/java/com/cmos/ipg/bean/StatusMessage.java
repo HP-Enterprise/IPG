@@ -11,9 +11,9 @@ import static io.netty.buffer.Unpooled.buffer;
  */
 public class StatusMessage extends UpBean{
 
-    private static int deviceNameSize=10;
-    private static int deviceLocateSize=20;
-    private static int deviceParaSize=20;
+    private static int deviceNameSize=100;
+    private static int deviceLocateSize=100;
+    private static int deviceParaSize=100;
     private static int statusSize=10;
 
     private Byte packageNum;

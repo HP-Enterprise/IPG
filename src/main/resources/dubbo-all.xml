@@ -7,23 +7,15 @@
     http://code.alibabatech.com/schema/dubbo
     http://code.alibabatech.com/schema/dubbo/dubbo.xsd">
     <!-- 提供方应用信息，用于计算依赖关系 -->
-    <dubbo:application name="command-service"  />
-    <!-- <dubbo:registry address="zookeeper://127.0.0.1:2181" />-->
-    <dubbo:registry address="N/A" ></dubbo:registry>
-    <dubbo:protocol name="dubbo" port="20990" />
-    <dubbo:provider>
-        <dubbo:service interface="com.cmos.ipg.dubbo.ReceiveCommandService" ref="receiveCommandService"></dubbo:service>
-    </dubbo:provider>
-    <bean id="receiveCommandService" class="com.cmos.ipg.dubbo.ReceiveCommandServiceImpl" />
-    <!--dubbo服务端 -->
+    <dubbo:application name="ipg"></dubbo:application>
+    <dubbo:registry id="dubbo-provider-registry" address="zookeeper://127.0.0.1:2181" check="false"
+                    timeout="15000"></dubbo:registry>
+    <!-- 声明需要暴露的服务接口 -->
+    <dubbo:service interface="com.cmos.ipg.dubbo.ConfigureAgentService" ref="configureAgentService" />
+    <dubbo:protocol name="dubbo" port="20880"></dubbo:protocol>
 
-    <!--dubbo客户端 -->
-    <dubbo:consumer timeout="30000" >
-    </dubbo:consumer>
-    <dubbo:reference
-            id="demoService"
-            interface="com.cmos.ipg.dubbo.ReceiveAlarmService"
-            url="dubbo://127.0.0.1:20880/com.znn.provider.ReceiveAlarmService"
-            />
+    <!-- 和本地bean一样实现服务 -->
+    <bean id="configureAgentService" class="com.cmos.ipg.dubbo.impl.ConfigureAgentServiceImpl" />
+
 
 </beans>

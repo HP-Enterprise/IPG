@@ -1,4 +1,6 @@
-package com.cmos.ipg.dubbo;
+package com.cmos.ipg.dubbo.impl;
+
+import com.cmos.ipg.dubbo.ReceiveCommandService;
 
 import java.util.Date;
 

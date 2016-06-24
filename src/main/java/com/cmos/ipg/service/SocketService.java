@@ -179,6 +179,26 @@ public class SocketService {
                 if(req.getDevicePara()[i].equals("deviceFaultAlarm")){
                         alarmParam.add("运行异常告警#0") ;
                         alarmValue.add("高级") ;
+                        //AlarmHistory
+                        AlarmHistory alarmHistory=new AlarmHistory();
+                        alarmHistory.setDeviceId(-1);
+                        alarmHistory.setAlarmDeviceName(req.getDeviceName()[0]);
+                        alarmHistory.setAlarmTitle("运行异常告警");
+                        alarmHistory.setAlarmContent("运行异常告警");
+                        alarmHistory.setAlarmLevel(0);
+                        alarmHistory.setAlarmDate(dataTool.seconds2Date(req.getSendingTime()));
+                        alarmHistoryMapper.save(alarmHistory);
+
+                        //Alarm
+                        alarmMapper.deleteByName(req.getDeviceName()[0]);//delete current alarm info
+                        Alarm alarm=new Alarm();
+                        alarm.setDeviceId(-1);
+                        alarm.setAlarmDeviceName(req.getDeviceName()[0]);
+                        alarm.setAlarmTitle("运行异常告警");
+                        alarm.setAlarmContent("运行异常告警");
+                        alarm.setAlarmLevel(0);
+                        alarm.setAlarmDate(dataTool.seconds2Date(req.getSendingTime()));
+                        alarmMapper.save(alarm);
                 }
 
             }

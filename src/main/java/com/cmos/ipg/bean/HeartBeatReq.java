@@ -3,6 +3,8 @@ package com.cmos.ipg.bean;
 import io.netty.buffer.ByteBuf;
 
 
+import java.io.UnsupportedEncodingException;
+
 import static io.netty.buffer.Unpooled.buffer;
 /**
  * Created by jackl on 2016/4/29.
@@ -33,6 +35,14 @@ public class HeartBeatReq extends UpBean{
         this.setSendingTime(bb.readInt());
         this.setEventId(bb.readInt());
         this.setAgentNum(bb.readByte());
+        byte[] parkCodeBytes = new byte[this.getParkCodeSize()];
+        bb.readBytes(parkCodeBytes);
+        try {
+            System.err.print(new String(parkCodeBytes,"UTF-8").trim());
+            this.setParkCode(new String(parkCodeBytes,"UTF-8").trim());
+        } catch (UnsupportedEncodingException e) {
+
+        }
         this.setHeartBeat(bb.readByte());
         this.setCheckSum(bb.readByte());
      }
@@ -48,6 +58,11 @@ public class HeartBeatReq extends UpBean{
         bb.writeInt(this.getSendingTime());//
         bb.writeInt(this.getEventId());//
         bb.writeByte(this.getAgentNum());//
+        try {
+            bb.writeBytes(dataTool.getLengthBytesString(this.getParkCode(),this.getParkCodeSize()).getBytes("utf-8"));
+        } catch (UnsupportedEncodingException e) {
+
+        }
         bb.writeByte(this.getHeartBeat());//
         //回写length段
         int index=bb.writerIndex();

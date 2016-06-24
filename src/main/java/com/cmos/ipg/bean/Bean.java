@@ -6,6 +6,8 @@ import com.cmos.ipg.utils.DataTool;
  * Created by jackl on 2016/4/29.
  */
 public abstract class Bean {
+    //园区识别码长度 10
+    private int parkCodeSize=10;
     private Short startCode=9252;
     private Short messageSize;
     private Byte messageType;
@@ -13,10 +15,19 @@ public abstract class Bean {
     private Integer sendingTime;
     private Integer eventId;
     private Byte agentNum;
+    private String parkCode;
     private Byte checkSum;
 
     public static final int BUFFER_SIZE = 1024;
     public DataTool dataTool = new DataTool();
+
+    public int getParkCodeSize() {
+        return parkCodeSize;
+    }
+
+    public void setParkCodeSize(int parkCodeSize) {
+        this.parkCodeSize = parkCodeSize;
+    }
 
     public Short getStartCode() {
         return startCode;
@@ -72,6 +83,14 @@ public abstract class Bean {
 
     public void setAgentNum(Byte agentNum) {
         this.agentNum = agentNum;
+    }
+
+    public String getParkCode() {
+        return parkCode;
+    }
+
+    public void setParkCode(String parkCode) {
+        this.parkCode = parkCode;
     }
 
     public Byte getCheckSum() {

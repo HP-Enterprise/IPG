@@ -1,7 +1,5 @@
 package com.cmos.ipg.service;
 
-import com.cmos.core.bean.InputObject;
-import com.cmos.core.bean.OutputObject;
 import com.cmos.ipg.bean.*;
 import com.cmos.ipg.dubbo.IControlIPGService;
 import com.cmos.ipg.dubbo.ReceiveAlarmService;
@@ -19,7 +17,10 @@ import org.springframework.transaction.annotation.Transactional;
 import java.lang.management.CompilationMXBean;
 import java.net.InetSocketAddress;
 import java.nio.ByteBuffer;
+import java.util.ArrayList;
 import java.util.*;
+import java.util.HashMap;
+import java.util.List;
 
 
 /**

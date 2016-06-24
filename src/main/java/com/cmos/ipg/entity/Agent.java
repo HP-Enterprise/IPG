@@ -1,9 +1,11 @@
 package com.cmos.ipg.entity;
 
+import java.io.Serializable;
+
 /**
  * Created by jackl on 2016/5/5.
  */
-public class Agent {
+public class Agent implements Serializable{
     private  int id;
     private String agentName;
     private short agentType;

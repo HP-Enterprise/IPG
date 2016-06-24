@@ -5,6 +5,8 @@ import com.cmos.ipg.entity.Device;
 import org.apache.ibatis.annotations.*;
 import org.apache.ibatis.type.JdbcType;
 
+import java.util.List;
+
 /**
  * Created by jackl on 2016/5/5.
  */
@@ -31,4 +33,10 @@ public interface AgentMapper {
             @Result(property = "agentType", column = "agent_type", javaType = Short.class, jdbcType = JdbcType.SMALLINT) ,
             @Result(property = "conProtocol", column = "con_protocol", javaType = Integer.class, jdbcType = JdbcType.INTEGER) })
     Agent findByAgentTypeAndNum(@Param("agent_type") short  agent_type,@Param("num") int  num);
+
+    @Delete("Delete from ip_agent where id = #{id}")
+    void delete(@Param("id") String id);
+
+    @Select("SELECT * FROM ip_agent WHERE 1=1")
+    List<Agent> getAllAgent();
 }

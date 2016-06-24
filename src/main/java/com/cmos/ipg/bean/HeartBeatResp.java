@@ -3,6 +3,8 @@ package com.cmos.ipg.bean;
 import com.cmos.ipg.utils.DataTool;
 import io.netty.buffer.ByteBuf;
 
+import java.io.UnsupportedEncodingException;
+
 import static io.netty.buffer.Unpooled.buffer;
 
 /**
@@ -34,6 +36,14 @@ public class HeartBeatResp extends DownBean{
         this.setSendingTime(bb.readInt());
         this.setEventId(bb.readInt());
         this.setAgentNum(bb.readByte());
+        byte[] parkCodeBytes = new byte[this.getParkCodeSize()];
+        bb.readBytes(parkCodeBytes);
+        try {
+            System.err.print(new String(parkCodeBytes,"UTF-8").trim());
+            this.setParkCode(new String(parkCodeBytes,"UTF-8").trim());
+        } catch (UnsupportedEncodingException e) {
+
+        }
         this.setStatus(bb.readByte());
         this.setCheckSum(bb.readByte());
     }
@@ -49,6 +59,11 @@ public class HeartBeatResp extends DownBean{
         bb.writeInt(this.getSendingTime());//
         bb.writeInt(this.getEventId());
         bb.writeByte(this.getAgentNum());//
+        try {
+            bb.writeBytes(dataTool.getLengthBytesString(this.getParkCode(), this.getParkCodeSize()).getBytes("utf-8"));
+        } catch (UnsupportedEncodingException e) {
+
+        }
         bb.writeByte(this.getStatus());//
         //回写length段
         int index=bb.writerIndex();

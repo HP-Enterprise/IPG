@@ -4,12 +4,12 @@ com.cmos.acquire:
     #disable  dataServer and dataHandler .if set this value true,neither dataServer nor dataHandler will work
     disabled: false
    #data server listen on this port
-    port: 8000
+    port: 8001
 
 #RocketMQ server info
 com.cmos.mq:
     ProducerGroupName: ProducerGroupName
-    nameServerAddress: 127.0.0.1:9876
+    nameServerAddress: 192.168.100.66:9876
     instanceName: Producer
 
 # Logging level (TRACE, DEBUG, INFO, WARN, ERROR, FATAL, OFF)
@@ -26,7 +26,7 @@ spring:
         max-active: 100
         max-idle: 40
         min-idle: 35
-        url: jdbc:mysql://192.168.100.66:3306/ipg?characterEncoding=utf8
+        url: jdbc:mysql://192.168.100.66:3306/ipg_bacnet?useUnicode=true&characterEncoding=utf8&useSSL=false
         username: root
         password: 123456
     jpa:
@@ -38,7 +38,7 @@ spring:
             properties:
                 hibernate.dialect: org.hibernate.dialect.MySQL5Dialect
     redis:
-        host: 127.0.0.1
+        host: 192.168.100.66
         port: 6379
         password:
         database: 0

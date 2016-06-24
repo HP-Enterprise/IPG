@@ -1,5 +1,7 @@
 package com.cmos.ipg.service;
 
+import com.cmos.core.bean.InputObject;
+import com.cmos.core.bean.OutputObject;
 import com.cmos.ipg.bean.*;
 import com.cmos.ipg.dubbo.IControlIPGService;
 import com.cmos.ipg.dubbo.ReceiveAlarmService;

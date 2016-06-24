@@ -237,6 +237,11 @@ public class SocketService {
     public int handleWarningMessage(String reqString,String ip){
         //
         try{
+            InputObject io = new InputObject();
+            io.setMethod("insertDeviceOpenDetailsByAgent");
+            io.setService("DeviceOpenDetailsService");
+            Map map = new HashMap<String,Object>() ;
+
             ByteBuf bb=dataTool.getByteBuf(reqString);
             byte[] reqBytes=dataTool.getBytesFromByteBuf(bb);
             WarningMessage req=new WarningMessage();
@@ -269,17 +274,30 @@ public class SocketService {
             alarm.setAlarmDate(dataTool.seconds2Date(req.getSendingTime()));
             alarmMapper.save(alarm);
             //push message
-            String pushMsg=req.getAlarmLevel()+":"+req.getAlarmDeviceName()+","+req.getAlarmTitle()+","+req.getAlarmContent();
-            mqService.pushToUser(1,pushMsg);
+            //String pushMsg=req.getAlarmLevel()+":"+req.getAlarmDeviceName()+","+req.getAlarmTitle()+","+req.getAlarmContent();
+            //mqService.pushToUser(1,pushMsg);
             // send via Dubbo
             //如果没有Dubbo服务,请先注释掉line 42 避免Spring启动错误
-            try {
-                System.out.println( receiveAlarmService.send(pushMsg));
-            }catch (Exception e){
-                e.printStackTrace();
-                this._logger.error("Dubbo Consumer filed:"+e.getMessage());
-            }
+            //try {
+              //  System.out.println( receiveAlarmService.send(pushMsg));
+            //}catch (Exception e){
+              //  e.printStackTrace();
+              //  this._logger.error("Dubbo Consumer filed:"+e.getMessage());
+            //}
             //dubbo end
+
+            map.put("deviceName", req.getAlarmDeviceName());
+            map.put("deviceCode", req.getAlarmDeviceName());
+            map.put("deviceLoction", req.getAlarmDeviceName());
+            map.put("paraName", req.getAlarmTitle())  ;
+            map.put("paraValue", req.getAlarmContent());
+            map.put("sendTime", new Date());
+            io.setParams(map);
+            OutputObject oo= controlService.execute(io);
+            if(oo.getBusiCode().equals("0")) {
+            }else{
+                return 1;
+            }
             return 0;
         }catch (Exception e){
             e.printStackTrace();

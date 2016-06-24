@@ -77,6 +77,7 @@ public class SocketService {
         resp.setSendingTime(dataTool.getCurrentSeconds());
         resp.setEventId(req.getEventId());
         resp.setAgentNum(req.getAgentNum());
+        resp.setParkCode(req.getParkCode());
         resp.setStatus((byte) 1);
         byte[] respBytes=resp.encoded();
         String respStr=dataTool.bytes2hex(respBytes);

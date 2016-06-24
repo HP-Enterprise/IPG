@@ -12,7 +12,8 @@ import static io.netty.buffer.Unpooled.buffer;
 public class StatusMessage extends UpBean{
 
     private static int deviceNameSize=100;
-    private static int deviceLocateSize=100;
+    private static int deviceLocateSize=200;
+    private static int deviceCodeSize=100;
     private static int deviceParaSize=100;
     private static int statusSize=10;
 
@@ -20,6 +21,7 @@ public class StatusMessage extends UpBean{
     private Byte packageNum;
     private String[] deviceName;//
     private String[] deviceLocate;//
+    private String[] deviceCode;//
     private String[] devicePara;
     private String[] status1;//
     private String[] status2;//
@@ -120,6 +122,7 @@ public class StatusMessage extends UpBean{
         int _packageNum=this.getPackageNum();
 
         deviceName = new String[_packageNum];
+        deviceCode = new String[_packageNum];
         deviceLocate = new String[_packageNum];
         devicePara=new String[_packageNum];
         status1 = new String[_packageNum];
@@ -132,6 +135,9 @@ public class StatusMessage extends UpBean{
             byte[] deviceNameBytes = new byte[deviceNameSize];
             bb.readBytes(deviceNameBytes);
             deviceName[i] = new String(deviceNameBytes,"UTF-8").trim();
+            byte[] deviceCodeBytes = new byte[deviceCodeSize];
+            bb.readBytes(deviceCodeBytes);
+            deviceCode[i] = new String(deviceCodeBytes,"UTF-8").trim();
             byte[] deviceLocateBytes = new byte[deviceLocateSize];
             bb.readBytes(deviceLocateBytes);
             deviceLocate[i] = new String(deviceLocateBytes,"UTF-8").trim();
@@ -169,6 +175,7 @@ public class StatusMessage extends UpBean{
         bb.writeByte(this.getPackageNum());
         for (int i = 0; i <this.getPackageNum() ; i++) {
             bb.writeBytes(dataTool.getLengthBytesString(deviceName[i], deviceNameSize).getBytes("UTF-8"));
+            bb.writeBytes(dataTool.getLengthBytesString(deviceCode[i], deviceCodeSize).getBytes("UTF-8"));
             bb.writeBytes(dataTool.getLengthBytesString(deviceLocate[i], deviceLocateSize).getBytes("UTF-8"));
             bb.writeBytes(dataTool.getLengthBytesString(devicePara[i], deviceParaSize).getBytes("UTF-8"));
             bb.writeBytes(dataTool.getLengthBytesString(status1[i], statusSize).getBytes("UTF-8"));
@@ -208,5 +215,13 @@ public class StatusMessage extends UpBean{
         sb.append("        CheckSum:").append(this.getCheckSum()).append("\n");
         sb.append("------------"+this.getClass().toString()+"------------").append("\n");
         return sb.toString();
+    }
+
+    public String[] getDeviceCode() {
+        return deviceCode;
+    }
+
+    public void setDeviceCode(String[] deviceCode) {
+        this.deviceCode = deviceCode;
     }
 }

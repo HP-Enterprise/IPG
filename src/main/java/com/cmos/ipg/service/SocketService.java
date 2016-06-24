@@ -1,6 +1,9 @@
 package com.cmos.ipg.service;
 
+import com.cmos.core.bean.InputObject;
+import com.cmos.core.bean.OutputObject;
 import com.cmos.ipg.bean.*;
+import com.cmos.ipg.dubbo.IControlIPGService;
 import com.cmos.ipg.dubbo.ReceiveAlarmService;
 import com.cmos.ipg.entity.*;
 import com.cmos.ipg.mapper.*;
@@ -16,7 +19,8 @@ import org.springframework.transaction.annotation.Transactional;
 import java.lang.management.CompilationMXBean;
 import java.net.InetSocketAddress;
 import java.nio.ByteBuffer;
-import java.util.Date;
+import java.util.*;
+
 
 /**
  * Created by jackl on 2016/4/29.
@@ -41,6 +45,8 @@ public class SocketService {
     CommandMapper commandMapper;
     //@Autowired
     ReceiveAlarmService receiveAlarmService;
+    @Autowired
+    IControlIPGService controlService;
 
     private Logger _logger= LoggerFactory.getLogger(SocketService.class);
 
@@ -121,6 +127,15 @@ public class SocketService {
     public int handleStatusMessage(String reqString,String ip){
         //
         try{
+            InputObject io = new InputObject();
+//            io.setMethod("getUserList");
+//            io.setService("userService");
+            io.setMethod("insertDeviceOpenDetailsByAgent");
+            io.setService("DeviceOpenDetailsService");
+            Map map = new HashMap<String,Object>() ;
+
+
+
             ByteBuf bb=dataTool.getByteBuf(reqString);
             byte[] reqBytes=dataTool.getBytesFromByteBuf(bb);
             StatusMessage req=new StatusMessage();
@@ -133,6 +148,8 @@ public class SocketService {
                 return 2;//from ip not in the list
             }
             //save deviceStatusHistory
+            List<String> alarmParam = new ArrayList<String>();
+            List<String> alarmValue = new ArrayList<String>();
             int num=req.getPackageNum();
             for (int i = 0; i < num; i++) {
                 //save deviceStatusHistory
@@ -153,7 +170,28 @@ public class SocketService {
                 deviceStatus.setDeviceParaName(req.getDevicePara()[i]);
                 deviceStatus.setDeviceParaValue(req.getStatus1()[i]);
                 deviceStatusMapper.save(deviceStatus);
+
+                //判断告警信息
+                if(req.getDevicePara()[i].equals("deviceFaultAlarm")){
+                        alarmParam.add("运行异常告警#0") ;
+                        alarmValue.add("高级") ;
+                }
+
             }
+            map.put("alarm", alarmParam.toArray());
+            map.put("deviceName", req.getDeviceName()[0]);
+            map.put("deviceCode", req.getDeviceCode()[0]);
+            map.put("deviceLoction", req.getDeviceLocate()[0]);
+            map.put("paraName", req.getDevicePara())  ;
+            map.put("paraValue", req.getStatus1());
+            map.put("sendTime", req.getSendingTime());
+            io.setParams(map);
+            OutputObject oo= controlService.execute(io);
+            if(oo.getBusiCode().equals("0")) {
+            }else{
+              return 1;
+            }
+            System.out.println(oo.getReturnMessage());
             //
             return 0;
         }catch (Exception e){

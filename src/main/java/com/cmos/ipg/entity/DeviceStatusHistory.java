@@ -9,6 +9,8 @@ public class DeviceStatusHistory {
     private  int id;
     private  int deviceId;
     private String deviceName;
+    private String deviceCode;
+    private String deviceLocaiton;
     private String deviceParaName;
     private String deviceParaValue;
     private Date collectDate;
@@ -60,4 +62,21 @@ public class DeviceStatusHistory {
     public void setCollectDate(Date collectDate) {
         this.collectDate = collectDate;
     }
+
+	public String getDeviceCode() {
+		return deviceCode;
+	}
+
+	public void setDeviceCode(String deviceCode) {
+		this.deviceCode = deviceCode;
+	}
+
+	public String getDeviceLocaiton() {
+		return deviceLocaiton;
+	}
+
+	public void setDeviceLocaiton(String deviceLocaiton) {
+		this.deviceLocaiton = deviceLocaiton;
+	}
+    
 }

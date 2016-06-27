@@ -13,5 +13,5 @@
     <dubbo:protocol name="dubbo" port="20990" />
     <dubbo:service interface="com.cmos.ipg.dubbo.ReceiveCommandService" ref="commandService" />
     <!-- 和本地bean一样实现服务 -->
-    <bean id="commandService" class="com.cmos.ipg.dubbo.ReceiveCommandServiceImpl" />
+    <bean id="commandService" class="com.cmos.ipg.dubbo.impl.ReceiveCommandServiceImpl" />
 </beans>

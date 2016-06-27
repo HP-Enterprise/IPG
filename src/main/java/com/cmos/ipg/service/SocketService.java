@@ -202,7 +202,11 @@ public class SocketService {
                 }
 
             }
-            map.put("alarm", alarmParam.toArray());
+            String[] alarms = new String[alarmParam.size()];
+            for(int i=0;i<alarmParam.size();i++){
+            	alarms[i]=alarmParam.get(i).toString();
+            }
+            map.put("alarm", alarms);
             map.put("deviceName", req.getDeviceName()[0]);
             map.put("deviceCode", req.getDeviceCode()[0]);
             map.put("deviceLoction", req.getDeviceLocate()[0]);

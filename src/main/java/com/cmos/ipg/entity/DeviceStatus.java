@@ -8,7 +8,7 @@ public class DeviceStatus {
     private  int deviceId;
     private String deviceName;
     private String deviceCode;
-    private String deviceLocaiton;
+    private String deviceLocation;
     private String deviceParaName;
     private String deviceParaValue;
 
@@ -60,12 +60,12 @@ public class DeviceStatus {
 		this.deviceCode = deviceCode;
 	}
 
-	public String getDeviceLocaiton() {
-		return deviceLocaiton;
+	public String getDeviceLocation() {
+		return deviceLocation;
 	}
 
-	public void setDeviceLocaiton(String deviceLocaiton) {
-		this.deviceLocaiton = deviceLocaiton;
+	public void setDeviceLocation(String deviceLocation) {
+		this.deviceLocation = deviceLocation;
 	}
-    
+
 }

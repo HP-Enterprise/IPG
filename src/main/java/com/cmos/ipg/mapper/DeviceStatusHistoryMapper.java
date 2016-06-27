@@ -24,7 +24,7 @@ public interface DeviceStatusHistoryMapper {
             @Result(property = "collectDate", column = "collect_date", javaType = Date.class, jdbcType = JdbcType.TIMESTAMP) })
     DeviceStatusHistory findByDeviceId(@Param("deviceId") int deviceId);
 
-    @Insert("INSERT INTO ip_device_status_his(device_id, device_name,decvice_code,device_location,device_para_name,device_para_value,collect_date)" +
+    @Insert("INSERT INTO ip_device_status_his(device_id, device_name,device_code,device_location,device_para_name,device_para_value,collect_date)" +
             "VALUES(#{deviceStatusHistory.deviceId}, #{deviceStatusHistory.deviceName},#{deviceStatusHistory.deviceCode},#{deviceStatusHistory.deviceLocation}, #{deviceStatusHistory.deviceParaName}, #{deviceStatusHistory.deviceParaValue}, #{deviceStatusHistory.collectDate})")
     void save(@Param("deviceStatusHistory") DeviceStatusHistory deviceStatusHistory);
 }

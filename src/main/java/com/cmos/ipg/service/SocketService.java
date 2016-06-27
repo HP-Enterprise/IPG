@@ -238,7 +238,7 @@ public class SocketService {
         //
         try{
             InputObject io = new InputObject();
-            io.setMethod("insertDeviceOpenDetailsByAgent");
+            io.setMethod("insertDeviceAccessByAgent");
             io.setService("DeviceOpenDetailsService");
             Map map = new HashMap<String,Object>() ;
 
@@ -257,6 +257,8 @@ public class SocketService {
             AlarmHistory alarmHistory=new AlarmHistory();
             alarmHistory.setDeviceId(-1);
             alarmHistory.setAlarmDeviceName(req.getAlarmDeviceName());
+            alarmHistory.setAlarmDeviceCode(req.getAlarmDeviceCode());
+            alarmHistory.setAlarmDeviceLocate(req.getAlarmDeviceLocate());
             alarmHistory.setAlarmTitle(req.getAlarmTitle());
             alarmHistory.setAlarmContent(req.getAlarmContent());
             alarmHistory.setAlarmLevel(req.getAlarmLevel());
@@ -268,6 +270,8 @@ public class SocketService {
             Alarm alarm=new Alarm();
             alarm.setDeviceId(-1);
             alarm.setAlarmDeviceName(req.getAlarmDeviceName());
+            alarm.setAlarmDeviceCode(req.getAlarmDeviceCode());
+            alarm.setAlarmDeviceLocate(req.getAlarmDeviceLocate());
             alarm.setAlarmTitle(req.getAlarmTitle());
             alarm.setAlarmContent(req.getAlarmContent());
             alarm.setAlarmLevel(req.getAlarmLevel());
@@ -287,15 +291,14 @@ public class SocketService {
             //dubbo end
 
             map.put("deviceName", req.getAlarmDeviceName());
-            map.put("deviceCode", req.getAlarmDeviceName());
-            map.put("deviceLoction", req.getAlarmDeviceName());
-            map.put("paraName", req.getAlarmTitle())  ;
+            map.put("deviceCode", req.getAlarmDeviceCode());
+            map.put("deviceLoction", req.getAlarmDeviceLocate());
+            map.put("paraName", req.getAlarmTitle());
             map.put("paraValue", req.getAlarmContent());
             map.put("sendTime", new Date());
             io.setParams(map);
             OutputObject oo= controlService.execute(io);
-            if(oo.getBusiCode().equals("0")) {
-            }else{
+            if(!oo.getBusiCode().equals("0")) {
                 return 1;
             }
             return 0;

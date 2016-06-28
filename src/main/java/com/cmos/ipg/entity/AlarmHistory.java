@@ -9,8 +9,6 @@ public class AlarmHistory {
     private  int id;
     private int deviceId;
     private  String alarmDeviceName;
-    private String alarmDeviceCode;
-    private String alarmDeviceLocate;
     private String alarmTitle;
     private String alarmContent;
     private int alarmLevel;
@@ -38,22 +36,6 @@ public class AlarmHistory {
 
     public void setAlarmDeviceName(String alarmDeviceName) {
         this.alarmDeviceName = alarmDeviceName;
-    }
-
-    public String getAlarmDeviceCode() {
-        return alarmDeviceCode;
-    }
-
-    public void setAlarmDeviceCode(String alarmDeviceCode) {
-        this.alarmDeviceCode = alarmDeviceCode;
-    }
-
-    public String getAlarmDeviceLocate() {
-        return alarmDeviceLocate;
-    }
-
-    public void setAlarmDeviceLocate(String alarmDeviceLocate) {
-        this.alarmDeviceLocate = alarmDeviceLocate;
     }
 
     public String getAlarmTitle() {

@@ -14,7 +14,7 @@
     <dubbo:provider>
         <dubbo:service interface="com.cmos.ipg.dubbo.ReceiveCommandService" ref="receiveCommandService"></dubbo:service>
     </dubbo:provider>
-    <bean id="receiveCommandService" class="com.cmos.ipg.dubbo.impl.ReceiveCommandServiceImpl" />
+    <bean id="receiveCommandService" class="com.cmos.ipg.dubbo.ReceiveCommandServiceImpl" />
     <!--dubbo服务端 -->
 
     <!--dubbo客户端 -->

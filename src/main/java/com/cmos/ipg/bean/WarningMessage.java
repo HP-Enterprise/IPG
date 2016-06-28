@@ -10,13 +10,17 @@ import static io.netty.buffer.Unpooled.buffer;
  * Created by jackl on 2016/5/4.
  */
 public class WarningMessage extends UpBean{
-    private static int alarmDeviceNameSize=100;
-    private static int alarmTitleSize=200;
-    private static int alarmContentSize=500;
+    private static int alarmDeviceNameSize=20;
+    private static int alarmDeviceCodeSize=20;
+    private static int alarmDeviceLocateSize=20;
+    private static int alarmTitleSize=50;
+    private static int alarmContentSize=100;
 
-    private String alarmDeviceName;//100/4
-    private String alarmTitle;//200/4
-    private String alarmContent;//500/4
+    private String alarmDeviceName;
+    private String alarmDeviceCode;
+    private String alarmDeviceLocate;
+    private String alarmTitle;
+    private String alarmContent;
     private Byte alarmLevel;//告警级别 1 严重 2 重要 3 一般  4通知
 
     public WarningMessage() {
@@ -30,6 +34,22 @@ public class WarningMessage extends UpBean{
 
     public void setAlarmDeviceName(String alarmDeviceName) {
         this.alarmDeviceName = alarmDeviceName;
+    }
+
+    public String getAlarmDeviceCode() {
+        return alarmDeviceCode;
+    }
+
+    public void setAlarmDeviceCode(String alarmDeviceCode) {
+        this.alarmDeviceCode = alarmDeviceCode;
+    }
+
+    public String getAlarmDeviceLocate() {
+        return alarmDeviceLocate;
+    }
+
+    public void setAlarmDeviceLocate(String alarmDeviceLocate) {
+        this.alarmDeviceLocate = alarmDeviceLocate;
     }
 
     public String getAlarmTitle() {
@@ -73,6 +93,14 @@ public class WarningMessage extends UpBean{
         bb.readBytes(alarmDeviceNameBytes);
         this.setAlarmDeviceName(new String(alarmDeviceNameBytes,"UTF-8").trim());
 
+        byte[] alarmDeviceCodeBytes = new byte[alarmDeviceCodeSize];
+        bb.readBytes(alarmDeviceCodeBytes);
+        this.setAlarmDeviceCode(new String(alarmDeviceCodeBytes, "UTF-8").trim());
+
+        byte[] alarmDeviceLocateBytes = new byte[alarmDeviceLocateSize];
+        bb.readBytes(alarmDeviceLocateBytes);
+        this.setAlarmDeviceLocate(new String(alarmDeviceLocateBytes, "UTF-8").trim());
+
         byte[] alarmTitleBytes = new byte[alarmTitleSize];
         bb.readBytes(alarmTitleBytes);
         this.setAlarmTitle(new String(alarmTitleBytes,"UTF-8").trim());
@@ -99,6 +127,8 @@ public class WarningMessage extends UpBean{
             bb.writeByte(this.getAgentNum());//
 
             bb.writeBytes(dataTool.getLengthBytesString(this.getAlarmDeviceName(), alarmDeviceNameSize).getBytes("UTF-8"));
+            bb.writeBytes(dataTool.getLengthBytesString(this.getAlarmDeviceCode(), alarmDeviceCodeSize).getBytes("UTF-8"));
+            bb.writeBytes(dataTool.getLengthBytesString(this.getAlarmDeviceLocate(), alarmDeviceLocateSize).getBytes("UTF-8"));
             bb.writeBytes(dataTool.getLengthBytesString(this.getAlarmTitle(), alarmTitleSize).getBytes("UTF-8"));
             bb.writeBytes(dataTool.getLengthBytesString(this.getAlarmContent(), alarmContentSize).getBytes("UTF-8"));
 

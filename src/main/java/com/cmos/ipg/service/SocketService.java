@@ -160,6 +160,8 @@ public class SocketService {
                 DeviceStatusHistory deviceStatusHistory=new DeviceStatusHistory();
                 deviceStatusHistory.setDeviceId(-1);
                 deviceStatusHistory.setDeviceName(req.getDeviceName()[i]);
+                deviceStatusHistory.setDeviceCode(req.getDeviceCode()[i]);
+                deviceStatusHistory.setDeviceLocation(req.getDeviceLocate()[i]);
                 deviceStatusHistory.setDeviceParaName(req.getDevicePara()[i]);
                 deviceStatusHistory.setDeviceParaValue(req.getStatus1()[i]);
                 deviceStatusHistory.setCollectDate(dataTool.seconds2Date(req.getSendingTime()));
@@ -171,6 +173,8 @@ public class SocketService {
                 DeviceStatus deviceStatus=new DeviceStatus();
                 deviceStatus.setDeviceId(-1);
                 deviceStatus.setDeviceName(req.getDeviceName()[i]);
+                deviceStatus.setDeviceCode(req.getDeviceCode()[i]);
+                deviceStatus.setDeviceLocation(req.getDeviceLocate()[i]);
                 deviceStatus.setDeviceParaName(req.getDevicePara()[i]);
                 deviceStatus.setDeviceParaValue(req.getStatus1()[i]);
                 deviceStatusMapper.save(deviceStatus);
@@ -215,7 +219,7 @@ public class SocketService {
             map.put("sendTime", req.getSendingTime());
             io.setParams(map);
             OutputObject oo= controlService.execute(io);
-            if(oo.getBusiCode().equals("0")) {
+            if(oo!=null&&oo.getReturnCode()!=null&&oo.getReturnCode().equals("0")) {
             }else{
               return 1;
             }
@@ -237,6 +241,11 @@ public class SocketService {
     public int handleWarningMessage(String reqString,String ip){
         //
         try{
+            InputObject io = new InputObject();
+            io.setMethod("insertDeviceAccessByAgent");
+            io.setService("DeviceOpenDetailsService");
+            Map map = new HashMap<String,Object>() ;
+
             ByteBuf bb=dataTool.getByteBuf(reqString);
             byte[] reqBytes=dataTool.getBytesFromByteBuf(bb);
             WarningMessage req=new WarningMessage();
@@ -252,6 +261,8 @@ public class SocketService {
             AlarmHistory alarmHistory=new AlarmHistory();
             alarmHistory.setDeviceId(-1);
             alarmHistory.setAlarmDeviceName(req.getAlarmDeviceName());
+            alarmHistory.setAlarmDeviceCode(req.getAlarmDeviceCode());
+            alarmHistory.setAlarmDeviceLocate(req.getAlarmDeviceLocate());
             alarmHistory.setAlarmTitle(req.getAlarmTitle());
             alarmHistory.setAlarmContent(req.getAlarmContent());
             alarmHistory.setAlarmLevel(req.getAlarmLevel());
@@ -263,23 +274,37 @@ public class SocketService {
             Alarm alarm=new Alarm();
             alarm.setDeviceId(-1);
             alarm.setAlarmDeviceName(req.getAlarmDeviceName());
+            alarm.setAlarmDeviceCode(req.getAlarmDeviceCode());
+            alarm.setAlarmDeviceLocate(req.getAlarmDeviceLocate());
             alarm.setAlarmTitle(req.getAlarmTitle());
             alarm.setAlarmContent(req.getAlarmContent());
             alarm.setAlarmLevel(req.getAlarmLevel());
             alarm.setAlarmDate(dataTool.seconds2Date(req.getSendingTime()));
             alarmMapper.save(alarm);
             //push message
-            String pushMsg=req.getAlarmLevel()+":"+req.getAlarmDeviceName()+","+req.getAlarmTitle()+","+req.getAlarmContent();
-            mqService.pushToUser(1,pushMsg);
+            //String pushMsg=req.getAlarmLevel()+":"+req.getAlarmDeviceName()+","+req.getAlarmTitle()+","+req.getAlarmContent();
+            //mqService.pushToUser(1,pushMsg);
             // send via Dubbo
             //如果没有Dubbo服务,请先注释掉line 42 避免Spring启动错误
-            try {
-                System.out.println( receiveAlarmService.send(pushMsg));
-            }catch (Exception e){
-                e.printStackTrace();
-                this._logger.error("Dubbo Consumer filed:"+e.getMessage());
-            }
+            //try {
+              //  System.out.println( receiveAlarmService.send(pushMsg));
+            //}catch (Exception e){
+              //  e.printStackTrace();
+              //  this._logger.error("Dubbo Consumer filed:"+e.getMessage());
+            //}
             //dubbo end
+
+            map.put("deviceName", req.getAlarmDeviceName());
+            map.put("deviceCode", req.getAlarmDeviceCode());
+            map.put("deviceLoction", req.getAlarmDeviceLocate());
+            map.put("paraName", req.getAlarmTitle());
+            map.put("paraValue", req.getAlarmContent());
+            map.put("sendTime", new Date());
+            io.setParams(map);
+            OutputObject oo= controlService.execute(io);
+            if(!oo.getBusiCode().equals("0")) {
+                return 1;
+            }
             return 0;
         }catch (Exception e){
             e.printStackTrace();

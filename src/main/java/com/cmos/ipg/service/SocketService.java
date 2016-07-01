@@ -9,6 +9,7 @@ import com.cmos.ipg.entity.*;
 import com.cmos.ipg.mapper.*;
 import com.cmos.ipg.utils.DataTool;
 import io.netty.buffer.ByteBuf;
+import io.netty.buffer.ByteBufUtil;
 import io.netty.channel.Channel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -221,6 +222,7 @@ public class SocketService {
             OutputObject oo= controlService.execute(io);
             if(oo!=null&&oo.getReturnCode()!=null&&oo.getReturnCode().equals("0")) {
             }else{
+            	System.out.println("发送平台失败");
               return 1;
             }
             System.out.println(oo.getReturnMessage());

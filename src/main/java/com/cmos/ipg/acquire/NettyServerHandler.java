@@ -8,6 +8,7 @@ import com.cmos.ipg.mapper.ClientLogMapper;
 import com.cmos.ipg.mapper.DataMapper;
 import com.cmos.ipg.service.MQService;
 import com.cmos.ipg.service.SocketService;
+import com.cmos.ipg.utils.ByteUtil;
 import com.cmos.ipg.utils.DataTool;
 import com.sun.scenario.effect.impl.sw.sse.SSEBlend_SRC_OUTPeer;
 import io.netty.buffer.ByteBuf;
@@ -57,6 +58,7 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter { // (1)
         ByteBuf buf;
         //将缓冲区的数据读出到byte[]
         _logger.info("Receive date from " + ch.remoteAddress() + ">>>:" + receiveDataHexString);
+        _logger.info("Receive date from " + ch.remoteAddress() + ">>>:" + ByteUtil.decode(receiveDataHexString));
         InetSocketAddress socketAddress=(InetSocketAddress)ch.remoteAddress();
         String ip=socketAddress.getAddress().getHostAddress();
        // System.out.println(socketAddress.getAddress().getHostAddress()+":"+socketAddress.getPort());

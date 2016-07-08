@@ -119,6 +119,10 @@ public class StatusMessage extends UpBean{
         this.setEventId(bb.readInt());
         this.setAgentNum(bb.readByte());
         this.setPackageNum(bb.readByte());
+        byte[] parkCodeBytes = new byte[this.getParkCodeSize()];
+        bb.readBytes(parkCodeBytes);
+        String parkCode = new String(parkCodeBytes,"UTF-8").trim();
+        this.setParkCode(parkCode);
         int _packageNum=this.getPackageNum();
 
         deviceName = new String[_packageNum];

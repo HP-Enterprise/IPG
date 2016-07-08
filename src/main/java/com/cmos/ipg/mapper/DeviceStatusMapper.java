@@ -17,12 +17,13 @@ public interface DeviceStatusMapper {
             @Result(property = "deviceName", column = "device_name", javaType = String.class, jdbcType = JdbcType.VARCHAR),
             @Result(property = "deviceCode", column = "device_code", javaType = String.class, jdbcType = JdbcType.VARCHAR),
             @Result(property = "deviceLocation", column = "device_location", javaType = String.class, jdbcType = JdbcType.VARCHAR),
-           @Result(property = "deviceParaName", column = "device_para_name", javaType = String.class, jdbcType = JdbcType.VARCHAR),
-            @Result(property = "deviceParaValue", column = "device_para_value", javaType = String.class, jdbcType = JdbcType.VARCHAR) })
+            @Result(property = "deviceParaName", column = "device_para_name", javaType = String.class, jdbcType = JdbcType.VARCHAR),
+            @Result(property = "deviceParaValue", column = "device_para_value", javaType = String.class, jdbcType = JdbcType.VARCHAR),
+            @Result(property="parkCode",column="park_code",javaType=Integer.class,jdbcType=JdbcType.INTEGER)})
     DeviceStatus findByDeviceId(@Param("deviceId") int deviceId);
 
-    @Insert("INSERT INTO ip_device_status(device_id, device_name,device_code,device_location,device_para_name,device_para_value)" +
-            "VALUES(#{deviceStatus.deviceId}, #{deviceStatus.deviceName},#{deviceStatus.deviceCode},#{deviceStatus.deviceLocation},#{deviceStatus.deviceParaName}, #{deviceStatus.deviceParaValue})")
+    @Insert("INSERT INTO ip_device_status(device_id, device_name,device_code,device_location,device_para_name,device_para_value,park_code)" +
+            "VALUES(#{deviceStatus.deviceId}, #{deviceStatus.deviceName},#{deviceStatus.deviceCode},#{deviceStatus.deviceLocation},#{deviceStatus.deviceParaName}, #{deviceStatus.deviceParaValue}, #{deviceStatus.parkCode})")
     void save(@Param("deviceStatus")DeviceStatus deviceStatus);
 
     @Delete("DELETE  FROM ip_device_status WHERE device_name = #{deviceName}and  device_para_name = #{deviceParaName}")

@@ -16,6 +16,7 @@ public class Agent implements Serializable{
     private int conProtocol;
     private String description;
     private short agentOnline;
+    private String parkCode;
 
     public int getId() {
         return id;
@@ -95,5 +96,13 @@ public class Agent implements Serializable{
 
     public void setAgentOnline(short agentOnline) {
         this.agentOnline = agentOnline;
+    }
+
+    public String getParkCode() {
+        return parkCode;
+    }
+
+    public void setParkCode(String parkCode) {
+        this.parkCode = parkCode;
     }
 }

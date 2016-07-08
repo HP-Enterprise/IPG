@@ -11,6 +11,7 @@ public class Data implements Serializable {
     private String client;
     private String bytes;
     private Date  actionDate;
+    private String parkCode;
 
     public int getId() {
         return id;
@@ -42,5 +43,13 @@ public class Data implements Serializable {
 
     public void setActionDate(Date actionDate) {
         this.actionDate = actionDate;
+    }
+
+    public String getParkCode() {
+        return parkCode;
+    }
+
+    public void setParkCode(String parkCode) {
+        this.parkCode = parkCode;
     }
 }

@@ -14,6 +14,7 @@ public class DeviceStatusHistory {
     private String deviceParaName;
     private String deviceParaValue;
     private Date collectDate;
+    private String parkCode;
 
     public int getId() {
         return id;
@@ -79,5 +80,11 @@ public class DeviceStatusHistory {
 		this.deviceLocation = deviceLocation;
 	}
 
-    
+    public String getParkCode() {
+        return parkCode;
+    }
+
+    public void setParkCode(String parkCode) {
+        this.parkCode = parkCode;
+    }
 }

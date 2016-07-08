@@ -14,6 +14,7 @@ public class Command {
     private String param;
     private short commandStatus;
     private Date actionDate;
+    private String parkCode;
 
     public int getId() {
         return id;
@@ -77,5 +78,13 @@ public class Command {
 
     public void setActionDate(Date actionDate) {
         this.actionDate = actionDate;
+    }
+
+    public String getParkCode() {
+        return parkCode;
+    }
+
+    public void setParkCode(String parkCode) {
+        this.parkCode = parkCode;
     }
 }

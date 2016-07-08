@@ -14,8 +14,8 @@ public interface DataMapper {
     @Select("SELECT * FROM ip_data WHERE from = #{from}")
     Data findByFrom(@Param("from") String from);
 
-    @Insert("INSERT INTO ip_data(client, bytes,action_date)" +
-            "VALUES(#{data.client}, #{data.bytes}, #{data.actionDate})")
+    @Insert("INSERT INTO ip_data(client, bytes,action_date,park_code)" +
+            "VALUES(#{data.client}, #{data.bytes}, #{data.actionDate},#{data.parkCode})")
     void save(@Param("data")Data data);
 
 

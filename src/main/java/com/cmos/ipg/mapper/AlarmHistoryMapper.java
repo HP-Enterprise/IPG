@@ -22,10 +22,11 @@ public interface AlarmHistoryMapper {
             @Result(property = "alarmTitle", column = "alarm_title", javaType = String.class, jdbcType = JdbcType.VARCHAR),
             @Result(property = "alarmContent", column = "alarm_content", javaType = String.class, jdbcType = JdbcType.VARCHAR),
             @Result(property = "alarmLevel", column = "alarm_level", javaType = Integer.class, jdbcType = JdbcType.INTEGER),
-            @Result(property = "alarmDate", column = "alarm_date", javaType = Date.class, jdbcType = JdbcType.TIMESTAMP) })
+            @Result(property = "alarmDate", column = "alarm_date", javaType = Date.class, jdbcType = JdbcType.TIMESTAMP),
+            @Result(property="parkCode",column="park_code",javaType=Integer.class,jdbcType=JdbcType.INTEGER)})
     AlarmHistory findByDeviceId(@Param("deviceId") int deviceId);
 
-    @Insert("INSERT INTO ip_alarm_his(device_id, alarm_device_name, alarm_device_code, alarm_device_locate,alarm_title,alarm_content,alarm_level,alarm_date)" +
-            "VALUES(#{alarmHistory.deviceId}, #{alarmHistory.alarmDeviceName}, #{alarmHistory.alarmDeviceCode}, #{alarmHistory.alarmDeviceLocate}, #{alarmHistory.alarmTitle}, #{alarmHistory.alarmContent}, #{alarmHistory.alarmLevel}, #{alarmHistory.alarmDate})")
+    @Insert("INSERT INTO ip_alarm_his(device_id, alarm_device_name, alarm_device_code, alarm_device_locate,alarm_title,alarm_content,alarm_level,alarm_date,park_code)" +
+            "VALUES(#{alarmHistory.deviceId}, #{alarmHistory.alarmDeviceName}, #{alarmHistory.alarmDeviceCode}, #{alarmHistory.alarmDeviceLocate}, #{alarmHistory.alarmTitle}, #{alarmHistory.alarmContent}, #{alarmHistory.alarmLevel}, #{alarmHistory.alarmDate},#{alarmHistory.parkCode})")
     void save(@Param("alarmHistory") AlarmHistory alarmHistory);
 }

@@ -22,10 +22,11 @@ public interface AlarmConfMapper {
             @Result(property = "alarmTitle", column = "alarm_title", javaType = String.class, jdbcType = JdbcType.VARCHAR),
             @Result(property = "alarmContent", column = "alarm_content", javaType = String.class, jdbcType = JdbcType.VARCHAR),
             @Result(property = "alarmLevel", column = "alarm_level", javaType = Integer.class, jdbcType = JdbcType.INTEGER),
-            @Result(property = "alarmDate", column = "alarm_date", javaType = Date.class, jdbcType = JdbcType.TIMESTAMP) })
+            @Result(property = "alarmDate", column = "alarm_date", javaType = Date.class, jdbcType = JdbcType.TIMESTAMP),
+            @Result(property="parkCode",column="park_code",javaType=Integer.class,jdbcType=JdbcType.INTEGER)})
     AlarmConf findByDeviceId(@Param("deviceId") int deviceId);
 
-    @Insert("INSERT INTO ip_alarm_conf(device_id, device_name, device_para_name,device_para_value,alarm_title,alarm_content,alarm_level,alarm_date)" +
-            "VALUES(#{alarmConf.deviceId}, #{alarmConf.deviceName},  #{alarmConf.deviceParaName}, #{alarmConf.deviceParaValue},#{alarmConf.alarmTitle}, #{alarmConf.alarmContent}, #{alarmConf.alarmLevel}, #{alarmConf.alarmDate})")
+    @Insert("INSERT INTO ip_alarm_conf(device_id, device_name, device_para_name,device_para_value,alarm_title,alarm_content,alarm_level,alarm_date,park_code)" +
+            "VALUES(#{alarmConf.deviceId}, #{alarmConf.deviceName},  #{alarmConf.deviceParaName}, #{alarmConf.deviceParaValue},#{alarmConf.alarmTitle}, #{alarmConf.alarmContent}, #{alarmConf.alarmLevel}, #{alarmConf.alarmDate},#{alarmConf.parkCode})")
     void save(@Param("alarmConf") AlarmConf alarmConf);
 }

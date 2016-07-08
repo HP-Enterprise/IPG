@@ -11,6 +11,7 @@ public class ClientLog {
     private String client;
     private String action;
     private Date actionDate;
+    private String parkCode;
 
     public int getId() {
         return id;
@@ -43,5 +44,13 @@ public class ClientLog {
 
     public void setActionDate(Date actionDate) {
         this.actionDate = actionDate;
+    }
+
+    public String getParkCode() {
+        return parkCode;
+    }
+
+    public void setParkCode(String parkCode) {
+        this.parkCode = parkCode;
     }
 }

@@ -1,18 +1,16 @@
 package com.cmos.ipg.entity;
 
 /**
- * Created by jackl on 2016/5/5.
+ * Created by Administrator on 2016/7/5 0005.
  */
-public class DeviceStatus {
+public class EnergyRecordDetail {
     private  int id;
     private  int deviceId;
-    private String deviceName;
-    private String deviceCode;
-    private String deviceLocation;
-    private String deviceParaName;
-    private String deviceParaValue;
-    private String parkCode;
-
+    private  String deviceName;
+    private  String deviceCode;
+    private  String deviceLocation;
+    private  String deviceParaName;
+    private  String deviceParaValue;
 
     public int getId() {
         return id;
@@ -38,6 +36,22 @@ public class DeviceStatus {
         this.deviceName = deviceName;
     }
 
+    public String getDeviceCode() {
+        return deviceCode;
+    }
+
+    public void setDeviceCode(String deviceCode) {
+        this.deviceCode = deviceCode;
+    }
+
+    public String getDeviceLocation() {
+        return deviceLocation;
+    }
+
+    public void setDeviceLocation(String deviceLocation) {
+        this.deviceLocation = deviceLocation;
+    }
+
     public String getDeviceParaName() {
         return deviceParaName;
     }
@@ -52,29 +66,5 @@ public class DeviceStatus {
 
     public void setDeviceParaValue(String deviceParaValue) {
         this.deviceParaValue = deviceParaValue;
-    }
-
-	public String getDeviceCode() {
-		return deviceCode;
-	}
-
-	public void setDeviceCode(String deviceCode) {
-		this.deviceCode = deviceCode;
-	}
-
-	public String getDeviceLocation() {
-		return deviceLocation;
-	}
-
-	public void setDeviceLocation(String deviceLocation) {
-		this.deviceLocation = deviceLocation;
-	}
-
-    public String getParkCode() {
-        return parkCode;
-    }
-
-    public void setParkCode(String parkCode) {
-        this.parkCode = parkCode;
     }
 }

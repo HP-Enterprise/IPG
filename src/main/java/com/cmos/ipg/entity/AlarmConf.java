@@ -15,6 +15,7 @@ public class AlarmConf {
     private String alarmContent;
     private int alarmLevel;
     private Date alarmDate;
+    private String parkCode;
 
     public int getId() {
         return id;
@@ -86,5 +87,13 @@ public class AlarmConf {
 
     public void setAlarmDate(Date alarmDate) {
         this.alarmDate = alarmDate;
+    }
+
+    public String getParkCode() {
+        return parkCode;
+    }
+
+    public void setParkCode(String parkCode) {
+        this.parkCode = parkCode;
     }
 }

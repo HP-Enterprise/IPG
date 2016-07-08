@@ -14,14 +14,15 @@ public interface ClientLogMapper {
 
 
 
-    @Insert("INSERT INTO ip_client_log(client, action,action_date)" +
-            "VALUES(#{clientLog.client}, #{clientLog.action},#{clientLog.actionDate})")
+    @Insert("INSERT INTO ip_client_log(client, action,action_date,park_code)" +
+            "VALUES(#{clientLog.client}, #{clientLog.action},#{clientLog.actionDate},#{clientLog.parkCode})")
     void save(@Param("clientLog") ClientLog clientLog);
 
 
     @Select("SELECT * FROM ip_client_log order by id desc")
     @Results(value = {
-            @Result(property = "actionDate", column = "action_date", javaType = Date.class, jdbcType = JdbcType.TIMESTAMP) })
+            @Result(property = "actionDate", column = "action_date", javaType = Date.class, jdbcType = JdbcType.TIMESTAMP),
+            @Result(property="parkCode",column="park_code",javaType=Integer.class,jdbcType=JdbcType.INTEGER)})
     List<ClientLog> findAll();
 
 }

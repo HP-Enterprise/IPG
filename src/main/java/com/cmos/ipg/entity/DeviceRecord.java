@@ -1,17 +1,17 @@
 package com.cmos.ipg.entity;
 
-import java.io.Serializable;
 import java.util.Date;
 
 /**
- * Created by jackl on 2016/5/5.
+ * Created by Administrator on 2016/7/5 0005.
  */
-public class Device implements Serializable {
+public class DeviceRecord {
     private  int id;
-    private String deviceName;
-    private String deviceSn;
+    private  String deviceName;
+    private  Date deviceSy;
     private int deviceType;
-    private String deviceLocate;
+    private  String deviceLocate;
+    private  String deviceCode;
     private String parkCode;
 
     public int getId() {
@@ -30,12 +30,12 @@ public class Device implements Serializable {
         this.deviceName = deviceName;
     }
 
-    public String getDeviceSn() {
-        return deviceSn;
+    public Date getDeviceSy() {
+        return deviceSy;
     }
 
-    public void setDeviceSn(String deviceSn) {
-        this.deviceSn = deviceSn;
+    public void setDeviceSy(Date deviceSy) {
+        this.deviceSy = deviceSy;
     }
 
     public int getDeviceType() {
@@ -52,6 +52,14 @@ public class Device implements Serializable {
 
     public void setDeviceLocate(String deviceLocate) {
         this.deviceLocate = deviceLocate;
+    }
+
+    public String getDeviceCode() {
+        return deviceCode;
+    }
+
+    public void setDeviceCode(String deviceCode) {
+        this.deviceCode = deviceCode;
     }
 
     public String getParkCode() {

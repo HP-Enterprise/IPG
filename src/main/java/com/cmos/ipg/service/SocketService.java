@@ -51,6 +51,14 @@ public class SocketService {
     ReceiveAlarmService receiveAlarmService;
     @Autowired
     IControlIPGService controlService;
+    @Autowired
+    DeviceRecordMapper deviceRecordMapper;
+    @Autowired
+    DeviceRecordDetailMapper deviceRecordDetailMapper;
+    @Autowired
+    EnergyRecordMapper energyRecordMapper;
+    @Autowired
+    EnergyRecordDetailMapper energyRecordDetailMapper;
 
     private Logger _logger= LoggerFactory.getLogger(SocketService.class);
 
@@ -135,12 +143,8 @@ public class SocketService {
             InputObject io = new InputObject();
 //            io.setMethod("getUserList");
 //            io.setService("userService");
-            io.setMethod("insertDeviceOpenDetailsByAgent");
             io.setService("DeviceOpenDetailsService");
             Map map = new HashMap<String,Object>() ;
-
-
-
             ByteBuf bb=dataTool.getByteBuf(reqString);
             byte[] reqBytes=dataTool.getBytesFromByteBuf(bb);
             StatusMessage req=new StatusMessage();
@@ -155,6 +159,18 @@ public class SocketService {
             //save deviceStatusHistory
             List<String> alarmParam = new ArrayList<String>();
             List<String> alarmValue = new ArrayList<String>();
+            //判断楼控信息或能耗信息
+            Agent agt = agentMapper.findByAgentNum(req.getAgentNum());
+            if(2==agt.getAgentType()){//楼控信息
+            	io.setMethod("insertDeviceOpenDetailsByAgent");
+            	doDeviceRecord(req);
+            }else if(4==agt.getAgentType()){//能耗
+            	io.setMethod("insertEnergyDetailsByAgent");
+            	doEnergyRecord(req);
+            }else{
+            	_logger.info("无法匹配代理服务类型");
+            }
+           
             int num=req.getPackageNum();
             for (int i = 0; i < num; i++) {
                 //save deviceStatusHistory
@@ -179,7 +195,7 @@ public class SocketService {
                 deviceStatus.setDeviceParaName(req.getDevicePara()[i]);
                 deviceStatus.setDeviceParaValue(req.getStatus1()[i]);
                 deviceStatusMapper.save(deviceStatus);
-
+               
                 //判断告警信息
                 if(req.getDevicePara()[i].equals("deviceFaultAlarm")){
                         alarmParam.add("运行异常告警#0") ;
@@ -235,6 +251,55 @@ public class SocketService {
     }
 
     /**
+     * 处理能耗信息
+     * @param req
+     */
+ 	private void doEnergyRecord(StatusMessage req) {
+ 		 EnergyRecord energyRecord = new EnergyRecord();
+      	energyRecord.setParkCode(req.getParkCode());
+      	energyRecord.setDeviceSy(new Date());
+      	energyRecord.setDeviceCode(req.getDeviceCode()[0]);
+         energyRecord.setDeviceLocate(req.getDeviceLocate()[0]);
+         energyRecord.setDeviceName(req.getDeviceName()[0]);
+        // energyRecord.setDeviceType(''));
+      	energyRecordMapper.save(energyRecord);
+      	for (int i = 0; i < req.getPackageNum(); i++) {
+      		EnergyRecordDetail energyRecordDetail = new EnergyRecordDetail();
+         	energyRecordDetail.setDeviceId(energyRecord.getId());
+             energyRecordDetail.setDeviceLocation(energyRecord.getDeviceLocate());
+             energyRecordDetail.setDeviceName(energyRecord.getDeviceName());
+             energyRecordDetail.setDeviceCode(energyRecord.getDeviceCode());
+             energyRecordDetail.setDeviceParaName(req.getDevicePara()[i]);
+             energyRecordDetail.setDeviceParaValue(req.getStatus1()[i]);
+         	energyRecordDetailMapper.save(energyRecordDetail);
+     	}
+ 	}
+ 	/**
+ 	 * 处理楼控信息
+ 	 * @param req
+ 	 */
+ 	private void doDeviceRecord(StatusMessage req) {
+ 		 DeviceRecord deviceRecord = new DeviceRecord();
+     	deviceRecord.setParkCode(req.getParkCode());
+     	deviceRecord.setDeviceSy(new Date());
+     	deviceRecord.setDeviceCode(req.getDeviceCode()[0]);
+         deviceRecord.setDeviceName(req.getDeviceName()[0]);
+         deviceRecord.setDeviceLocate(req.getDeviceLocate()[0]);
+         //deviceRecord.setDeviceType(req.getMessageType());
+     	deviceRecordMapper.save(deviceRecord);
+     	for (int i = 0; i < req.getPackageNum(); i++) {
+     		DeviceRecordDetail deviceRecordDetail = new DeviceRecordDetail();
+     		deviceRecordDetail.setDeviceId(deviceRecord.getId());
+             deviceRecordDetail.setDeviceName(deviceRecord.getDeviceName());
+             deviceRecordDetail.setDeviceCode(deviceRecord.getDeviceCode());
+             deviceRecordDetail.setDeviceLocation(deviceRecord.getDeviceLocate());
+             deviceRecordDetail.setDeviceParaName(req.getDevicePara()[i]);
+             deviceRecordDetail.setDeviceParaValue(req.getStatus1()[i]);
+         	deviceRecordDetailMapper.save(deviceRecordDetail);
+     	}
+ 	}
+
+	/**
      * 处理告警信息上报
      * @param reqString 告警信息hex
      * @param ip c端ip

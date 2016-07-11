@@ -9,7 +9,7 @@ import org.apache.ibatis.type.JdbcType;
  */
 @Mapper
 public interface EnergyRecordDetailMapper {
-    @Select("SELECT * FROM ip_device_record_detail WHERE device_id=#{deviceId}LIMIT 1")
+    @Select("SELECT * FROM ip_energy_record_detail WHERE device_id=#{deviceId}LIMIT 1")
     @Results(value = {
             @Result(property = "deviceId", column = "device_id", javaType = Integer.class, jdbcType = JdbcType.INTEGER),
             @Result(property = "deviceName", column = "device_name", javaType = String.class, jdbcType = JdbcType.VARCHAR),
@@ -19,14 +19,14 @@ public interface EnergyRecordDetailMapper {
             @Result(property = "deviceParaValue", column = "device_para_value", javaType = String.class, jdbcType = JdbcType.VARCHAR)})
     EnergyRecordDetail findByDeviceCode(@Param("deviceId") int deviceId);
 
-    @Insert("INSERT INTO ip_device_record_detail (device_id,device_name,device_code,device_location,device_para_name,device_para_value)" +
+    @Insert("INSERT INTO ip_energy_record_detail (device_id,device_name,device_code,device_location,device_para_name,device_para_value)" +
             "VALUES(#{energyRecordDetail.deviceId},#{energyRecordDetail.deviceName},#{energyRecordDetail.deviceCode},#{energyRecordDetail.deviceLocation}," +
             "#{energyRecordDetail.deviceParaName},#{energyRecordDetail.deviceParaValue})")
     void save(@Param("energyRecordDetail") EnergyRecordDetail energyRecordDetail);
 
-    @Delete("DELETE  FROM ip_device_record_detail WHERE device_name = #{deviceName}and device_id = #{deviceId}")
+    @Delete("DELETE  FROM ip_energy_record_detail WHERE device_name = #{deviceName}and device_id = #{deviceId}")
     void deleteByNameAndCode(@Param("deviceName") String deviceNamem, @Param("deviceId") int deviceId);
 
-    @Update("UPDATE ip_device_record_detail SET device_name = #{deviceName} WHERE device_id = #{deviceId}")
+    @Update("UPDATE ip_energy_record_detail SET device_name = #{deviceName} WHERE device_id = #{deviceId}")
     void update(@Param("deviceName") String deviceName, @Param("deviceId") int deviceId);
 }

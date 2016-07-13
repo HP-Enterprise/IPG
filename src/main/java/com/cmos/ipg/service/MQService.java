@@ -16,11 +16,18 @@ public class MQService{
     @Autowired
     MQTTHome mqttHome;
 
-
-    public void pushToUser(int userId, String content) {
+    /**
+     * push Mq
+     * @param userId
+     * @param content 消息内容
+     * @param topic 主题
+     * @param tag 标签
+     * @param key 消息关键词(可为空)
+     */
+    public void pushToUser(int userId, String content,String topic,String tag,String key) {
         System.out.println(content);
         try{
-            mqttHome.sendMessage(content);
+            mqttHome.sendMessage(content,topic,tag,key);
         }catch (Exception e){e.printStackTrace();}
     }
 

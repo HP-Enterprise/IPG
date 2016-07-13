@@ -32,14 +32,14 @@ public class MQTTHome {
          */
         producer.start();
     }
-    public void sendMessage(String message) throws MQClientException,
+    public void sendMessage(String message,String topic,String tag,String key) throws MQClientException,
     InterruptedException ,MQBrokerException,RemotingException {
         if (producer==null){
             init();
         }
-        Message msg = new Message("alarm",// topic
-                "TagA",// tag
-                "OrderID001",// key
+        Message msg = new Message(topic,// topic
+                tag,// tag
+                key,// key
                 message.getBytes());// body
         SendResult sendResult = producer.send(msg);
         System.out.println(sendResult);

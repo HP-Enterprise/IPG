@@ -151,6 +151,7 @@ public class SocketService {
             req.decoded(reqBytes);
             System.out.println("save to mysql>>>:");
             // todo save to db and push to mq
+//            mqService.pushToUser(req.getEventId(), reqString);
             Agent _agent=agentMapper.findByAgentIp(ip);
             if(_agent==null){
                 _logger.info("save failed,from ip "+ip+" not in the db");
@@ -170,7 +171,7 @@ public class SocketService {
             }else{
             	_logger.info("无法匹配代理服务类型");
             }
-           
+            io.setMethod("insertDeviceOpenDetailsByAgent");
             int num=req.getPackageNum();
             for (int i = 0; i < num; i++) {
                 //save deviceStatusHistory
@@ -238,6 +239,13 @@ public class SocketService {
             OutputObject oo= controlService.execute(io);
             if(oo!=null&&oo.getReturnCode()!=null&&oo.getReturnCode().equals("0")) {
             }else{
+            	if(2==agt.getAgentType()){//楼控信息
+            		mqService.pushToUser(0, reqString, MqClient.TOPIC_STATUS, MqClient.TAG_DEVICE, "");
+                }else if(4==agt.getAgentType()){//能耗
+                	mqService.pushToUser(0, reqString, MqClient.TOPIC_STATUS, MqClient.TAG_ENERGY, "");
+                }else{
+                	_logger.info("无法匹配代理服务类型");
+                }
             	System.out.println("发送平台失败");
               return 1;
             }

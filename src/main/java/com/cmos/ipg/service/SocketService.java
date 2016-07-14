@@ -59,7 +59,8 @@ public class SocketService {
     EnergyRecordMapper energyRecordMapper;
     @Autowired
     EnergyRecordDetailMapper energyRecordDetailMapper;
-
+    @Autowired
+    private CWPCoreService cwpCoreService;
     private Logger _logger= LoggerFactory.getLogger(SocketService.class);
 
 
@@ -140,18 +141,10 @@ public class SocketService {
     public int handleStatusMessage(String reqString,String ip){
         //
         try{
-            InputObject io = new InputObject();
-//            io.setMethod("getUserList");
-//            io.setService("userService");
-            io.setService("DeviceOpenDetailsService");
-            Map map = new HashMap<String,Object>() ;
             ByteBuf bb=dataTool.getByteBuf(reqString);
             byte[] reqBytes=dataTool.getBytesFromByteBuf(bb);
             StatusMessage req=new StatusMessage();
             req.decoded(reqBytes);
-            System.out.println("save to mysql>>>:");
-            // todo save to db and push to mq
-//            mqService.pushToUser(req.getEventId(), reqString);
             Agent _agent=agentMapper.findByAgentIp(ip);
             if(_agent==null){
                 _logger.info("save failed,from ip "+ip+" not in the db");
@@ -159,19 +152,31 @@ public class SocketService {
             }
             //save deviceStatusHistory
             List<String> alarmParam = new ArrayList<String>();
-            List<String> alarmValue = new ArrayList<String>();
             //判断楼控信息或能耗信息
             Agent agt = agentMapper.findByAgentNum(req.getAgentNum());
             if(2==agt.getAgentType()){//楼控信息
-            	io.setMethod("insertDeviceOpenDetailsByAgent");
             	doDeviceRecord(req);
+            	int result = cwpCoreService.sendDeviceRecordMessage(reqString);
+            	if(result!=0){
+            		try{
+            			mqService.pushToUser(0, reqString, MqConsumerService.TOPIC_STATUS, MqConsumerService.TAG_DEVICE, "");
+            		}catch(Exception e){
+            			e.printStackTrace();
+            		}
+            	}
             }else if(4==agt.getAgentType()){//能耗
-            	io.setMethod("insertEnergyDetailsByAgent");
             	doEnergyRecord(req);
+            	int result = cwpCoreService.sendEnergyRecordMessage(reqString);
+            	if(result!=0){
+            		try{
+            			mqService.pushToUser(0, reqString, MqConsumerService.TOPIC_STATUS, MqConsumerService.TAG_ENERGY, "");
+            		}catch(Exception e){
+            			e.printStackTrace();
+            		}
+            	}
             }else{
             	_logger.info("无法匹配代理服务类型");
             }
-            io.setMethod("insertDeviceOpenDetailsByAgent");
             int num=req.getPackageNum();
             for (int i = 0; i < num; i++) {
                 //save deviceStatusHistory
@@ -200,7 +205,6 @@ public class SocketService {
                 //判断告警信息
                 if(req.getDevicePara()[i].equals("deviceFaultAlarm")){
                         alarmParam.add("运行异常告警#0") ;
-                        alarmValue.add("高级") ;
                         //AlarmHistory
                         AlarmHistory alarmHistory=new AlarmHistory();
                         alarmHistory.setDeviceId(-1);
@@ -228,29 +232,6 @@ public class SocketService {
             for(int i=0;i<alarmParam.size();i++){
             	alarms[i]=alarmParam.get(i).toString();
             }
-            map.put("alarm", alarms);
-            map.put("deviceName", req.getDeviceName()[0]);
-            map.put("deviceCode", req.getDeviceCode()[0]);
-            map.put("deviceLoction", req.getDeviceLocate()[0]);
-            map.put("paraName", req.getDevicePara())  ;
-            map.put("paraValue", req.getStatus1());
-            map.put("sendTime", req.getSendingTime());
-            io.setParams(map);
-            OutputObject oo= controlService.execute(io);
-            if(oo!=null&&oo.getReturnCode()!=null&&oo.getReturnCode().equals("0")) {
-            }else{
-            	if(2==agt.getAgentType()){//楼控信息
-            		mqService.pushToUser(0, reqString, MqClient.TOPIC_STATUS, MqClient.TAG_DEVICE, "");
-                }else if(4==agt.getAgentType()){//能耗
-                	mqService.pushToUser(0, reqString, MqClient.TOPIC_STATUS, MqClient.TAG_ENERGY, "");
-                }else{
-                	_logger.info("无法匹配代理服务类型");
-                }
-            	System.out.println("发送平台失败");
-              return 1;
-            }
-            System.out.println(oo.getReturnMessage());
-            //
             return 0;
         }catch (Exception e){
             e.printStackTrace();
@@ -259,7 +240,7 @@ public class SocketService {
     }
 
     /**
-     * 处理能耗信息
+     * 本地保存能耗信息
      * @param req
      */
  	private void doEnergyRecord(StatusMessage req) {
@@ -283,7 +264,7 @@ public class SocketService {
      	}
  	}
  	/**
- 	 * 处理楼控信息
+ 	 * 本地保存楼控信息
  	 * @param req
  	 */
  	private void doDeviceRecord(StatusMessage req) {

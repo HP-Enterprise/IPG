@@ -17,33 +17,34 @@ import com.alibaba.rocketmq.common.message.MessageExt;
  * mq 发送给数据线程 Created by Administrator on 2016/6/8.
  */
 @Service
-public class MqClient{
+public class MqConsumerService{
 	//mq服务地址
-	private @Value("${com.cmos.mq.nameServerAddress}") String nameServerAddress="192.168.100.66:9876";
-	   private @Value("${com.cmos.mq.instanceName}") String instanceName;
+	private @Value("${com.cmos.mq.nameServerAddress}") String nameServerAddress;
+	 @Autowired
+	 private CWPCoreService cwpCoreService;
 	//告警主题
 	public static String TOPIC_ALARM = "TopAlarm";
 	//状态主题
 	public static String TOPIC_STATUS = "TopStatus";
 	public static String TAG_ENERGY = "TagEnergy";
 	public static String TAG_DEVICE = "TagDevice";
-	private static MqClient mqClient;
-	private MqClient() {
+	private static MqConsumerService mqClient;
+	/*private MqConsumerService() {
 	}
 
-	/**
+	*//**
 	 * 得到实例
-	 */
-	public static MqClient getBacnetClient() {
+	 *//*
+	public static MqConsumerService getBacnetClient() {
 		if (mqClient == null) {
-			synchronized (MqClient.class) {
+			synchronized (MqConsumerService.class) {
 				if (mqClient == null) {
-					mqClient = new MqClient();
+					mqClient = new MqConsumerService();
 				}
 			}
 		}
 		return mqClient;
-	}
+	}*/
 	/**
 	 * 启动消费
 	 */
@@ -64,7 +65,7 @@ public class MqClient{
 		DefaultMQPushConsumer consumer = null;
 		String topic =null;
 		String tag=null;
-		int max=1;
+		int max=100;
 		public void createConumer() {
 		
 		}
@@ -101,16 +102,17 @@ public class MqClient{
 					public ConsumeConcurrentlyStatus consumeMessage(List<MessageExt> msgs,
 							ConsumeConcurrentlyContext context) {
 						System.out.println(Thread.currentThread().getName() + " Receive New Messages: " + msgs.size());
-
 						for(MessageExt msg:msgs){
 							if (msg.getTopic().equals(TOPIC_STATUS)) {
 								// 执行TopicTest1的消费逻辑
 								if (msg.getTags() != null && msg.getTags().equals(TAG_DEVICE)) {
 									// 执行TagDevice的消费
-									System.out.println(msg.getTopic()+msg.getTags()+new String(msg.getBody()));
+									System.out.println(msg.getTopic()+msg.getTags());
+									cwpCoreService.sendDeviceRecordMessage(new String(msg.getBody()));
 								} else if (msg.getTags() != null && msg.getTags().equals(TAG_ENERGY)) {
 									// 执行TagEnergy的消费
-									System.out.println(msg.getTopic()+msg.getTags()+new String(msg.getBody()));
+									System.out.println(msg.getTopic()+msg.getTags());
+									cwpCoreService.sendEnergyRecordMessage(new String(msg.getBody()));
 								} else if (msg.getTags() != null && msg.getTags().equals("TagD")) {
 									// 执行TagD的消费
 								}

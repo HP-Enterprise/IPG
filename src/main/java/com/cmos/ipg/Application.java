@@ -2,6 +2,8 @@ package com.cmos.ipg;
 
 import com.cmos.ipg.acquire.GateServer;
 import com.cmos.ipg.dubbo.ReceiveAlarmService;
+import com.cmos.ipg.service.MqConsumerService;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +24,8 @@ public class Application implements CommandLineRunner {
     private Logger _logger;
     @Autowired
     private GateServer gateServer;
+    @Autowired
+    private MqConsumerService consumerService;
     @Value("${com.cmos.acquire.disabled}")
     private boolean _disabled;
     @Value("${com.cmos.acquire.port}")
@@ -41,6 +45,7 @@ public class Application implements CommandLineRunner {
             return;
         }else{
             this._logger.info("GateWay Server is running,listening at port "+_port);
+            consumerService.start();
             gateServer.start();
         }
 

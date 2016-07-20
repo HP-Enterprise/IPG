@@ -28,7 +28,7 @@ spring:
         min-idle: 35
         url: jdbc:mysql://192.168.100.66:3307/ipg_bacnet?useUnicode=true&characterEncoding=utf8&useSSL=false
         username: root
-        password: 123456
+        password: mysql*2016#720
     jpa:
         show-sql: true
         hibernate:

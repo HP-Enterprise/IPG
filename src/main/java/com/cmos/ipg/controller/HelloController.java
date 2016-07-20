@@ -27,8 +27,8 @@ public class HelloController {
     }
 
     @RequestMapping(value = "/log",method = RequestMethod.GET)
-    public List<ClientLog> getClientLog(){
-        List<ClientLog> logList=clientLogMapper.findAll();
+    public List<ClientLog> getClientLog(String parkCode){
+        List<ClientLog> logList=clientLogMapper.findAll(parkCode);
         return logList;
     }
 }

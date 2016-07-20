@@ -16,8 +16,6 @@ import com.cmos.core.bean.OutputObject;
 import com.cmos.ipg.bean.StatusMessage;
 import com.cmos.ipg.bean.WarningMessage;
 import com.cmos.ipg.dubbo.IControlIPGService;
-import com.cmos.ipg.entity.Alarm;
-import com.cmos.ipg.entity.AlarmHistory;
 import com.cmos.ipg.mapper.AgentMapper;
 import com.cmos.ipg.utils.DataTool;
 
@@ -40,6 +38,7 @@ public class CWPCoreService {
 	@Autowired
 	MQService mqService;
 
+	@SuppressWarnings("unused")
 	private Logger _logger = LoggerFactory.getLogger(CWPCoreService.class);
 
 	/**
@@ -50,7 +49,7 @@ public class CWPCoreService {
 	 *            告警信息hex
 	 * @return 处理结果
 	 */
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({ "unchecked", "static-access", "rawtypes" })
 	public int sendWarningMessage(String reqString) {
 
 		try {
@@ -73,9 +72,10 @@ public class CWPCoreService {
 			OutputObject oo = controlService.execute(io);
 			if (oo != null && oo.getReturnCode() != null && oo.getReturnCode().equals("0")) {
 			}else{
+				_logger.info("向应用平台发送失败");
 				return 1;
 			}
-			System.out.println(oo.getReturnMessage());
+			_logger.info(oo.getReturnMessage());
 			return 0;
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -91,6 +91,7 @@ public class CWPCoreService {
 	 *            能耗信息
 	 * @return
 	 */
+	@SuppressWarnings({ "rawtypes", "static-access", "unchecked" })
 	public int sendEnergyRecordMessage(String reqString) {
 		try {
 			InputObject io = new InputObject();
@@ -113,9 +114,10 @@ public class CWPCoreService {
 			OutputObject oo = controlService.execute(io);
 			if (oo != null && oo.getReturnCode() != null && oo.getReturnCode().equals("0")) {
 			} else {
+				_logger.info("向应用平台发送失败");
 				return 1;
 			}
-			System.out.println(oo.getReturnMessage());
+			_logger.info(oo.getReturnMessage());
 			return 0;
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -131,6 +133,7 @@ public class CWPCoreService {
 	 *            楼控信息
 	 * @return
 	 */
+	@SuppressWarnings({ "static-access", "rawtypes", "unchecked" })
 	public int sendDeviceRecordMessage(String reqString) {
 		try {
 			InputObject io = new InputObject();
@@ -163,9 +166,10 @@ public class CWPCoreService {
 			OutputObject oo = controlService.execute(io);
 			if (oo != null && oo.getReturnCode() != null && oo.getReturnCode().equals("0")) {
 			} else {
+				_logger.info("向应用平台发送失败");
 				return 1;
 			}
-			System.out.println(oo.getReturnMessage());
+			_logger.info(oo.getReturnMessage());
 			return 0;
 		} catch (Exception e) {
 			e.printStackTrace();

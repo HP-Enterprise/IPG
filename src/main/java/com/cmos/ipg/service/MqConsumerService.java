@@ -24,6 +24,7 @@ public class MqConsumerService{
 	 private CWPCoreService cwpCoreService;
 	//告警主题
 	public static String TOPIC_ALARM = "TopAlarm";
+	public static String TAG_ACCESS ="TagAccess";
 	//状态主题
 	public static String TOPIC_STATUS = "TopStatus";
 	public static String TAG_ENERGY = "TagEnergy";
@@ -59,6 +60,14 @@ public class MqConsumerService{
 		cmqE.setTopic(TOPIC_STATUS);
 		cmqE.setTag(TAG_ENERGY);
 		new Thread(cmqE).start();
+		//告警消费者启动
+		ConsumerMq cmqA = new ConsumerMq("accessConsumerGroupName","accessInstanceConsumer");
+		cmqA.setTopic(TOPIC_ALARM);
+		cmqA.setTag(TAG_ACCESS);
+		Thread alarmThread = new Thread(cmqA);
+		alarmThread.setName("告警线程");
+		alarmThread.start();
+		
 	}
 
 	class ConsumerMq implements Runnable {
@@ -117,6 +126,10 @@ public class MqConsumerService{
 									// 执行TagD的消费
 								}
 							} else if (msg.getTopic().equals(TOPIC_ALARM)) {
+								if(msg.getTags()!=null&&msg.getTags().equals(TAG_ACCESS)){
+									System.out.println(msg.getTopic()+msg.getTags());
+									cwpCoreService.sendWarningMessage(new String(msg.getBody()));
+								}
 								System.out.println(new String(msg.getBody()));
 							}
 						}

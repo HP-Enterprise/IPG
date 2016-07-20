@@ -13,7 +13,7 @@ import java.util.Date;
 @Mapper
 public interface AlarmHistoryMapper {
 
-    @Select("SELECT * FROM ip_alarm_his WHERE device_id = #{deviceId} LIMIT 1")
+    @Select("SELECT * FROM ip_alarm_his WHERE device_id = #{deviceId} and park_code=#{parkCode} LIMIT 1")
     @Results(value = {
             @Result(property = "deviceId", column = "device_id", javaType = Integer.class, jdbcType = JdbcType.INTEGER),
             @Result(property = "alarmDeviceName", column = "alarm_device_name", javaType = String.class, jdbcType = JdbcType.VARCHAR),
@@ -23,8 +23,8 @@ public interface AlarmHistoryMapper {
             @Result(property = "alarmContent", column = "alarm_content", javaType = String.class, jdbcType = JdbcType.VARCHAR),
             @Result(property = "alarmLevel", column = "alarm_level", javaType = Integer.class, jdbcType = JdbcType.INTEGER),
             @Result(property = "alarmDate", column = "alarm_date", javaType = Date.class, jdbcType = JdbcType.TIMESTAMP),
-            @Result(property="parkCode",column="park_code",javaType=Integer.class,jdbcType=JdbcType.INTEGER)})
-    AlarmHistory findByDeviceId(@Param("deviceId") int deviceId);
+            @Result(property="parkCode",column="park_code",javaType=String.class,jdbcType=JdbcType.VARCHAR)})
+    AlarmHistory findByDeviceId(@Param("deviceId") int deviceId ,@Param("parkCode") String parkCode);
 
     @Insert("INSERT INTO ip_alarm_his(device_id, alarm_device_name, alarm_device_code, alarm_device_locate,alarm_title,alarm_content,alarm_level,alarm_date,park_code)" +
             "VALUES(#{alarmHistory.deviceId}, #{alarmHistory.alarmDeviceName}, #{alarmHistory.alarmDeviceCode}, #{alarmHistory.alarmDeviceLocate}, #{alarmHistory.alarmTitle}, #{alarmHistory.alarmContent}, #{alarmHistory.alarmLevel}, #{alarmHistory.alarmDate},#{alarmHistory.parkCode})")

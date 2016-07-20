@@ -13,7 +13,7 @@ import java.util.Date;
 @Mapper
 public interface AlarmMapper {
 
-    @Select("SELECT * FROM ip_alarm WHERE device_id = #{deviceId} LIMIT 1")
+    @Select("SELECT * FROM ip_alarm WHERE device_id = #{deviceId} and park_code=#{parkCode} LIMIT 1")
     @Results(value = {
             @Result(property = "deviceId", column = "device_id", javaType = Integer.class, jdbcType = JdbcType.INTEGER),
             @Result(property = "alarmDeviceName", column = "alarm_device_name", javaType = String.class, jdbcType = JdbcType.VARCHAR),
@@ -23,14 +23,14 @@ public interface AlarmMapper {
             @Result(property = "alarmContent", column = "alarm_content", javaType = String.class, jdbcType = JdbcType.VARCHAR),
             @Result(property = "alarmLevel", column = "alarm_level", javaType = Integer.class, jdbcType = JdbcType.INTEGER),
             @Result(property = "alarmDate", column = "alarm_date", javaType = Date.class, jdbcType = JdbcType.TIMESTAMP),
-            @Result(property="parkCode",column="park_code",javaType=Integer.class,jdbcType=JdbcType.INTEGER)})
-    Alarm findByDeviceId(@Param("deviceId") int deviceId);
+            @Result(property="parkCode",column="park_code",javaType=String.class,jdbcType=JdbcType.VARCHAR)})
+    Alarm findByDeviceId(@Param("deviceId") int deviceId ,@Param("parkCode") String parkCode );
 
     @Insert("INSERT INTO ip_alarm(device_id, alarm_device_name, alarm_device_code, alarm_device_locate,alarm_title,alarm_content,alarm_level,alarm_date,park_code)" +
             "VALUES(#{alarm.deviceId}, #{alarm.alarmDeviceName}, #{alarm.alarmDeviceCode}, #{alarm.alarmDeviceLocate}, #{alarm.alarmTitle}, #{alarm.alarmContent}, #{alarm.alarmLevel}, #{alarm.alarmDate},#{alarm.parkCode})")
     void save(@Param("alarm") Alarm alarm);
 
 
-    @Delete("DELETE  FROM ip_alarm WHERE alarm_device_name = #{alarmDeviceName}")
-    void deleteByName(@Param("alarmDeviceName") String alarmDeviceName);
+    @Delete("DELETE  FROM ip_alarm WHERE alarm_device_name = #{alarmDeviceName} and park_code=#{parkCode}")
+    void deleteByName(@Param("alarmDeviceName") String alarmDeviceName ,@Param("parkCode") String parkCode);
 }

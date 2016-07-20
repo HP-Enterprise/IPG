@@ -25,7 +25,6 @@ public class MQService{
      * @param key 消息关键词(可为空)
      */
     public void pushToUser(int userId, String content,String topic,String tag,String key) {
-        System.out.println(content);
         try{
             mqttHome.sendMessage(content,topic,tag,key);
         }catch (Exception e){e.printStackTrace();}

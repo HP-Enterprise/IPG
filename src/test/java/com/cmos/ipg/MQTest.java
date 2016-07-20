@@ -3,6 +3,7 @@ package com.cmos.ipg;
 import com.cmos.ipg.mq.Consumer;
 import com.cmos.ipg.mq.Producer;
 import com.cmos.ipg.service.MQService;
+
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Ignore;
@@ -18,10 +19,10 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = Application.class)
 public class MQTest {
-    @Autowired
-    Consumer consumer;
-    @Autowired
-    Producer producer;
+//    @Autowired
+//    Consumer consumer;
+//    @Autowired
+//    Producer producer;
 
     @Autowired
     MQService mqService;
@@ -35,11 +36,12 @@ public class MQTest {
     }
 
 
-    @Ignore
     @Test
     public void test_sendMsg(){
-        mqService.pushToUser(1,"WARNING>>>>");
-
+//        mqService.pushToUser(1,);
+//    	mqService.pushToUser(1, "abcDevice", MqClient.TOPIC_STATUS, MqClient.TAG_DEVICE, "1");
+//    	mqService.pushToUser(1, "abcEnergy", MqClient.TOPIC_STATUS, MqClient.TAG_ENERGY, "1");
+//    	MqClient.getBacnetClient().start();
     }
 
 

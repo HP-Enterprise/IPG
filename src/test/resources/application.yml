@@ -8,7 +8,7 @@ com.cmos.acquire:
 #RocketMQ server info
 com.cmos.mq:
     ProducerGroupName: ProducerGroupName
-    nameServerAddress: 127.0.0.1:9876
+    nameServerAddress: 192.168.100.66:9876
     instanceName: Producer
 
 # Logging level (TRACE, DEBUG, INFO, WARN, ERROR, FATAL, OFF)

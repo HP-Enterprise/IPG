@@ -61,6 +61,7 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter { // (1)
         _logger.info("Receive date from " + ch.remoteAddress() + ">>>:" + ByteUtil.decode(receiveDataHexString));
         InetSocketAddress socketAddress=(InetSocketAddress)ch.remoteAddress();
         String ip=socketAddress.getAddress().getHostAddress();
+        int port = socketAddress.getPort();
        // System.out.println(socketAddress.getAddress().getHostAddress()+":"+socketAddress.getPort());
         if(!dataTool.checkByteArray(receiveData)) {
             _logger.info(">>>>>bytes data is invalid,we will not handle them");
@@ -69,11 +70,11 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter { // (1)
             switch(dataType){
                 case 0x01://A
                     _logger.info("StatusMessage request");
-                    int result_s=socketService.handleStatusMessage(receiveDataHexString,ip);
+                    int result_s=socketService.handleStatusMessage(receiveDataHexString,ip,port);
                     break;
                 case 0x02://B
                     _logger.info("WarningMessage request");
-                    int result_w=socketService.handleWarningMessage(receiveDataHexString,ip);
+                    int result_w=socketService.handleWarningMessage(receiveDataHexString,ip,port);
                     break;
                 case 0x03://C
                    _logger.info("Heartbeat request");
@@ -108,19 +109,20 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter { // (1)
 
     @Override
     public void channelRegistered(ChannelHandlerContext ctx) {
-        Channel ch=ctx.channel();
+       Channel ch=ctx.channel();
         InetSocketAddress socketAddress=(InetSocketAddress)ch.remoteAddress();
         String ip=socketAddress.getAddress().getHostAddress();
+        int port = socketAddress.getPort();
         _logger.info("Register" + ch.remoteAddress());
         boolean verifyResult=socketService.verifyAgent(ch);
         if(!verifyResult){
             _logger.info("Agent from " + ch.remoteAddress()+" is not in server white list!close connection!");
             ch.close();
         }else{
-            channels.put(ip, ch);// save this connection
+            channels.put(ip+port, ch);// save this connection
         }
         //修改agent的在线状态[上线]
-        agentMapper.update((short) 1,ip);
+        agentMapper.update((short) 1,ip,port);
         //记录客户端的连接信息
         ClientLog c=new ClientLog();
         c.setClient(ch.remoteAddress().toString());
@@ -132,12 +134,13 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter { // (1)
         Channel ch=ctx.channel();
         InetSocketAddress socketAddress=(InetSocketAddress)ch.remoteAddress();
         String ip=socketAddress.getAddress().getHostAddress();
+        int port = socketAddress.getPort();
         _logger.info("UnRegister" + ch.remoteAddress());
         //连接断开 从map移除连接
-        channels.remove(ip);
+        channels.remove(ip+port);
 
         //修改agent的在线状态[下线]
-        agentMapper.update((short) 0,ip);
+        agentMapper.update((short) 0,ip,port);
         //记录客户端的连接信息
         ClientLog c=new ClientLog();
         c.setClient(ch.remoteAddress().toString());
@@ -154,6 +157,5 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter { // (1)
         cause.printStackTrace();
         ctx.close();
     }
-
 
 }

@@ -11,8 +11,8 @@ import org.apache.ibatis.annotations.Select;
 @Mapper
 public interface DataMapper {
 
-    @Select("SELECT * FROM ip_data WHERE from = #{from}")
-    Data findByFrom(@Param("from") String from);
+    @Select("SELECT * FROM ip_data WHERE from = #{from} and park_code=#{parkCode}")
+    Data findByFrom(@Param("from") String from,@Param("parkCode") String parkCode);
 
     @Insert("INSERT INTO ip_data(client, bytes,action_date,park_code)" +
             "VALUES(#{data.client}, #{data.bytes}, #{data.actionDate},#{data.parkCode})")

@@ -1,7 +1,5 @@
 package com.cmos.ipg.service;
 
-import com.cmos.core.bean.InputObject;
-import com.cmos.core.bean.OutputObject;
 import com.cmos.ipg.bean.*;
 import com.cmos.ipg.dubbo.IControlIPGService;
 import com.cmos.ipg.dubbo.ReceiveAlarmService;
@@ -9,20 +7,15 @@ import com.cmos.ipg.entity.*;
 import com.cmos.ipg.mapper.*;
 import com.cmos.ipg.utils.DataTool;
 import io.netty.buffer.ByteBuf;
-import io.netty.buffer.ByteBufUtil;
 import io.netty.channel.Channel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
 
-import java.lang.management.CompilationMXBean;
 import java.net.InetSocketAddress;
-import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.*;
-import java.util.HashMap;
 import java.util.List;
 
 
@@ -67,8 +60,9 @@ public class SocketService {
     public boolean verifyAgent( Channel ch){
         InetSocketAddress socketAddress=(InetSocketAddress)ch.remoteAddress();
         String ip=socketAddress.getAddress().getHostAddress();
+        int port = socketAddress.getPort();
         //根据参数下载请求的16进制字符串，生成响应的16进制字符串
-        Agent agent=agentMapper.findByAgentIp(ip);
+        Agent agent=agentMapper.findByAgentIp(ip,port);
         if(agent==null){
             return false;
         }
@@ -80,7 +74,8 @@ public class SocketService {
      * @param reqString 心跳请求hex
      * @return 心跳响应hex
      */
-    public String getHeartbeatResp(String reqString){
+    @SuppressWarnings("static-access")
+	public String getHeartbeatResp(String reqString){
         //根据心跳请求的16进制字符串，生成响应的16进制字符串
         ByteBuf bb=dataTool.getByteBuf(reqString);
         byte[] reqBytes=dataTool.getBytesFromByteBuf(bb);
@@ -103,16 +98,19 @@ public class SocketService {
      * @param reqString 参数下载请求hex
      * @return 参数下载响应hex
      */
-    public String getParamDownloadResp( Channel ch,String reqString){
+    @SuppressWarnings("static-access")
+	public String getParamDownloadResp( Channel ch,String reqString){
         InetSocketAddress socketAddress=(InetSocketAddress)ch.remoteAddress();
        // System.out.println(socketAddress.getAddress().getHostAddress()+":"+socketAddress.getPort());
-        String ip=socketAddress.getAddress().getHostAddress();
+//        String ip=socketAddress.getAddress().getHostAddress();
+//        int port = socketAddress.getPort();
         //根据参数下载请求的16进制字符串，生成响应的16进制字符串
-        Agent agent=agentMapper.findByAgentIp(ip);
+//        Agent agent=agentMapper.findByAgentIp(ip,port);
         ByteBuf bb=dataTool.getByteBuf(reqString);
         byte[] reqBytes=dataTool.getBytesFromByteBuf(bb);
         ParamDownloadReq req=new ParamDownloadReq();
         req.decoded(reqBytes);
+        Agent agent=agentMapper.findByAgentNum(req.getAgentNum());
         ParamDownloadResp resp=new ParamDownloadResp();
         resp.setSendingTime(dataTool.getCurrentSeconds());
         resp.setEventId(req.getEventId());
@@ -138,14 +136,15 @@ public class SocketService {
      * @param ip c端ip
      * @return 处理结果
      */
-    public int handleStatusMessage(String reqString,String ip){
+    @SuppressWarnings("static-access")
+	public int handleStatusMessage(String reqString,String ip,int port){
         //
         try{
             ByteBuf bb=dataTool.getByteBuf(reqString);
             byte[] reqBytes=dataTool.getBytesFromByteBuf(bb);
             StatusMessage req=new StatusMessage();
             req.decoded(reqBytes);
-            Agent _agent=agentMapper.findByAgentIp(ip);
+            Agent _agent=agentMapper.findByAgentNum(req.getAgentNum());
             if(_agent==null){
                 _logger.info("save failed,from ip "+ip+" not in the db");
                 return 2;//from ip not in the list
@@ -191,7 +190,7 @@ public class SocketService {
                 deviceStatusHistoryMapper.save(deviceStatusHistory);
 
                 //delete
-                deviceStatusMapper.deleteByNameAndPara(req.getDeviceName()[i],req.getDevicePara()[i]);
+                deviceStatusMapper.deleteByNameAndPara(req.getDeviceName()[i],req.getDevicePara()[i],req.getParkCode());
                 //save deviceStatusHistory
                 DeviceStatus deviceStatus=new DeviceStatus();
                 deviceStatus.setDeviceId(-1);
@@ -216,7 +215,7 @@ public class SocketService {
                         alarmHistoryMapper.save(alarmHistory);
 
                         //Alarm
-                        alarmMapper.deleteByName(req.getDeviceName()[0]);//delete current alarm info
+                        alarmMapper.deleteByName(req.getDeviceName()[0],req.getParkCode());//delete current alarm info
                         Alarm alarm=new Alarm();
                         alarm.setDeviceId(-1);
                         alarm.setAlarmDeviceName(req.getDeviceName()[0]);
@@ -294,21 +293,21 @@ public class SocketService {
      * @param ip c端ip
      * @return 处理结果
      */
-    public int handleWarningMessage(String reqString,String ip){
+    @SuppressWarnings("static-access")
+	public int handleWarningMessage(String reqString,String ip,int port){
         //
         try{
-            InputObject io = new InputObject();
+           /* InputObject io = new InputObject();
             io.setMethod("insertDeviceAccessByAgent");
             io.setService("DeviceOpenDetailsService");
-            Map map = new HashMap<String,Object>() ;
+            Map map = new HashMap<String,Object>() ;*/
 
             ByteBuf bb=dataTool.getByteBuf(reqString);
             byte[] reqBytes=dataTool.getBytesFromByteBuf(bb);
             WarningMessage req=new WarningMessage();
             req.decoded(reqBytes);
             System.out.println("save to mysql>>>:");
-            // todo save to db and push to mq
-            Agent _agent=agentMapper.findByAgentIp(ip);
+            Agent _agent=agentMapper.findByAgentNum(req.getAgentNum());
             if(_agent==null){
                 _logger.info("save failed,from ip "+ip+" not in the db");
                 return 2;//from ip not in the list
@@ -326,7 +325,7 @@ public class SocketService {
             alarmHistoryMapper.save(alarmHistory);
 
             //Alarm
-            alarmMapper.deleteByName(req.getAlarmDeviceName());//delete current alarm info
+            alarmMapper.deleteByName(req.getAlarmDeviceName(),req.getParkCode());//delete current alarm info
             Alarm alarm=new Alarm();
             alarm.setDeviceId(-1);
             alarm.setAlarmDeviceName(req.getAlarmDeviceName());
@@ -350,7 +349,7 @@ public class SocketService {
             //}
             //dubbo end
 
-            map.put("deviceName", req.getAlarmDeviceName());
+       /*     map.put("deviceName", req.getAlarmDeviceName());
             map.put("deviceCode", req.getAlarmDeviceCode());
             map.put("deviceLoction", req.getAlarmDeviceLocate());
             map.put("paraName", req.getAlarmTitle());
@@ -360,7 +359,15 @@ public class SocketService {
             OutputObject oo= controlService.execute(io);
             if(!oo.getBusiCode().equals("0")) {
                 return 1;
-            }
+            }*/
+            int result=cwpCoreService.sendWarningMessage(reqString);
+            if(result!=0){
+        		try{
+        			mqService.pushToUser(0, reqString, MqConsumerService.TOPIC_ALARM, MqConsumerService.TAG_ACCESS, "");
+        		}catch(Exception e){
+        			e.printStackTrace();
+        		}
+        	}
             return 0;
         }catch (Exception e){
             e.printStackTrace();
@@ -374,7 +381,8 @@ public class SocketService {
      * @param ip c端ip
      * @return 处理结果
      */
-    public int handleCommandResp(String reqString,String ip){
+    @SuppressWarnings("static-access")
+	public int handleCommandResp(String reqString,String ip){
         //
         try{
             ByteBuf bb=dataTool.getByteBuf(reqString);

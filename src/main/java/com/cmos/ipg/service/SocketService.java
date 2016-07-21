@@ -54,6 +54,8 @@ public class SocketService {
     EnergyRecordDetailMapper energyRecordDetailMapper;
     @Autowired
     private CWPCoreService cwpCoreService;
+    @Autowired
+    private AccessCtrlMapper accessCtrlMapper;
     private Logger _logger= LoggerFactory.getLogger(SocketService.class);
 
 
@@ -297,11 +299,6 @@ public class SocketService {
 	public int handleWarningMessage(String reqString,String ip,int port){
         //
         try{
-           /* InputObject io = new InputObject();
-            io.setMethod("insertDeviceAccessByAgent");
-            io.setService("DeviceOpenDetailsService");
-            Map map = new HashMap<String,Object>() ;*/
-
             ByteBuf bb=dataTool.getByteBuf(reqString);
             byte[] reqBytes=dataTool.getBytesFromByteBuf(bb);
             WarningMessage req=new WarningMessage();
@@ -312,62 +309,67 @@ public class SocketService {
                 _logger.info("save failed,from ip "+ip+" not in the db");
                 return 2;//from ip not in the list
             }
-            //AlarmHistory
-            AlarmHistory alarmHistory=new AlarmHistory();
-            alarmHistory.setDeviceId(-1);
-            alarmHistory.setAlarmDeviceName(req.getAlarmDeviceName());
-            alarmHistory.setAlarmDeviceCode(req.getAlarmDeviceCode());
-            alarmHistory.setAlarmDeviceLocate(req.getAlarmDeviceLocate());
-            alarmHistory.setAlarmTitle(req.getAlarmTitle());
-            alarmHistory.setAlarmContent(req.getAlarmContent());
-            alarmHistory.setAlarmLevel(req.getAlarmLevel());
-            alarmHistory.setAlarmDate(dataTool.seconds2Date(req.getSendingTime()));
-            alarmHistoryMapper.save(alarmHistory);
+            //门禁控制表AccessCtrl
+            AccessCtrl accessCtrl = new AccessCtrl();
+            //报警级别 是 4 是正常同行
+            if(req.getAlarmLevel().byteValue()==4){
+                accessCtrl.setControllerName(req.getAlarmDeviceName());
+                accessCtrl.setInterfaceAddr((req.getAlarmDeviceCode().split("#"))[1]);
+                accessCtrl.setPanelName((req.getAlarmDeviceLocate().split(","))[0]);
+                accessCtrl.setCardReaderName((req.getAlarmDeviceLocate().split(","))[1]);
+                accessCtrl.setEventTime(new Date());
+                accessCtrl.setEventName((req.getAlarmContent().split(";"))[3]);
+                accessCtrl.setCardNum((req.getAlarmContent().split(";"))[4]);
+                accessCtrl.setJobNum((req.getAlarmContent().split(";"))[5]);
+                accessCtrl.setStaffName((req.getAlarmContent().split(";"))[6]);
+                accessCtrl.setParkCode(req.getParkCode());
+                accessCtrlMapper.save(accessCtrl);
+            }else {
+                accessCtrl.setControllerName(req.getAlarmDeviceName());
+                accessCtrl.setInterfaceAddr((req.getAlarmDeviceCode().split("#"))[1]);
+                accessCtrl.setPanelName((req.getAlarmDeviceLocate().split(","))[0]);
+                accessCtrl.setCardReaderName((req.getAlarmDeviceLocate().split(","))[1]);
+                accessCtrl.setEventTime(new Date());
+                accessCtrl.setIoDescription((req.getAlarmContent().split("#"))[2]);
+                accessCtrl.setParkCode(req.getParkCode());
+                accessCtrlMapper.save(accessCtrl);
+                 //AlarmHistory
+            }
+          //报警级别 是 4 是正常同行
+            if(req.getAlarmLevel().byteValue()!=4){
+                AlarmHistory alarmHistory=new AlarmHistory();
+                alarmHistory.setDeviceId(-1);
+                alarmHistory.setAlarmDeviceName(req.getAlarmDeviceName());
+                alarmHistory.setAlarmDeviceCode(req.getAlarmDeviceCode());
+                alarmHistory.setAlarmDeviceLocate(req.getAlarmDeviceLocate());
+                alarmHistory.setAlarmTitle(req.getAlarmTitle());
+                alarmHistory.setAlarmContent(req.getAlarmContent());
+                alarmHistory.setAlarmLevel(req.getAlarmLevel());
+                alarmHistory.setAlarmDate(dataTool.seconds2Date(req.getSendingTime()));
+                alarmHistoryMapper.save(alarmHistory);
+                // Byte by= req.getAlarmLevel();
+                //Alarm
+                alarmMapper.deleteByName(req.getAlarmDeviceName(), req.getParkCode());//delete current alarm info
+                Alarm alarm = new Alarm();
+                alarm.setDeviceId(-1);
+                alarm.setAlarmDeviceName(req.getAlarmDeviceName());
+                alarm.setAlarmDeviceCode(req.getAlarmDeviceCode());
+                alarm.setAlarmDeviceLocate(req.getAlarmDeviceLocate());
+                alarm.setAlarmTitle(req.getAlarmTitle());
+                alarm.setAlarmContent(req.getAlarmContent());
+                alarm.setAlarmLevel(req.getAlarmLevel());
+                alarm.setAlarmDate(dataTool.seconds2Date(req.getSendingTime()));
+                alarmMapper.save(alarm);
 
-            //Alarm
-            alarmMapper.deleteByName(req.getAlarmDeviceName(),req.getParkCode());//delete current alarm info
-            Alarm alarm=new Alarm();
-            alarm.setDeviceId(-1);
-            alarm.setAlarmDeviceName(req.getAlarmDeviceName());
-            alarm.setAlarmDeviceCode(req.getAlarmDeviceCode());
-            alarm.setAlarmDeviceLocate(req.getAlarmDeviceLocate());
-            alarm.setAlarmTitle(req.getAlarmTitle());
-            alarm.setAlarmContent(req.getAlarmContent());
-            alarm.setAlarmLevel(req.getAlarmLevel());
-            alarm.setAlarmDate(dataTool.seconds2Date(req.getSendingTime()));
-            alarmMapper.save(alarm);
-            //push message
-            //String pushMsg=req.getAlarmLevel()+":"+req.getAlarmDeviceName()+","+req.getAlarmTitle()+","+req.getAlarmContent();
-            //mqService.pushToUser(1,pushMsg);
-            // send via Dubbo
-            //如果没有Dubbo服务,请先注释掉line 42 避免Spring启动错误
-            //try {
-              //  System.out.println( receiveAlarmService.send(pushMsg));
-            //}catch (Exception e){
-              //  e.printStackTrace();
-              //  this._logger.error("Dubbo Consumer filed:"+e.getMessage());
-            //}
-            //dubbo end
-
-       /*     map.put("deviceName", req.getAlarmDeviceName());
-            map.put("deviceCode", req.getAlarmDeviceCode());
-            map.put("deviceLoction", req.getAlarmDeviceLocate());
-            map.put("paraName", req.getAlarmTitle());
-            map.put("paraValue", req.getAlarmContent());
-            map.put("sendTime", new Date());
-            io.setParams(map);
-            OutputObject oo= controlService.execute(io);
-            if(!oo.getBusiCode().equals("0")) {
-                return 1;
-            }*/
-            int result=cwpCoreService.sendWarningMessage(reqString);
-            if(result!=0){
-        		try{
-        			mqService.pushToUser(0, reqString, MqConsumerService.TOPIC_ALARM, MqConsumerService.TAG_ACCESS, "");
-        		}catch(Exception e){
-        			e.printStackTrace();
-        		}
-        	}
+	            int result=cwpCoreService.sendWarningMessage(reqString);
+	            if(result!=0){
+	        		try{
+	        			mqService.pushToUser(0, reqString, MqConsumerService.TOPIC_ALARM, MqConsumerService.TAG_ACCESS, "");
+	        		}catch(Exception e){
+	        			e.printStackTrace();
+	        		}
+	        	}
+            }
             return 0;
         }catch (Exception e){
             e.printStackTrace();

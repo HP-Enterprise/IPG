@@ -313,26 +313,46 @@ public class SocketService {
             AccessCtrl accessCtrl = new AccessCtrl();
             //报警级别 是 4 是正常同行
             if(req.getAlarmLevel().byteValue()==4){
-                accessCtrl.setControllerName(req.getAlarmDeviceName());
-                accessCtrl.setInterfaceAddr((req.getAlarmDeviceCode().split("#"))[1]);
-                accessCtrl.setPanelName((req.getAlarmDeviceLocate().split(","))[0]);
-                accessCtrl.setCardReaderName((req.getAlarmDeviceLocate().split(","))[1]);
-                accessCtrl.setEventTime(new Date());
-                accessCtrl.setEventName((req.getAlarmContent().split(";"))[3]);
-                accessCtrl.setCardNum((req.getAlarmContent().split(";"))[4]);
-                accessCtrl.setJobNum((req.getAlarmContent().split(";"))[5]);
-                accessCtrl.setStaffName((req.getAlarmContent().split(";"))[6]);
-                accessCtrl.setParkCode(req.getParkCode());
-                accessCtrlMapper.save(accessCtrl);
-            }else {
-                accessCtrl.setControllerName(req.getAlarmDeviceName());
-                accessCtrl.setInterfaceAddr((req.getAlarmDeviceCode().split("#"))[1]);
-                accessCtrl.setPanelName((req.getAlarmDeviceLocate().split(","))[0]);
-                accessCtrl.setCardReaderName((req.getAlarmDeviceLocate().split(","))[1]);
-                accessCtrl.setEventTime(new Date());
-                accessCtrl.setIoDescription((req.getAlarmContent().split("#"))[2]);
-                accessCtrl.setParkCode(req.getParkCode());
-                accessCtrlMapper.save(accessCtrl);
+				if (req.getAlarmDeviceCode().split("#").length >= 2) {
+					accessCtrl.setInterfaceAddr((req.getAlarmDeviceCode().split("#"))[1]);
+				}
+				if (req.getAlarmDeviceLocate().split(",").length >= 1) {
+					accessCtrl.setPanelName((req.getAlarmDeviceLocate().split(","))[0]);
+				}
+				if (req.getAlarmDeviceLocate().split(",").length >= 2) {
+					accessCtrl.setCardReaderName((req.getAlarmDeviceLocate().split(","))[1]);
+				}
+				accessCtrl.setEventTime(new Date());
+				if (req.getAlarmContent().split(";").length >= 4) {
+					accessCtrl.setEventName((req.getAlarmContent().split(";"))[3]);
+				}
+				if (req.getAlarmContent().split(";").length >= 5) {
+					accessCtrl.setCardNum((req.getAlarmContent().split(";"))[4]);
+				}
+				if (req.getAlarmContent().split(";").length >= 6) {
+					accessCtrl.setJobNum((req.getAlarmContent().split(";"))[5]);
+				}
+				if (req.getAlarmContent().split(";").length >= 7) {
+					accessCtrl.setStaffName((req.getAlarmContent().split(";"))[6]);
+				}
+				accessCtrl.setParkCode(req.getParkCode());
+				accessCtrlMapper.save(accessCtrl);
+			} else {
+				accessCtrl.setControllerName(req.getAlarmDeviceName());
+				if (req.getAlarmDeviceCode().split("#").length >= 2) {
+					accessCtrl.setInterfaceAddr((req.getAlarmDeviceCode().split("#"))[1]);
+				}
+				if (req.getAlarmDeviceLocate().split(",").length >= 1) {
+					accessCtrl.setPanelName((req.getAlarmDeviceLocate().split(","))[0]);
+				}
+				if (req.getAlarmDeviceLocate().split(",").length >= 2) {
+					accessCtrl.setCardReaderName((req.getAlarmDeviceLocate().split(","))[1]);
+				}
+				accessCtrl.setEventTime(new Date());
+				if (req.getAlarmContent().split("#").length >= 3) {
+					accessCtrl.setIoDescription((req.getAlarmContent().split("#"))[2]);
+				}
+
                  //AlarmHistory
             }
           //报警级别 是 4 是正常同行

@@ -26,9 +26,9 @@ spring:
         max-active: 100
         max-idle: 40
         min-idle: 35
-        url: jdbc:mysql://192.168.100.66:3307/ipg_bacnet?useUnicode=true&characterEncoding=utf8&useSSL=false
-        username: root
-        password: mysql*2016#720
+        url: jdbc:mysql://192.168.100.126:33306/cwp?useUnicode=true&characterEncoding=utf8&useSSL=false
+        username: cwp
+        password: sd61^CNe
     jpa:
         show-sql: true
         hibernate:

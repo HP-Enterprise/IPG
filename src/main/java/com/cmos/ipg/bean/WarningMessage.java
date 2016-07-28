@@ -88,7 +88,12 @@ public class WarningMessage extends UpBean{
         this.setSendingTime(bb.readInt());
         this.setEventId(bb.readInt());
         this.setAgentNum(bb.readByte());
-
+        
+        byte[] parkCodeBytes = new byte[this.getParkCodeSize()];
+        bb.readBytes(parkCodeBytes);
+        String parkCode = new String(parkCodeBytes,"UTF-8").trim();
+        this.setParkCode(parkCode);
+        
         byte[] alarmDeviceNameBytes = new byte[alarmDeviceNameSize];
         bb.readBytes(alarmDeviceNameBytes);
         this.setAlarmDeviceName(new String(alarmDeviceNameBytes,"UTF-8").trim());

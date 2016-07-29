@@ -335,8 +335,7 @@ public class SocketService {
 				if (req.getAlarmContent().split(";").length >= 7) {
 					accessCtrl.setStaffName((req.getAlarmContent().split(";"))[6]);
 				}
-				accessCtrl.setParkCode(req.getParkCode());
-				accessCtrlMapper.save(accessCtrl);
+				
 			} else {
 				accessCtrl.setControllerName(req.getAlarmDeviceName());
 				if (req.getAlarmDeviceCode().split("#").length >= 2) {
@@ -355,6 +354,8 @@ public class SocketService {
 
                  //AlarmHistory
             }
+            accessCtrl.setParkCode(req.getParkCode());
+			accessCtrlMapper.save(accessCtrl);
           //报警级别 是 4 是正常同行
             if(req.getAlarmLevel().byteValue()!=4){
                 AlarmHistory alarmHistory=new AlarmHistory();

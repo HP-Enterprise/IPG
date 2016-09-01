@@ -5,18 +5,26 @@ import com.cmos.ipg.dubbo.IControlIPGService;
 import com.cmos.ipg.dubbo.ReceiveAlarmService;
 import com.cmos.ipg.entity.*;
 import com.cmos.ipg.mapper.*;
+import com.cmos.ipg.utils.Base64;
 import com.cmos.ipg.utils.DataTool;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.Channel;
+
+import org.apache.tomcat.jdbc.pool.DataSource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.jdbc.DataSourceProperties;
+import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Component;
 
 import java.net.InetSocketAddress;
 import java.util.ArrayList;
 import java.util.*;
 import java.util.List;
+
 
 
 /**
@@ -57,7 +65,8 @@ public class SocketService {
     @Autowired
     private AccessCtrlMapper accessCtrlMapper;
     private Logger _logger= LoggerFactory.getLogger(SocketService.class);
-
+    @Autowired
+    DataSource dataSource;
 
     public boolean verifyAgent( Channel ch){
         InetSocketAddress socketAddress=(InetSocketAddress)ch.remoteAddress();
@@ -125,7 +134,8 @@ public class SocketService {
         }else{
             resp.setStatus((byte) 1);
             resp.setCollectContab(agent.getContable());
-            resp.setCollectProtocol((byte)agent.getConProtocol());
+//            resp.setCollectProtocol(agent.getConProtocol());
+            resp.setCollectProtocol((byte) 0);
         }
         byte[] respBytes=resp.encoded();
         String respStr=dataTool.bytes2hex(respBytes);
@@ -430,7 +440,12 @@ public class SocketService {
        commandMapper.update(c);
         return c;
     }
+    @Autowired
+	private DataSourceProperties properties;
+	@ConfigurationProperties(prefix = DataSourceProperties.PREFIX)
     public Command loadOneCommand(){
+		String password = Base64.decode(this.properties.getPassword());
+    	dataSource.setPassword(password);
         Command c=commandMapper.findOne();
         if(c!=null){
             c.setCommandStatus((short)-3);//正在处理

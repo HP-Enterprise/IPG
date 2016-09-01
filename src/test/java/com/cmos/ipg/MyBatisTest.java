@@ -109,7 +109,7 @@ public class MyBatisTest {
         agent.setIp("192.168.2.22");
         agent.setPort("9000");
         agent.setContable(1000);
-        agent.setConProtocol(10);
+        agent.setConProtocol("");
         agent.setDescription("说明信息");
         agentMapper.save(agent);
         Agent f=agentMapper.findByAgentIp("192.168.2.22",1);

@@ -10,7 +10,7 @@ import com.cmos.ipg.service.MQService;
 import com.cmos.ipg.service.SocketService;
 import com.cmos.ipg.utils.ByteUtil;
 import com.cmos.ipg.utils.DataTool;
-import com.sun.scenario.effect.impl.sw.sse.SSEBlend_SRC_OUTPeer;
+//import com.sun.scenario.effect.impl.sw.sse.SSEBlend_SRC_OUTPeer;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;

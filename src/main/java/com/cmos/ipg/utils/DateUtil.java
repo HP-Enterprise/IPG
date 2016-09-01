@@ -11,8 +11,6 @@ public class DateUtil {
 
 	public static DateFormat dateFormat = null;
 
-	public static Calendar calendar = null;
-
 	/**
 	 * 功能描述：格式化日期
 	 * 
@@ -91,7 +89,7 @@ public class DateUtil {
      * @return 返回年份
 	 */
 	public static int getYear(Date date) {
-		calendar = Calendar.getInstance();
+		Calendar calendar = Calendar.getInstance();
 		calendar.setTime(date);
 		return calendar.get(Calendar.YEAR);
 	}
@@ -102,7 +100,7 @@ public class DateUtil {
 	 * @return 返回月份
 	 */
 	public static int getMonth(Date date) {
-		calendar = Calendar.getInstance();
+		Calendar calendar = Calendar.getInstance();
 		calendar.setTime(date);
 		return calendar.get(Calendar.MONTH) + 1;
 	}
@@ -113,7 +111,7 @@ public class DateUtil {
 	 * @return 返回日
 	 */
 	public static int getDay(Date date) {
-		calendar = Calendar.getInstance();
+		Calendar calendar = Calendar.getInstance();
 		calendar.setTime(date);
 		return calendar.get(Calendar.DAY_OF_MONTH);
 	}
@@ -124,7 +122,7 @@ public class DateUtil {
 	 * @return 返回小时
 	 */
 	public static int getHour(Date date) {
-		calendar = Calendar.getInstance();
+		Calendar calendar = Calendar.getInstance();
 		calendar.setTime(date);
 		return calendar.get(Calendar.HOUR_OF_DAY);
 	}
@@ -135,7 +133,7 @@ public class DateUtil {
 	 * @return 返回分钟
 	 */
 	public static int getMinute(Date date) {
-		calendar = Calendar.getInstance();
+		Calendar calendar = Calendar.getInstance();
 		calendar.setTime(date);
 		return calendar.get(Calendar.MINUTE);
 	}
@@ -146,7 +144,7 @@ public class DateUtil {
 	 * @return 返回秒
 	 */
 	public static int getSecond(Date date) {
-		calendar = Calendar.getInstance();
+		Calendar calendar = Calendar.getInstance();
 		calendar.setTime(date);
 		return calendar.get(Calendar.SECOND);
 	}
@@ -157,7 +155,7 @@ public class DateUtil {
 	 * @return 返回毫秒
 	 */
 	public static long getMillis(Date date) {
-		calendar = Calendar.getInstance();
+		Calendar calendar = Calendar.getInstance();
 		calendar.setTime(date);
 		return calendar.getTimeInMillis();
 	}
@@ -196,7 +194,7 @@ public class DateUtil {
 	 * @return 返回相加后的日期
 	 */
 	public static Date addDate(Date date, int day) {
-		calendar = Calendar.getInstance();
+		Calendar calendar = Calendar.getInstance();
 		long millis = getMillis(date) + ((long) day) * 24 * 3600 * 1000;
 		calendar.setTimeInMillis(millis);
 		return calendar.getTime();
@@ -229,7 +227,7 @@ public class DateUtil {
 	 */
 	public static String getMonthEnd(String strdate) {
 		date = parseDate(getMonthBegin(strdate));
-		calendar = Calendar.getInstance();
+		Calendar calendar = Calendar.getInstance();
 		calendar.setTime(date);
 		calendar.add(Calendar.MONTH, 1);
 		calendar.add(Calendar.DAY_OF_YEAR, -1);

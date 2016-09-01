@@ -13,7 +13,7 @@ public class Agent implements Serializable{
     private String ip;
     private String port;
     private int contable;
-    private int conProtocol;
+    private String conProtocol;
     private String description;
     private short agentOnline;
     private String parkCode;
@@ -58,11 +58,11 @@ public class Agent implements Serializable{
         this.contable = contable;
     }
 
-    public int getConProtocol() {
+    public String getConProtocol() {
         return conProtocol;
     }
 
-    public void setConProtocol(int conProtocol) {
+    public void setConProtocol(String conProtocol) {
         this.conProtocol = conProtocol;
     }
 

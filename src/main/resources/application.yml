@@ -1,4 +1,4 @@
-server.port: 8080 # Server HTTP port.
+server.port: 8181 # Server HTTP port.
 # Acquire port
 com.cmos.acquire:
     #disable  dataServer and dataHandler .if set this value true,neither dataServer nor dataHandler will work
@@ -9,16 +9,8 @@ com.cmos.acquire:
 #RocketMQ server info
 com.cmos.mq:
     ProducerGroupName: ProducerGroupName
-    nameServerAddress: 192.168.100.66:9876
+    nameServerAddress: 192.168.100.86:28881
     instanceName: Producer
-
-# Logging level (TRACE, DEBUG, INFO, WARN, ERROR, FATAL, OFF)
-logging:
-    level:
-        org.hibernate: WARN
-        org.springframework: WARN
-    file: ipg.log
-
 # Spring settings
 spring:
     profiles.active: dev
@@ -26,9 +18,12 @@ spring:
         max-active: 100
         max-idle: 40
         min-idle: 35
-        url: jdbc:mysql://192.168.100.126:33306/cwp?useUnicode=true&characterEncoding=utf8&useSSL=false
-        username: cwp
-        password: sd61^CNe
+        url: jdbc:mysql://192.168.100.126:50000/ipg_sit?useUnicode=true&characterEncoding=utf8&useSSL=false
+#        username: ipg_dev
+#        password: mysql*2016#720
+        username: ipg_sit
+        #password: yMq6k%sx
+        password: eU1xNmslc3g=
     jpa:
         show-sql: true
         hibernate:
@@ -47,3 +42,10 @@ spring:
             min-idle: 0
             max-active: 8
             max-wait: -1
+# Logging level (TRACE, DEBUG, INFO, WARN, ERROR, FATAL, OFF)
+logging:
+    level:
+        org.hibernate: WARN
+        org.springframework: WARN
+    file: ipg.log
+

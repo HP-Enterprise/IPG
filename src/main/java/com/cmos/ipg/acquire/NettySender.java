@@ -11,6 +11,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 
 /**
  * Created by jackl on 2016/5/18.
@@ -23,8 +24,8 @@ public class NettySender extends Thread{
 
     private ConcurrentHashMap<String,Channel> channels;
     private  SocketService socketService;
-    public NettySender(ConcurrentHashMap<String,Channel> cs,SocketService socketService,DataTool dt){
-        this.channels=cs;
+    public NettySender(ConcurrentMap<String,Channel> cs,SocketService socketService,DataTool dt){
+        this.channels=(ConcurrentHashMap<String, Channel>) cs;
         this.socketService=socketService;
         this.dataTool=dt;
         this._logger = LoggerFactory.getLogger(NettySender.class);
@@ -35,13 +36,17 @@ public class NettySender extends Thread{
         while (true){
             try{
                 Thread.sleep(1000);//开发调试用
-            }catch (InterruptedException e){e.printStackTrace(); }
+            }catch (InterruptedException e){
+            	_logger.debug(e.getMessage());
+            	e.printStackTrace(); 
+            	Thread.currentThread().interrupt();
+            }
 
             //_logger.info("Connection count>>:" + channels.keySet().size()+"|Thread count>>:" + maps.size());
             //读取数据库中所有的命令集合
            Command command =socketService.loadOneCommand();
            if(command!=null){
-               System.out.println(command.getParam());
+//               System.out.println(command.getParam());
                SendMessage(command);
            }
         }

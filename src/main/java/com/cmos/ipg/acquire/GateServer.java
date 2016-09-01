@@ -42,7 +42,7 @@ public class GateServer {
     //生成数据
     ScheduledExecutorService nettyServerScheduledService = Executors.newScheduledThreadPool(10);
 
-    public static ConcurrentHashMap<String,Channel> channels=new ConcurrentHashMap<String,io.netty.channel.Channel>();
+    public static final ConcurrentHashMap<String,Channel> channels=new ConcurrentHashMap<String,io.netty.channel.Channel>();
     public   void start(){
         new NettySender(channels,socketService,dataTool).start();    //netty发数据线程
         new NettyServer(channels, _acquirePort, nettyServerScheduledService,dataMapper,clientLogMapper,agentMapper,socketService,dataTool).run();    //netty收数据程序，收到消息后可能导致阻塞的业务全部交由线程池处理

@@ -27,7 +27,8 @@ public class ByteUtil {
      * @return
      */
     protected static int BytesToInt(byte abyte0[]){
-        return ((0xff & abyte0[0]) << 8) + abyte0[1];
+//    	return ((0xff & abyte0[0]) << 8) + abyte0[1]; 修改为下面格式
+        return ((0xff & abyte0[0]) << 8) + (0xff &abyte0[1]);
     }
 
     /**
@@ -211,7 +212,8 @@ public class ByteUtil {
         for(int i=0;i<bytes.length;i++)
         {
             sb.append(hexString.charAt((bytes[i]&0xf0)>>4));
-            sb.append(hexString.charAt((bytes[i]&0x0f)>>0));
+            sb.append(hexString.charAt((bytes[i]&0x0f)));
+//            sb.append(hexString.charAt((bytes[i]&0x0f)>>0));
         }
         return sb.toString();
     }

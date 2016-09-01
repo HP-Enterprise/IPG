@@ -23,7 +23,7 @@ public class HelloController {
 
     @RequestMapping(value = "/hello",method = RequestMethod.GET)
    public String hello(){
-        return "hello:"+new Date().getTime();
+        return "{hello:"+new Date().getTime()+"}";
     }
 
     @RequestMapping(value = "/log",method = RequestMethod.GET)

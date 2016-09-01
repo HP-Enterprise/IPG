@@ -7,7 +7,6 @@ import com.alibaba.rocketmq.client.producer.DefaultMQProducer;
 import com.alibaba.rocketmq.client.producer.SendResult;
 import com.alibaba.rocketmq.common.message.Message;
 
-import sun.applet.resources.MsgAppletViewer_es;
 
 public class TestMq {
 	public static void main(String[] args) {
@@ -80,12 +79,12 @@ public class TestMq {
             } catch (Exception e) {
                 e.printStackTrace();
             }
-            try {
-				TimeUnit.MILLISECONDS.sleep(1000);
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+//				try {
+//					TimeUnit.MILLISECONDS.sleep(1000);
+//				} catch (InterruptedException e) {
+//					// TODO Auto-generated catch block
+//					e.printStackTrace();
+//				}
         }
 
         /**
